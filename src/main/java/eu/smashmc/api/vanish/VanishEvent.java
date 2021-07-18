@@ -3,27 +3,12 @@ package eu.smashmc.api.vanish;
 import java.util.UUID;
 
 /**
- * @param <T> type of player
+ * @param player     the player that vanished
+ * @param playerUuid the {@link UUID} of the player
+ * @param vanishMode the vanish mode changed to
+ * @param <T>        type of player
  */
-public class VanishEvent<T> {
-
-	private T player;
-	private UUID playerUuid;
-	private VanishMode vanishMode;
-
-	public VanishEvent(T player, UUID uuid, VanishMode vanishMode) {
-		this.player = player;
-		this.playerUuid = uuid;
-		this.vanishMode = vanishMode;
-	}
-
-	public T getPlayer() {
-		return player;
-	}
-
-	public UUID getPlayerUuid() {
-		return playerUuid;
-	}
+public record VanishEvent<T> (T player, UUID playerUuid, VanishMode vanishMode) {
 
 	public boolean hasVanished() {
 		return vanishMode == VanishMode.INVISIBLE;
