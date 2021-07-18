@@ -3,11 +3,15 @@ package eu.smashmc.api.vanish;
 import java.util.UUID;
 import java.util.function.BiPredicate;
 
+import eu.smashmc.api.Environment;
+import eu.smashmc.api.SmashApi;
+
 /**
  * API for the vanish Plugin.
  * 
  * @param <T> type of player
  */
+@SmashApi({ Environment.BUKKIT, Environment.BUNGEECORD })
 public interface VanishApi<T> {
 	public default boolean isVanished(UUID uuid) {
 		return getVanishMode(uuid) == VanishMode.INVISIBLE;

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class SmashMcTest {
@@ -17,6 +18,11 @@ public class SmashMcTest {
 
 	@SmashApi({ Environment.BUKKIT, Environment.BUNGEECORD })
 	interface DependentApi {
+	}
+
+	@BeforeEach
+	public void setup() {
+		SmashMc.clearApis();
 	}
 
 	@Test

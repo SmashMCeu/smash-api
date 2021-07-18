@@ -80,4 +80,8 @@ public final class SmashMc {
 		String supportedNames = Stream.of(supported).map(e -> e.name()).collect(Collectors.joining(" / "));
 		throw new UnsupportedOperationException(api.getSimpleName() + " requires " + supportedNames);
 	}
+
+	static void clearApis() {
+		REGISTERED_APIS.clear();
+	}
 }
