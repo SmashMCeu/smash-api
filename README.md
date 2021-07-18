@@ -16,6 +16,7 @@ In this case, `SmashMc.getApi()` will throw an `UnsupportedOperationException`.
 ### List of APIs
 The list of currently implemented SmashAPIs:
 * VanishApi
+* PlaytimeApi
 * LanguageApi*
 
 *It is easier to use the `Lang` wrapper in `eu.smashmc.api.lang.Lang`
