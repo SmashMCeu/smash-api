@@ -12,7 +12,19 @@ import eu.smashmc.api.SmashApi;
  * @param <T> type of player
  */
 @SmashApi({ Environment.BUKKIT, Environment.BUNGEECORD })
-public interface VanishApi<T> {
+public interface Vanish<T> {
+
+	static final String defaultMessageChannel = "smashlib:vanish";
+	static final String commandPermission = "proxy.vanish";
+
+	public static String getDefaultMessageChannel() {
+		return defaultMessageChannel;
+	}
+
+	public static String getCommandPermission() {
+		return commandPermission;
+	}
+
 	public default boolean isVanished(UUID uuid) {
 		return getVanishMode(uuid) == VanishMode.INVISIBLE;
 	}

@@ -7,7 +7,7 @@ import eu.smashmc.api.Environment;
 import eu.smashmc.api.SmashApi;
 
 @SmashApi({ Environment.BUKKIT })
-public interface PlaytimeApi {
+public interface Playtime {
 
 	/**
 	 * Retrieve a players playtime information from their {@link UUID}.

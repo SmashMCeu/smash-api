@@ -1,98 +1,54 @@
 package eu.smashmc.api.lang;
 
-import java.util.UUID;
+import java.util.logging.Logger;
 
-public interface Language<T> {
+import eu.smashmc.api.Environment;
+import eu.smashmc.api.SmashApi;
 
-	/**
-	 * Return the scope prefix of this languages instance.
-	 * 
-	 * @return scope prefix
-	 */
-	public String getScope();
+@SmashApi({ Environment.BUKKIT, Environment.BUNGEECORD })
+public abstract class Language<T> {
 
-	/**
-	 * Broadcasts the translation of the given message to all online players.
-	 * 
-	 * @param translationKey the translation key of the message
-	 * @param format         optional format
-	 */
-	public void broadcast(String translationKey, Object... format);
+	static Logger LOGGER = Logger.getLogger(LanguageProvider.class.getName());
+
+	static LanguageProvider<?> defaultProvider;
 
 	/**
-	 * Send a translated message to a player. The message will have a prefix.
+	 * Get the default scope {@link LanguageProvider}.
 	 * 
-	 * @param player         the target player
-	 * @param translationKey the translation key of the message
-	 * @param format         optional format
+	 * @return default language
 	 */
-	public void sendMessage(T player, String translationKey, Object... format);
+	public LanguageProvider<T> getDefaultProvider() {
+		if (defaultProvider == null) {
+			/* Return new language with global scope */
+			/* This operation is cheap */
+			return createLanguageProvider("global", "");
+		}
+		return (LanguageProvider<T>) defaultProvider;
+	}
 
 	/**
-	 * Send a translated message to a player.
+	 * Set the default scope {@link LanguageProvider}.
 	 * 
-	 * @param player         the target player
-	 * @param translationKey the translation key of the message
-	 * @param format         optional format
+	 * @param language default scope language
 	 */
-	public void sendUnprefixedMessage(T player, String translationKey, Object... format);
+	public void setDefaultProvider(LanguageProvider<T> language) {
+		/*
+		 * To prevent race conditions with setting the default we only allow for one
+		 * initialization of the default BukkitLanguage.
+		 */
+		if (defaultProvider != null) {
+			throw new IllegalStateException("Default language provider already set to " + defaultProvider.getScope());
+		}
+		defaultProvider = language;
+		LOGGER.info("Default scope is now " + language.getScope());
+	}
 
 	/**
-	 * Returns the formatted translation of a given translationKey for a given
-	 * countryCode. The countryCode cannot be null.
+	 * Create a new language object with a different scope
 	 * 
-	 * @param countryCode    the country code used for the translation
-	 * @param translationKey the translation key to be used
-	 * @param format         optional format string
-	 * @return the translated message
-	 * @throws IllegalArgumentException if countryCode is null
+	 * @param scope  language key prefix
+	 * @param prefix the prefix for chat messages
+	 * @return new {@link LanguageProvider} instance
 	 */
-	public String get(String countryCode, String translationKey, Object... format) throws IllegalArgumentException;
-
-	/**
-	 * Returns the formatted translation of a given translationKey for a given user
-	 * by their UUID. The countryCode cannot be null.
-	 * 
-	 * @param uuid           the users {@link UUID} to get the translation for
-	 * @param translationKey the translation key to be used
-	 * @param format         optional format string
-	 * @return the translated message
-	 * @throws IllegalArgumentException if countryCode is null
-	 */
-	public String get(UUID uuid, String translationKey, Object... format) throws IllegalArgumentException;
-
-	/**
-	 * Returns the formatted translation of a given translationKey for a given user
-	 * by their UUID. The countryCode cannot be null.
-	 * 
-	 * @param player         the target player
-	 * @param translationKey the translation key to be used
-	 * @param format         optional format string
-	 * @return the translated message
-	 * @throws IllegalArgumentException if countryCode is null
-	 */
-	public String get(T player, String translationKey, Object... format) throws IllegalArgumentException;
-
-	/**
-	 * Translates a string in the following format:
-	 * 
-	 * (color code)lang:(key):format1:format2:...
-	 * 
-	 * Examples: <br>
-	 * - lang:chat.cooldown <br>
-	 * - §clang:chat.hello:LiquidDev
-	 * 
-	 * @param countryCode the countryCode used to translate the string
-	 * @param langStr     the input String
-	 * @return the translated String
-	 */
-	public String getFormatTranslation(String countryCode, String langStr);
-
-	/**
-	 * Get the countryCode for a player by it's UUID.
-	 * 
-	 * @param uuid the users UUID to get the country code for
-	 * @return the countryCode
-	 */
-	public String getCountryCode(UUID uuid);
+	public abstract LanguageProvider<T> createLanguageProvider(String scope, String prefix);
 }
