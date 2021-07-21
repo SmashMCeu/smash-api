@@ -47,7 +47,7 @@ public class SmashMcTest {
 
 	@Test
 	public void testGetApiFail() {
-		assertThrows(UnsupportedOperationException.class, () -> SmashMc.getApi(ExampleApi.class));
+		assertThrows(IllegalStateException.class, () -> SmashMc.getApi(ExampleApi.class));
 	}
 
 	@Test
@@ -77,8 +77,7 @@ public class SmashMcTest {
 	public void testDependentApiFail() {
 		Environment.setEnvironment(Environment.NONE);
 		DependentApi mock = mock(DependentApi.class);
-		SmashMc.registerApi(DependentApi.class, mock);
-		assertThrows(UnsupportedOperationException.class, () -> SmashMc.getApi(DependentApi.class));
+		assertThrows(UnsupportedOperationException.class, () -> SmashMc.registerApi(DependentApi.class, mock));
 	}
 
 }

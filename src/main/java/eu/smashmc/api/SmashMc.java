@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.annotation.Nonnull;
+
 /**
  * A global (static use only) API registry for {@link SmashApi}.
  * 
@@ -31,15 +33,20 @@ public final class SmashMc {
 	 * @param <T>            generic type of the APIs interface
 	 * @param type           class type of the APIs interface
 	 * @param implementation the implementing instance
-	 * @throws IllegalArgumentException if the class is not a {@link SmashApi}
+	 * @throws IllegalArgumentException      if the class type is not a
+	 *                                       {@link SmashApi} or the implementation
+	 *                                       is <code>null</code>
+	 * @throws UnsupportedOperationException if the current environment is not
+	 *                                       supported by API
 	 */
-	public static <T> void registerApi(Class<T> type, T implementation) throws IllegalArgumentException {
+	public static <T> void registerApi(Class<T> type, T implementation) throws IllegalArgumentException, UnsupportedOperationException {
 		if (!type.isAnnotationPresent(SmashApi.class)) {
 			throw new IllegalArgumentException("Class is missing the SmashApi annotation: " + type.getName());
 		}
 		if (implementation == null) {
 			throw new IllegalArgumentException("implementation must not be null");
 		}
+		verifyCompatibility(type);
 		REGISTERED_APIS.put(type, implementation);
 	}
 
@@ -49,27 +56,40 @@ public final class SmashMc {
 	 * 
 	 * @param <T> generic type of the APIs interface
 	 * @param api class type of the APIs interface used to lookup
-	 * @return an instance of the API
-	 * @throws UnsupportedOperationException if the API is not present or not yet
-	 *                                       registered
+	 * @return an instance of the API *
 	 * @throws IllegalArgumentException      if the requested type is not a
 	 *                                       {@link SmashApi}
+	 * @throws UnsupportedOperationException if the current environment is not
+	 *                                       supported by API
+	 * @throws IllegalStateException         if the API is not registered (yet)
 	 */
-	public static <T> T getApi(Class<T> api) throws UnsupportedOperationException, IllegalArgumentException {
-		if (REGISTERED_APIS.containsKey(api)) {
-			verifyCompatibility(api);
-			Object impl = REGISTERED_APIS.get(api);
+	@Nonnull
+	public static <T> T getApi(Class<T> api) throws UnsupportedOperationException, IllegalArgumentException, IllegalStateException {
+		Object impl = REGISTERED_APIS.get(api);
+
+		if (impl != null) {
 			return (T) impl;
 		} else {
 			if (api.isAnnotationPresent(SmashApi.class)) {
-				throw new UnsupportedOperationException(api.getName() + " is not implemented");
+				verifyCompatibility(api);
+				throw new IllegalStateException(api.getName() + " is not registered");
 			} else {
 				throw new IllegalArgumentException(api.getName() + " is not a SmashApi");
 			}
 		}
 	}
 
-	static void verifyCompatibility(Class<?> api) {
+	/**
+	 * Checks if a given API is registered and ready to use.
+	 * 
+	 * @param api type of the API to check
+	 * @return <code>true</code> if API is registered
+	 */
+	public boolean isPresent(Class<?> api) {
+		return REGISTERED_APIS.containsKey(api);
+	}
+
+	static void verifyCompatibility(Class<?> api) throws UnsupportedOperationException {
 		SmashApi annotation = api.getAnnotation(SmashApi.class);
 		Environment[] supported = annotation.value();
 		for (Environment env : supported) {
