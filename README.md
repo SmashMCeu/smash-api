@@ -1,12 +1,12 @@
 # Smash API
-Smash-API is a collection of SmashMC's Java APIs that allow anyone to develop for SmashMC :)
+Smash-API is a collection of Java APIs for SmashMC that allow you to develop for SmashMC :)
 
 ## Usage
-The usage should be as simple as getting an API by it's class and working with it.
-All interfaces are (hopefully) well documented that there is no need to know about the implementation or any other factors.
+The usage should be as simple as getting the desired API by it's class and working with it.
+All interfaces are (hopefully) well documented so that there should be no need to know about how they are implemented.
 
 ### Get an API
-To get an instance/implementation of an API use the `SmashMc` class as following:
+To get an instance/implementation of an API use the `SmashMc` class as the following:
 ```
 SmashMc.getApi(<api-name>.class)
 ```
@@ -19,4 +19,4 @@ The list of currently implemented SmashAPIs:
 * Playtime
 * Language*
 
-*It is easier to use the `Lang` wrapper in `eu.smashmc.api.lang.Lang`
+*For a more conveniente use, you can stick to the `Lang` wrapper in `eu.smashmc.api.lang.Lang`

@@ -18,7 +18,7 @@ public enum Environment {
 	}
 
 	/**
-	 * Check if the given {@link Environment} is supported the current
+	 * Check if the given {@link Environment} is supported by the current
 	 * {@link Environment}. Supported hereby means that the given
 	 * {@link Environment} is NONE or the same as the current one.
 	 * 
