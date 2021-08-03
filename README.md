@@ -18,5 +18,7 @@ The list of currently implemented SmashAPIs:
 * Vanish
 * Playtime
 * Language*
+* AsyncDispatcher
+* MinecraftIdentityProvider
 
 *For a more conveniente use, you can stick to the `Lang` wrapper in `eu.smashmc.api.lang.Lang`

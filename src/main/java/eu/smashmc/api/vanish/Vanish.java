@@ -4,14 +4,14 @@ import java.util.UUID;
 import java.util.function.BiPredicate;
 
 import eu.smashmc.api.Environment;
-import eu.smashmc.api.SmashApi;
+import eu.smashmc.api.SmashComponent;
 
 /**
  * API for the vanish Plugin.
  * 
  * @param <T> type of player
  */
-@SmashApi({ Environment.BUKKIT, Environment.BUNGEECORD })
+@SmashComponent({ Environment.BUKKIT, Environment.BUNGEECORD })
 public interface Vanish<T> {
 
 	static final String defaultMessageChannel = "smashlib:vanish";

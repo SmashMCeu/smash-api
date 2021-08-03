@@ -4,9 +4,9 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import eu.smashmc.api.Environment;
-import eu.smashmc.api.SmashApi;
+import eu.smashmc.api.SmashComponent;
 
-@SmashApi({ Environment.BUKKIT })
+@SmashComponent({ Environment.BUNGEECORD })
 public interface Playtime {
 
 	/**

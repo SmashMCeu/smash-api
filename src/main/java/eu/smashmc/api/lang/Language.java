@@ -3,9 +3,9 @@ package eu.smashmc.api.lang;
 import java.util.logging.Logger;
 
 import eu.smashmc.api.Environment;
-import eu.smashmc.api.SmashApi;
+import eu.smashmc.api.SmashComponent;
 
-@SmashApi({ Environment.BUKKIT, Environment.BUNGEECORD })
+@SmashComponent({ Environment.BUKKIT, Environment.BUNGEECORD })
 public abstract class Language<T> {
 
 	static Logger LOGGER = Logger.getLogger(LanguageProvider.class.getName());

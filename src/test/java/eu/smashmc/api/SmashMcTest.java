@@ -12,55 +12,55 @@ public class SmashMcTest {
 	interface Example {
 	}
 
-	@SmashApi
+	@SmashComponent
 	interface ExampleApi {
 	}
 
-	@SmashApi({ Environment.BUKKIT, Environment.BUNGEECORD })
+	@SmashComponent({ Environment.BUKKIT, Environment.BUNGEECORD })
 	interface DependentApi {
 	}
 
 	@BeforeEach
 	public void setup() {
-		SmashMc.clearApis();
+		SmashMc.clearComponents();
 	}
 
 	@Test
 	public void testRegisterApi() {
 		ExampleApi api = mock(ExampleApi.class);
-		SmashMc.registerApi(ExampleApi.class, api);
+		SmashMc.registerComponent(ExampleApi.class, api);
 	}
 
 	@Test
 	public void testRegisterApiFail() {
 		Example api = mock(Example.class);
-		assertThrows(IllegalArgumentException.class, () -> SmashMc.registerApi(Example.class, api));
+		assertThrows(IllegalArgumentException.class, () -> SmashMc.registerComponent(Example.class, api));
 	}
 
 	@Test
 	public void testGetApi() {
 		ExampleApi mock = mock(ExampleApi.class);
-		SmashMc.registerApi(ExampleApi.class, mock);
-		ExampleApi api = SmashMc.getApi(ExampleApi.class);
+		SmashMc.registerComponent(ExampleApi.class, mock);
+		ExampleApi api = SmashMc.getComponent(ExampleApi.class);
 		assertEquals(mock, api);
 	}
 
 	@Test
 	public void testGetApiFail() {
-		assertThrows(IllegalStateException.class, () -> SmashMc.getApi(ExampleApi.class));
+		assertThrows(IllegalStateException.class, () -> SmashMc.getComponent(ExampleApi.class));
 	}
 
 	@Test
 	public void testGetApiFailNoApi() {
-		assertThrows(IllegalArgumentException.class, () -> SmashMc.getApi(Example.class));
+		assertThrows(IllegalArgumentException.class, () -> SmashMc.getComponent(Example.class));
 	}
 
 	@Test
 	public void testDependentApi() {
 		Environment.setEnvironment(Environment.BUKKIT);
 		DependentApi mock = mock(DependentApi.class);
-		SmashMc.registerApi(DependentApi.class, mock);
-		DependentApi api = SmashMc.getApi(DependentApi.class);
+		SmashMc.registerComponent(DependentApi.class, mock);
+		DependentApi api = SmashMc.getComponent(DependentApi.class);
 		assertEquals(mock, api);
 	}
 
@@ -68,8 +68,8 @@ public class SmashMcTest {
 	public void testDependentApiAlternative() {
 		Environment.setEnvironment(Environment.BUNGEECORD);
 		DependentApi mock = mock(DependentApi.class);
-		SmashMc.registerApi(DependentApi.class, mock);
-		DependentApi api = SmashMc.getApi(DependentApi.class);
+		SmashMc.registerComponent(DependentApi.class, mock);
+		DependentApi api = SmashMc.getComponent(DependentApi.class);
 		assertEquals(mock, api);
 	}
 
@@ -77,7 +77,7 @@ public class SmashMcTest {
 	public void testDependentApiFail() {
 		Environment.setEnvironment(Environment.NONE);
 		DependentApi mock = mock(DependentApi.class);
-		assertThrows(UnsupportedOperationException.class, () -> SmashMc.registerApi(DependentApi.class, mock));
+		assertThrows(UnsupportedOperationException.class, () -> SmashMc.registerComponent(DependentApi.class, mock));
 	}
 
 }

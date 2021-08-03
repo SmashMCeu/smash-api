@@ -20,7 +20,7 @@ public class Lang {
 	 * @param prefix default prefix
 	 */
 	public static void initialize(String scope, String prefix) {
-		Language<CommandSender> api = SmashMc.getApi(Language.class);
+		Language<CommandSender> api = SmashMc.getComponent(Language.class);
 		LanguageProvider<CommandSender> language = api.createLanguageProvider(scope, prefix);
 		api.setDefaultProvider(language);
 	}
