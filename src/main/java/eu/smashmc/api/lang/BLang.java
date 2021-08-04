@@ -6,14 +6,18 @@ import eu.smashmc.api.SmashMc;
 import net.md_5.bungee.api.CommandSender;
 
 /**
- * Simple wrapper for {@link LanguageProvider} using the default
+ * Simple {@link LanguageProvider} wrapper for BungeeCord using the default
  * (Language#getDefault()) instance.
+ * 
+ * For Bukkit use {@link Lang} instead.
  */
 public class BLang {
 
 	/**
 	 * Initializes and sets the default {@link LanguageProvider} instance. This can
 	 * only be done once.
+	 * 
+	 * For Bukkit use {@link Lang#initialize(String, String)} instead.
 	 * 
 	 * @param scope  default scope
 	 * @param prefix default prefix

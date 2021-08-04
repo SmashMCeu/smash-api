@@ -2,19 +2,24 @@ package eu.smashmc.api.lang;
 
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 import eu.smashmc.api.SmashMc;
 
 /**
- * Simple wrapper for {@link LanguageProvider} using the default
+ * Simple {@link LanguageProvider} wrapper for {@link Bukkit} using the default
  * (Language#getDefault()) instance.
+ * 
+ * For BungeeCord use {@link BLang} instead.
  */
 public class Lang {
 
 	/**
 	 * Initializes and sets the default {@link LanguageProvider} instance. This can
 	 * only be done once.
+	 * 
+	 * For BungeeCord use {@link BLang#initialize(String, String)} instead.
 	 * 
 	 * @param scope  default scope
 	 * @param prefix default prefix

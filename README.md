@@ -1,8 +1,8 @@
 # Smash API
-Smash-API is a collection of Java APIs for SmashMC that allow you to develop for SmashMC :)
+Smash-API is a collection of our Java APIs that allow you to develop for SmashMC :)
 
 ## Components
-All components annotated with `@SmashComponent` and can be retrieved using the `SmashMc` class.
+All components annotated with `@SmashComponent` can be retrieved using the `SmashMc` class.
 The usage should be as simple as getting the desired component by it's class and working with it.
 All interfaces are (hopefully) well documented so that there should be no need to know about how they are implemented.
 

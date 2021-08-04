@@ -1,11 +1,14 @@
 package eu.smashmc.api.lang;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 
 /**
- * A Bukkit event that is called when a {@link Player} changed their language.
+ * A {@link Bukkit} {@link Event} that is called when a {@link Player} changed
+ * their language.
  * 
  * @author LiquidDev
  *
