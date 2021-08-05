@@ -7,6 +7,12 @@ import eu.smashmc.api.identity.minecraft.property.TexturesProperty;
 import lombok.Getter;
 import lombok.ToString;
 
+/**
+ * Identity representing some Minecraft user with an {@link UUID}, a name and a
+ * {@link TexturesProperty}.
+ * 
+ * @author LiquidDev
+ */
 @Getter
 @ToString
 public class MinecraftIdentity implements Identity<UUID> {
@@ -18,26 +24,66 @@ public class MinecraftIdentity implements Identity<UUID> {
 	@ToString.Exclude
 	private final TexturesProperty texture;
 
-	public MinecraftIdentity(UUID uuid, String name) {
-		this(uuid, name, null);
-	}
-
+	/**
+	 * Create an identity reference.
+	 * 
+	 * @param uuid    the identities {@link UUID}
+	 * @param name    the identities name
+	 * @param texture the identities {@link TexturesProperty}
+	 */
 	public MinecraftIdentity(UUID uuid, String name, TexturesProperty texture) {
 		this.uuid = uuid;
 		this.name = name;
 		this.texture = texture;
 	}
 
+	/**
+	 * Create an identity reference without a {@link TexturesProperty} loaded.
+	 * 
+	 * @param uuid the identities {@link UUID}
+	 * @param name the identities name
+	 */
+	public MinecraftIdentity(UUID uuid, String name) {
+		this(uuid, name, null);
+	}
+
+	/**
+	 * Returns the identities {@link UUID}.
+	 * 
+	 * @return the identities {@link UUID}
+	 */
+	public UUID getUuid() {
+		return uuid;
+	}
+
+	/**
+	 * Returns the identities {@link UUID}. Same as
+	 * {@link MinecraftIdentity#getUuid()}.
+	 * 
+	 * @return the identities {@link UUID}
+	 */
 	@Override
 	public UUID getId() {
 		return uuid;
 	}
 
+	/**
+	 * Checks if the {@link TexturesProperty} of the identity is loaded.
+	 * 
+	 * @return <code>true</code> if texture is loaded
+	 */
 	public boolean isTextureLoaded() {
 		return texture != null;
 	}
 
-	public TexturesProperty getTexture() {
+	/**
+	 * Returns the identities {@link TexturesProperty} if loaded, otherwise throws
+	 * {@link IllegalStateException}.
+	 * 
+	 * @return the {@link TexturesProperty}
+	 * @throws IllegalStateException if texture not loaded
+	 */
+	public TexturesProperty getTexture() throws IllegalStateException {
 		if (!isTextureLoaded()) {
 			throw new IllegalStateException("texture not loaded");
 		}

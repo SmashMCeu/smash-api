@@ -41,10 +41,26 @@ public interface IdentityProvider<ID, I extends Identity<ID>> {
 	 */
 	List<I> findByName(String name);
 
-	// TODO documentation
+	/**
+	 * Retrieves all Identities from the given ID array. The returned map may
+	 * contain less elements than the given array or may even be empty, if the user
+	 * is not found with the given id.This is a blocking operation that may perform
+	 * networking and database IO on the calling thread.
+	 * 
+	 * @param ids id list of users
+	 * @return ids mapped to their identity
+	 */
 	Map<ID, I> getAllById(ID[] ids);
 
-	// TODO documentation
+	/**
+	 * Searches all users with any name in the given array. The returned map may
+	 * contain less elements than the given array or may even be empty, if no user
+	 * is not found with any given name. This is a blocking operation that may
+	 * perform networking and database IO on the calling thread.
+	 * 
+	 * @param names array of names
+	 * @return names mapped to their identities
+	 */
 	Map<String, List<I>> findAllByName(String[] names);
 
 	/**
@@ -72,12 +88,29 @@ public interface IdentityProvider<ID, I extends Identity<ID>> {
 		return AsyncExecutor.supply(() -> this.findByName(name));
 	}
 
-	// TODO documentation
+	/**
+	 * Retrieves all Identities from the given ID array as a non-blocking
+	 * {@link CompletableFuture}. The returned map may contain less elements than
+	 * the given array or may even be empty, if the user is not found with the given
+	 * id.
+	 * 
+	 * @param ids id list of users
+	 * @return {@link CompletableFuture} holding the ids mapped to their identity
+	 */
 	default CompletableFuture<Map<ID, I>> getAllByIdAsync(ID[] ids) {
 		return AsyncExecutor.supply(() -> this.getAllById(ids));
 	}
 
-	// TODO documentation
+	/**
+	 * Searches all users with any name in the given array as a non-blocking
+	 * {@link CompletableFuture}. The returned map may contain less elements than
+	 * the given array or may even be empty, if no user is not found with any given
+	 * name.
+	 * 
+	 * @param names array of names
+	 * @return {@link CompletableFuture} holding the names mapped to their
+	 *         identities
+	 */
 	default CompletableFuture<Map<String, List<I>>> findAllByNameAsync(String[] names) {
 		return AsyncExecutor.supply(() -> this.findAllByName(names));
 	}
