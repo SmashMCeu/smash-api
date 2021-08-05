@@ -38,11 +38,22 @@ public class MinecraftIdentity implements Identity<UUID> {
 	 * @param texture the identities {@link TexturesProperty}
 	 * @param server  server name or <code>null</code>
 	 */
-	public MinecraftIdentity(UUID uuid, String name, TexturesProperty texture, String server) {
+	public MinecraftIdentity(UUID uuid, String name, String server, TexturesProperty texture) {
 		this.uuid = uuid;
 		this.name = name;
 		this.texture = texture;
 		this.server = server;
+	}
+
+	/**
+	 * Create an identity reference without a {@link TexturesProperty} loaded.
+	 * 
+	 * @param uuid   the identities {@link UUID}
+	 * @param name   the identities name
+	 * @param server server name or <code>null</code>
+	 */
+	public MinecraftIdentity(UUID uuid, String name, String server) {
+		this(uuid, name, server, null);
 	}
 
 	/**
