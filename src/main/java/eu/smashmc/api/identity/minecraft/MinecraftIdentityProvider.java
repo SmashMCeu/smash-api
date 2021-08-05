@@ -1,5 +1,7 @@
 package eu.smashmc.api.identity.minecraft;
 
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -8,7 +10,6 @@ import javax.annotation.Nullable;
 import eu.smashmc.api.SmashComponent;
 import eu.smashmc.api.concurrent.AsyncExecutor;
 import eu.smashmc.api.identity.IdentityProvider;
-import eu.smashmc.api.identity.minecraft.property.TexturesProperty;
 
 /**
  * A {@link UUID} to name, name to {@link UUID} and skin provider for Minecraft
@@ -19,84 +20,55 @@ import eu.smashmc.api.identity.minecraft.property.TexturesProperty;
 @SmashComponent
 public interface MinecraftIdentityProvider extends IdentityProvider<UUID, MinecraftIdentity> {
 
-	/**
-	 * Retrieves the name of a user by their UUID. Returns <code>null</code> if the
-	 * user was not found. This is a blocking operation that may perform networking
-	 * and database IO on the calling thread.
-	 * 
-	 * @param uuid the identifier of the user
-	 * @return the users name or <code>null</code>
-	 */
 	@Nullable
-	String getName(UUID uuid);
+	MinecraftIdentity getById(UUID uuid, boolean loadTexture);
 
-	/**
-	 * Retrieves the UUID of the most likely user with the given name. Returns
-	 * <code>null</code> if the user was not found. This is a blocking operation
-	 * that may perform networking and database IO on the calling thread.
-	 * 
-	 * @param name of the user
-	 * @return {@link UUID} of the user or <code>null</code>
-	 */
+	List<MinecraftIdentity> findByName(String name, boolean loadTexture);
+
+	Map<UUID, MinecraftIdentity> getAllById(UUID[] uuids, boolean loadTexture);
+
+	Map<String, List<MinecraftIdentity>> findAllByName(String[] names, boolean loadTexture);
+
 	@Nullable
-	UUID getUuid(String name);
+	@Override
+	default MinecraftIdentity getById(UUID uuid) {
+		return this.getById(uuid, false);
+	}
 
-	/**
-	 * Retrieves a players Skin/Texture by their {@link UUID}. Returns
-	 * <code>null</code> if the user was not found. This is a blocking operation
-	 * that may perform networking and database IO on the calling thread.
-	 * 
-	 * @param uuid the {@link UUID} of the user
-	 * @return {@link CompletableFuture} containing the {@link TexturesProperty} of
-	 *         the player or <code>null</code>
-	 */
-	@Nullable
-	TexturesProperty getTextures(UUID uuid);
+	@Override
+	default List<MinecraftIdentity> findByName(String name) {
+		return findByName(name, false);
+	}
 
-	/**
-	 * Retrieves the UUID of a user by their name as a non-blocking
-	 * {@link CompletableFuture}. The result of the {@link CompletableFuture} will
-	 * be <code>null</code> if the user was not found.
-	 * 
-	 * @param uuid the identifier of the user
-	 * @return {@link CompletableFuture} containing the name of the user or
-	 *         <code>null</code>
-	 */
-	default CompletableFuture<String> getNameAsync(UUID uuid) {
-		return AsyncExecutor.supply(() -> this.getName(uuid));
+	@Override
+	default Map<UUID, MinecraftIdentity> getAllById(UUID[] uuids) {
+		return this.getAllById(uuids, false);
+	}
+
+	default Map<String, List<MinecraftIdentity>> findAllByName(String[] names) {
+		return this.findAllByName(names, false);
+	}
+
+	default CompletableFuture<MinecraftIdentity> getByIdAsync(UUID uuid, boolean loadTexture) {
+		return AsyncExecutor.supply(() -> getById(uuid, loadTexture));
+	}
+
+	default CompletableFuture<List<MinecraftIdentity>> findByNameAsync(String name, boolean loadTexture) {
+		return AsyncExecutor.supply(() -> findByName(name, loadTexture));
+	}
+
+	default CompletableFuture<Map<UUID, MinecraftIdentity>> getAllByIdAsync(UUID[] uuids, boolean loadTexture) {
+		return AsyncExecutor.supply(() -> getAllById(uuids, loadTexture));
+	}
+
+	default CompletableFuture<Map<String, List<MinecraftIdentity>>> findAllByNameAsync(String[] names, boolean loadTexture) {
+		return AsyncExecutor.supply(() -> findAllByName(names, loadTexture));
 	}
 
 	/**
-	 * Retrieves the UUID of the most likely user with the given name as a
-	 * non-blocking {@link CompletableFuture}. The result of the
-	 * {@link CompletableFuture} will be <code>null</code> if the user was not
-	 * found.
-	 * 
-	 * @param name of the user
-	 * @return {@link CompletableFuture} containing the {@link UUID} of the user or
-	 *         <code>null</code>
-	 */
-	default CompletableFuture<UUID> getUuidAsync(String name) {
-		return AsyncExecutor.supply(() -> this.getUuid(name));
-	}
-
-	/**
-	 * Retrieves a players Skin/Texture as a non-blocking {@link CompletableFuture}.
-	 * The result of the {@link CompletableFuture} will be <code>null</code> if the
-	 * player was not found.
-	 * 
-	 * @param uuid the {@link UUID} of the player
-	 * @return {@link CompletableFuture} containing the {@link TexturesProperty} of
-	 *         the player or <code>null</code>
-	 */
-	default CompletableFuture<TexturesProperty> getTexturesAsync(UUID uuid) {
-		return AsyncExecutor.supply(() -> this.getTextures(uuid));
-	}
-
-	/**
-	 * Updates the identity to the backend and in the cache.
+	 * Updates the identity to the backend and the cache.
 	 * 
 	 * @param identity the {@link MinecraftIdentity} to update
 	 */
-	void updateIdentity(MinecraftIdentity identity);
+	void update(MinecraftIdentity identity);
 }
