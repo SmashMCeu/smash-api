@@ -2,6 +2,8 @@ package eu.smashmc.api.identity.minecraft;
 
 import java.util.UUID;
 
+import javax.annotation.Nullable;
+
 import eu.smashmc.api.identity.Identity;
 import eu.smashmc.api.identity.minecraft.property.TexturesProperty;
 import lombok.Getter;
@@ -21,8 +23,12 @@ public class MinecraftIdentity implements Identity<UUID> {
 
 	private final String name;
 
+	@Nullable
 	@ToString.Exclude
 	private final TexturesProperty texture;
+
+	@Nullable
+	private final String server;
 
 	/**
 	 * Create an identity reference.
@@ -30,21 +36,24 @@ public class MinecraftIdentity implements Identity<UUID> {
 	 * @param uuid    the identities {@link UUID}
 	 * @param name    the identities name
 	 * @param texture the identities {@link TexturesProperty}
+	 * @param server  server name or <code>null</code>
 	 */
-	public MinecraftIdentity(UUID uuid, String name, TexturesProperty texture) {
+	public MinecraftIdentity(UUID uuid, String name, TexturesProperty texture, String server) {
 		this.uuid = uuid;
 		this.name = name;
 		this.texture = texture;
+		this.server = server;
 	}
 
 	/**
-	 * Create an identity reference without a {@link TexturesProperty} loaded.
+	 * Create an offline identity reference without a {@link TexturesProperty}
+	 * loaded.
 	 * 
 	 * @param uuid the identities {@link UUID}
 	 * @param name the identities name
 	 */
 	public MinecraftIdentity(UUID uuid, String name) {
-		this(uuid, name, null);
+		this(uuid, name, null, null);
 	}
 
 	/**
@@ -88,6 +97,25 @@ public class MinecraftIdentity implements Identity<UUID> {
 			throw new IllegalStateException("texture not loaded");
 		}
 		return texture;
+	}
+
+	/**
+	 * Checks if the user is online.
+	 * 
+	 * @return <code>true</code> if user is online
+	 */
+	public boolean isOnline() {
+		return this.server != null;
+	}
+
+	/**
+	 * Returns the current server of a user, or <code>null</code> if offline.
+	 * 
+	 * @return server name or <code>null</code>
+	 */
+	@Nullable
+	public String getServer() {
+		return this.server;
 	}
 
 	@Override
