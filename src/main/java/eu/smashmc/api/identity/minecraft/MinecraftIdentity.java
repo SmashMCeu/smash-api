@@ -4,6 +4,8 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.Preconditions;
+
 import eu.smashmc.api.identity.Identity;
 import eu.smashmc.api.identity.minecraft.property.TexturesProperty;
 import lombok.Getter;
@@ -39,6 +41,8 @@ public class MinecraftIdentity implements Identity<UUID> {
 	 * @param server  server name or <code>null</code>
 	 */
 	public MinecraftIdentity(UUID uuid, String name, String server, TexturesProperty texture) {
+		Preconditions.checkNotNull(uuid, "uuid must not be null");
+		Preconditions.checkNotNull(name, "name must not be null");
 		this.uuid = uuid;
 		this.name = name;
 		this.texture = texture;
@@ -107,6 +111,17 @@ public class MinecraftIdentity implements Identity<UUID> {
 		if (!isTextureLoaded()) {
 			throw new IllegalStateException("texture not loaded");
 		}
+		return texture;
+	}
+
+	/**
+	 * Returns the identities {@link TexturesProperty} if loaded or
+	 * <code>null</code>.
+	 * 
+	 * @return {@link TexturesProperty} or <code>null</code>
+	 */
+	@Nullable
+	public TexturesProperty getTextureOrNull() {
 		return texture;
 	}
 
