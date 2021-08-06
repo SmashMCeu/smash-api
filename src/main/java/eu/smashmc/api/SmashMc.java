@@ -24,7 +24,7 @@ public final class SmashMc {
 	 * The actual component registry map with the component type as the key and the
 	 * implementation as the value.
 	 */
-	private static final Map<Class<?>, Object> REGISTERED_ComponentS = new HashMap<>();
+	private static final Map<Class<?>, Object> REGISTERED_COMPONENTS = new HashMap<>();
 
 	/**
 	 * Registers a new component with it's implementation. An component must have
@@ -47,7 +47,7 @@ public final class SmashMc {
 			throw new IllegalArgumentException("implementation must not be null");
 		}
 		verifyCompatibility(type);
-		REGISTERED_ComponentS.put(type, implementation);
+		REGISTERED_COMPONENTS.put(type, implementation);
 	}
 
 	/**
@@ -67,7 +67,7 @@ public final class SmashMc {
 	 */
 	@Nonnull
 	public static <T> T getComponent(Class<T> component) throws UnsupportedOperationException, IllegalArgumentException, IllegalStateException {
-		Object impl = REGISTERED_ComponentS.get(component);
+		Object impl = REGISTERED_COMPONENTS.get(component);
 
 		if (impl != null) {
 			return (T) impl;
@@ -88,7 +88,7 @@ public final class SmashMc {
 	 * @return <code>true</code> if component is registered
 	 */
 	public boolean isPresent(Class<?> component) {
-		return REGISTERED_ComponentS.containsKey(component);
+		return REGISTERED_COMPONENTS.containsKey(component);
 	}
 
 	static void verifyCompatibility(Class<?> component) throws UnsupportedOperationException {
@@ -104,7 +104,7 @@ public final class SmashMc {
 	}
 
 	static void clearComponents() {
-		REGISTERED_ComponentS.clear();
+		REGISTERED_COMPONENTS.clear();
 	}
 
 	@Deprecated

@@ -1,5 +1,7 @@
 package eu.smashmc.api.identity.minecraft;
 
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -8,7 +10,6 @@ import javax.annotation.Nullable;
 import eu.smashmc.api.SmashComponent;
 import eu.smashmc.api.concurrent.AsyncExecutor;
 import eu.smashmc.api.identity.IdentityProvider;
-import eu.smashmc.api.identity.minecraft.property.TexturesProperty;
 
 /**
  * A {@link UUID} to name, name to {@link UUID} and skin provider for Minecraft
@@ -20,83 +21,152 @@ import eu.smashmc.api.identity.minecraft.property.TexturesProperty;
 public interface MinecraftIdentityProvider extends IdentityProvider<UUID, MinecraftIdentity> {
 
 	/**
-	 * Retrieves the name of a user by their UUID. Returns <code>null</code> if the
-	 * user was not found. This is a blocking operation that may perform networking
-	 * and database IO on the calling thread.
+	 * Retrieves the identity of a user by their {@link UUID}. When setting
+	 * loadTexture to true, the lookup might bypass some caches and take longer.
 	 * 
-	 * @param uuid the identifier of the user
-	 * @return the users name or <code>null</code>
+	 * @param uuid
+	 * @param loadTexture specify whether or not the textures of the identity should
+	 *                    be loaded as well.
+	 * @return the {@link MinecraftIdentity} or null
 	 */
 	@Nullable
-	String getName(UUID uuid);
+	MinecraftIdentity getById(UUID uuid, boolean loadTexture);
 
 	/**
-	 * Retrieves the UUID of the most likely user with the given name. Returns
-	 * <code>null</code> if the user was not found. This is a blocking operation
-	 * that may perform networking and database IO on the calling thread.
+	 * Searches the identities of users with the given name. When setting
+	 * loadTexture to true, the lookup might bypass some caches and take longer.
 	 * 
-	 * @param name of the user
-	 * @return {@link UUID} of the user or <code>null</code>
+	 * @param name
+	 * @param loadTexture specify whether or not the textures of the identity should
+	 *                    be loaded as well.
+	 * @return a {@link List} of {@link MinecraftIdentity}, may be empty if none
+	 *         found
+	 */
+	List<MinecraftIdentity> findByName(String name, boolean loadTexture);
+
+	/**
+	 * Retrieves all identities by their {@link UUID} in the given array.. When
+	 * setting loadTexture to true, the lookup might bypass some caches and take
+	 * longer.
+	 * 
+	 * @param uuids       array of {@link UUID}
+	 * @param loadTexture specify whether or not the textures of the identity should
+	 *                    be loaded as well.
+	 * @return the {@link MinecraftIdentity} or null
+	 */
+	Map<UUID, MinecraftIdentity> getAllById(UUID[] uuids, boolean loadTexture);
+
+	/**
+	 * Searches all identities of all users with any name in the given array. When
+	 * setting loadTexture to true, the lookup might bypass some caches and take
+	 * longer.
+	 * 
+	 * @param names       list of names to search for
+	 * @param loadTexture specify whether or not the textures of the identity should
+	 *                    be loaded as well.
+	 * @return names mapped to a {@link List} of {@link MinecraftIdentity}, may be
+	 *         empty if none found
+	 */
+	Map<String, List<MinecraftIdentity>> findAllByName(String[] names, boolean loadTexture);
+
+	/**
+	 * @see MinecraftIdentityProvider#getById(UUID, boolean) - loadTexture defaults
+	 *      to false.
 	 */
 	@Nullable
-	UUID getUuid(String name);
-
-	/**
-	 * Retrieves a players Skin/Texture by their {@link UUID}. Returns
-	 * <code>null</code> if the user was not found. This is a blocking operation
-	 * that may perform networking and database IO on the calling thread.
-	 * 
-	 * @param uuid the {@link UUID} of the user
-	 * @return {@link CompletableFuture} containing the {@link TexturesProperty} of
-	 *         the player or <code>null</code>
-	 */
-	@Nullable
-	TexturesProperty getTextures(UUID uuid);
-
-	/**
-	 * Retrieves the UUID of a user by their name as a non-blocking
-	 * {@link CompletableFuture}. The result of the {@link CompletableFuture} will
-	 * be <code>null</code> if the user was not found.
-	 * 
-	 * @param uuid the identifier of the user
-	 * @return {@link CompletableFuture} containing the name of the user or
-	 *         <code>null</code>
-	 */
-	default CompletableFuture<String> getNameAsync(UUID uuid) {
-		return AsyncExecutor.supply(() -> this.getName(uuid));
+	@Override
+	default MinecraftIdentity getById(UUID uuid) {
+		return this.getById(uuid, false);
 	}
 
 	/**
-	 * Retrieves the UUID of the most likely user with the given name as a
-	 * non-blocking {@link CompletableFuture}. The result of the
-	 * {@link CompletableFuture} will be <code>null</code> if the user was not
-	 * found.
-	 * 
-	 * @param name of the user
-	 * @return {@link CompletableFuture} containing the {@link UUID} of the user or
-	 *         <code>null</code>
+	 * @see MinecraftIdentityProvider#findByName(String, boolean) - loadTexture
+	 *      defaults to false.
 	 */
-	default CompletableFuture<UUID> getUuidAsync(String name) {
-		return AsyncExecutor.supply(() -> this.getUuid(name));
+	@Override
+	default List<MinecraftIdentity> findByName(String name) {
+		return findByName(name, false);
 	}
 
 	/**
-	 * Retrieves a players Skin/Texture as a non-blocking {@link CompletableFuture}.
-	 * The result of the {@link CompletableFuture} will be <code>null</code> if the
-	 * player was not found.
-	 * 
-	 * @param uuid the {@link UUID} of the player
-	 * @return {@link CompletableFuture} containing the {@link TexturesProperty} of
-	 *         the player or <code>null</code>
+	 * @see MinecraftIdentityProvider#getAllById(UUID[], boolean) - loadTexture
+	 *      defaults to false.
 	 */
-	default CompletableFuture<TexturesProperty> getTexturesAsync(UUID uuid) {
-		return AsyncExecutor.supply(() -> this.getTextures(uuid));
+	@Override
+	default Map<UUID, MinecraftIdentity> getAllById(UUID[] uuids) {
+		return this.getAllById(uuids, false);
 	}
 
 	/**
-	 * Updates the identity to the backend and in the cache.
+	 * @see MinecraftIdentityProvider#findAllByName(String[], boolean) - loadTexture
+	 *      defaults to false.
+	 */
+	default Map<String, List<MinecraftIdentity>> findAllByName(String[] names) {
+		return this.findAllByName(names, false);
+	}
+
+	/**
+	 * Retrieves the identity of a user by their {@link UUID} as a non-blocking
+	 * operation. When setting loadTexture to true, the lookup might bypass some
+	 * caches and take longer.
+	 * 
+	 * @param uuid
+	 * @param loadTexture specify whether or not the textures of the identity should
+	 *                    be loaded as well.
+	 * @return {@link CompletableFuture} with the {@link MinecraftIdentity} or null
+	 */
+	default CompletableFuture<MinecraftIdentity> getByIdAsync(UUID uuid, boolean loadTexture) {
+		return AsyncExecutor.supply(() -> getById(uuid, loadTexture));
+	}
+
+	/**
+	 * Searches the identities of users with the given name as a non-blocking
+	 * operation. When setting loadTexture to true, the lookup might bypass some
+	 * caches and take longer.
+	 * 
+	 * @param name
+	 * @param loadTexture specify whether or not the textures of the identity should
+	 *                    be loaded as well.
+	 * @return {@link CompletableFuture} with {@link List} of
+	 *         {@link MinecraftIdentity}, may be empty if none found
+	 */
+	default CompletableFuture<List<MinecraftIdentity>> findByNameAsync(String name, boolean loadTexture) {
+		return AsyncExecutor.supply(() -> findByName(name, loadTexture));
+	}
+
+	/**
+	 * Retrieves all identities by their {@link UUID} in the given array as a
+	 * non-blocking operation. When setting loadTexture to true, the lookup might
+	 * bypass some caches and take longer.
+	 * 
+	 * @param uuids       array of {@link UUID}
+	 * @param loadTexture specify whether or not the textures of the identity should
+	 *                    be loaded as well.
+	 * @return {@link CompletableFuture} with the {@link MinecraftIdentity} or null
+	 */
+	default CompletableFuture<Map<UUID, MinecraftIdentity>> getAllByIdAsync(UUID[] uuids, boolean loadTexture) {
+		return AsyncExecutor.supply(() -> getAllById(uuids, loadTexture));
+	}
+
+	/**
+	 * Searches all identities of all users with any name in the given array as a
+	 * non-blocking operation. When setting loadTexture to true, the lookup might
+	 * bypass some caches and take longer.
+	 * 
+	 * @param names       list of names to search for
+	 * @param loadTexture specify whether or not the textures of the identity should
+	 *                    be loaded as well.
+	 * @return {@link CompletableFuture} with the names mapped to a {@link List} of
+	 *         {@link MinecraftIdentity}, may be empty if none found
+	 */
+	default CompletableFuture<Map<String, List<MinecraftIdentity>>> findAllByNameAsync(String[] names, boolean loadTexture) {
+		return AsyncExecutor.supply(() -> findAllByName(names, loadTexture));
+	}
+
+	/**
+	 * Updates the identity to the backend and the cache.
 	 * 
 	 * @param identity the {@link MinecraftIdentity} to update
 	 */
-	void updateIdentity(MinecraftIdentity identity);
+	void update(MinecraftIdentity identity);
 }
