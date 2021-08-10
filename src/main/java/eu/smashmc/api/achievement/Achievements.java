@@ -1,35 +1,36 @@
-package eu.smashmc.api.achievements;
+package eu.smashmc.api.achievement;
 
 import eu.smashmc.api.Environment;
 import eu.smashmc.api.SmashComponent;
 
-import java.util.Set;
+import java.util.List;
+import java.util.UUID;
 
-@SmashComponent({Environment.BUKKIT, Environment.BUNGEECORD})
+@SmashComponent({Environment.BUKKIT})
 public interface Achievements {
 
     /**
      * Retrieve all registered achievements
      *
-     * @return Set of all registered {@link AchievementEntity}
+     * @return List of all registered {@link AchievementEntity}
      */
-    Set<AchievementEntity> listAchievements();
+    List<AchievementEntity> listAchievements();
 
     /**
      * Retrieve all achievement keys of a player by their uuid
      *
-     * @param uuid player's uuid
-     * @return Set of all registered achievement keys
+     * @param uuid player's {@link UUID}
+     * @return List of all registered achievements
      */
-    Set<String> getAchievements(String uuid);
+    List<AchievementEntity> getAchievements(UUID uuid);
 
     /**
      * Claim an achievement for a player by their uuid
      *
-     * @param uuid player's uuid
+     * @param uuid player's {@link UUID}
      * @param achievementKey key of registered achievement
      */
-    void claimAchievement(String uuid, String achievementKey);
+    void claimAchievement(UUID uuid, String achievementKey);
 
     /**
      * Register a new achievement
