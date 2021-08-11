@@ -10,7 +10,7 @@ public interface AchievementEntity {
     String getKey();
 
     /**
-     * Get game type oft the registered achievement
+     * Get game type of the registered achievement
      * example: Smash, Lobby
      *
      * @return game type

@@ -34,6 +34,7 @@ public interface Achievements {
 
     /**
      * Register a new achievement
+     * If the achievement is already registered, it updates the registered achievement
      *
      * @param achievementEntity {@link AchievementEntity}
      */
