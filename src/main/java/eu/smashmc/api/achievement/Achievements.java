@@ -26,11 +26,13 @@ public interface Achievements {
 
     /**
      * Claim an achievement for a player by their uuid
+     * If the achievement is already claimed, nothing changes
+     * It throws an {@link IllegalArgumentException} if the achievement doesn't exists
      *
      * @param uuid player's {@link UUID}
      * @param achievementKey key of registered achievement
      */
-    void claimAchievement(UUID uuid, String achievementKey);
+    void claimAchievement(UUID uuid, String achievementKey) throws IllegalArgumentException;
 
     /**
      * Register a new achievement
