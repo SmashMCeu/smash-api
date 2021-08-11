@@ -87,7 +87,7 @@ public final class SmashMc {
 	 * @param component type of the component to check
 	 * @return <code>true</code> if component is registered
 	 */
-	public boolean isPresent(Class<?> component) {
+	public static boolean isPresent(Class<?> component) {
 		return REGISTERED_COMPONENTS.containsKey(component);
 	}
 
