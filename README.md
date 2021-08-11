@@ -21,5 +21,7 @@ The list of currently implemented SmashComponents:
 * Language*
 * AsyncDispatcher
 * MinecraftIdentityProvider
+* Achievements
+* LobbyTos
 
 *For a more conveniente use, you can stick to the `Lang` wrapper in `eu.smashmc.api.lang.Lang`
