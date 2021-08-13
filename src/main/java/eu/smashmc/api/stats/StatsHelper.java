@@ -4,13 +4,15 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
-import eu.smashmc.api.Environment;
-import eu.smashmc.api.SmashComponent;
-
-@SmashComponent(Environment.BUKKIT)
+/**
+ * TODO missing documentation
+ * 
+ * @author LiquidDev
+ *
+ */
 public interface StatsHelper {
 
-	void startGame(String gameType, String mapName, List<Player> participants) throws IllegalStateException;
+	void startGame(String mapName, List<Player> participants) throws IllegalStateException;
 
 	void endGame() throws IllegalStateException;
 

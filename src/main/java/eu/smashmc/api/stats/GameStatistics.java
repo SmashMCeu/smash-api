@@ -11,6 +11,13 @@ import eu.smashmc.api.stats.value.view.IntStatsValueAccumulation;
 import eu.smashmc.api.stats.value.view.StatsValueAccumulation;
 import eu.smashmc.api.stats.value.view.TextStatsValueAccumulation;
 
+/**
+ * Represents the statistics of a player within a specific time frame for a
+ * specific game type.
+ * 
+ * @author LiquidDev
+ *
+ */
 public interface GameStatistics {
 
 	UUID getPlayerUuid();
