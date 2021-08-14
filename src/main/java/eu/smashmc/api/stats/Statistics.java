@@ -44,23 +44,6 @@ public interface Statistics {
 	void saveGame(GameEntity game) throws IllegalArgumentException;
 
 	/**
-	 * Retrieve a {@link GameEntity} by their id.
-	 * 
-	 * @param id the games id
-	 * @return optional {@link GameEntity}
-	 */
-	Optional<GameEntity> getGame(String id);
-
-	/**
-	 * Retrieve a {@link List} of all games the given player participated in. This
-	 * might be a very large collection depending, use with care.
-	 * 
-	 * @param playerUuid the player {@link UUID}
-	 * @return a list of all games the given player participated in
-	 */
-	List<GameEntity> getGames(UUID playerUuid);
-
-	/**
 	 * Retrieve the ranking position of a player in a specific time window using a
 	 * sortKey.
 	 * 
