@@ -1,6 +1,6 @@
 package eu.smashmc.api.stats;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.bukkit.entity.Player;
 
@@ -12,9 +12,9 @@ import org.bukkit.entity.Player;
  */
 public interface StatsHelper {
 
-	void startGame(String mapName, List<Player> participants) throws IllegalStateException;
+	void startGame(String mapName, Collection<? extends Player> participants) throws IllegalStateException;
 
-	void endGame() throws IllegalStateException;
+	GameEntity endGame(boolean post) throws IllegalStateException;
 
 	void addWin(Player player) throws IllegalStateException;
 
