@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
  */
 public interface StatsHelper {
 
-	void startGame(String mapName, Collection<? extends Player> participants) throws IllegalStateException;
+	void startGame(String mapName, Collection<? extends Player> participants);
 
 	GameEntity endGame(boolean post) throws IllegalStateException;
 
