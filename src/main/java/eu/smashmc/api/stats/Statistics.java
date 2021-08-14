@@ -94,4 +94,11 @@ public interface Statistics {
 	 */
 	List<UUID> getTop(int limit, StatsPhase phase, String sortBy);
 
+	/**
+	 * Retrieves a list of all game types.
+	 * 
+	 * @return {@link List} of the game type names
+	 */
+	public List<String> getGameTypes();
+
 }
