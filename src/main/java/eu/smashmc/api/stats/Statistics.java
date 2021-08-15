@@ -24,16 +24,16 @@ public interface Statistics {
 	 * @return a new {@link StatsHelper} for the gameType
 	 * @throws UnsupportedOperationException if not in {@link Environment#BUKKIT}
 	 */
-	public StatsHelper createHelper(String gameType) throws UnsupportedOperationException;
+	StatsHelper createHelper(String gameType) throws UnsupportedOperationException;
 
 	/**
-	 * Retrieve the {@link GameStatistics} of a player by their {@link UUID}.
+	 * Retrieve the {@link PlayerStatistics} of a player by their {@link UUID}.
 	 * 
-	 * @param uuid  the players {@link UUID}
-	 * @param phase defining the time frame as well as the game type
-	 * @return computed {@link GameStatistics} for the given phase
+	 * @param uuid   the players {@link UUID}
+	 * @param period defining the time frame as well as the game type
+	 * @return computed {@link PlayerStatistics} for the given period
 	 */
-	Optional<GameStatistics> getStats(UUID uuid, StatsPhase phase);
+	Optional<PlayerStatistics> getStats(UUID uuid, StatsPeriod period);
 
 	/**
 	 * Save a {@link GameEntity} to the back-end.
@@ -48,40 +48,40 @@ public interface Statistics {
 	 * sortKey.
 	 * 
 	 * @param playerUuid the players {@link UUID}
-	 * @param phase      the {@link StatsPhase} to query for
+	 * @param period     the {@link StatsPeriod} to query for
 	 * @param sortBy     the statistics key to rank by
 	 * @return ranking position of the player starting from 0
 	 */
-	long getPositionOf(UUID playerUuid, StatsPhase phase, String sortBy);
+	long getPositionOf(UUID playerUuid, StatsPeriod period, String sortBy);
 
 	/**
 	 * Retrieve the {@link UUID} of the player that is at the given position for the
 	 * given time frame ranked by the sortKey.
 	 * 
 	 * @param position the position to search for starting from 0
-	 * @param phase    the {@link StatsPhase} to query for
+	 * @param period   the {@link StatsPeriod} to query for
 	 * @param sortBy   the statistics key to rank by
 	 * @return optional {@link UUID} of the player at that position
 	 */
-	Optional<UUID> getAtPosition(int position, StatsPhase phase, String sortBy);
+	Optional<UUID> getAtPosition(int position, StatsPeriod period, String sortBy);
 
 	/**
 	 * Retrieves a {@link List} of {@link UUID} from the top players in the given
 	 * time frame ranked by the sortKey.
 	 * 
 	 * @param limit  limit for the list size
-	 * @param phase  the {@link StatsPhase} to query for
+	 * @param period the {@link StatsPeriod} to query for
 	 * @param sortBy the statistics key to rank by
 	 * @return list a descending {@link List} of {@link UUID} with the very best at
 	 *         index 0
 	 */
-	List<UUID> getTop(int limit, StatsPhase phase, String sortBy);
+	List<UUID> getTop(int limit, StatsPeriod period, String sortBy);
 
 	/**
 	 * Retrieves a list of all game types.
 	 * 
 	 * @return {@link List} of the game type names
 	 */
-	public List<String> getGameTypes();
+	List<String> getGameTypes();
 
 }

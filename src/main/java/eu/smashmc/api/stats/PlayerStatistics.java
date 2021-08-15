@@ -18,7 +18,7 @@ import eu.smashmc.api.stats.value.view.TextStatsValueAccumulation;
  * @author LiquidDev
  *
  */
-public interface GameStatistics {
+public interface PlayerStatistics {
 
 	UUID getPlayerUuid();
 
