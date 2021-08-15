@@ -84,4 +84,12 @@ public interface Statistics {
 	 */
 	List<String> getGameTypes();
 
+	/**
+	 * Retrieve a list of all maps from a game.
+	 * 
+	 * @param gameType
+	 * @return {@link List} of {@link GameMap}
+	 */
+	List<GameMap> getMaps(String gameType);
+
 }
