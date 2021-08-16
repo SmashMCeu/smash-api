@@ -8,20 +8,20 @@ import lombok.NonNull;
 
 @Data
 @AllArgsConstructor
-public class StatsPhase {
+public class StatsPeriod {
 
-	public static StatsPhase alltime(String gameType) {
-		return new StatsPhase(gameType, LocalDate.EPOCH, LocalDate.now());
+	public static StatsPeriod alltime(String gameType) {
+		return new StatsPeriod(gameType, LocalDate.EPOCH, LocalDate.now());
 	}
 
-	public static StatsPhase weekly(String gameType) {
+	public static StatsPeriod weekly(String gameType) {
 		LocalDate from = LocalDate.now().minusDays(7);
-		return new StatsPhase(gameType, from, LocalDate.now());
+		return new StatsPeriod(gameType, from, LocalDate.now());
 	}
 
-	public static StatsPhase monthly(String gameType) {
+	public static StatsPeriod monthly(String gameType) {
 		LocalDate from = LocalDate.now().minusDays(30);
-		return new StatsPhase(gameType, from, LocalDate.now());
+		return new StatsPeriod(gameType, from, LocalDate.now());
 	}
 
 	@NonNull

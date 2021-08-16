@@ -36,6 +36,17 @@ public interface Achievements {
 	void claimAchievement(UUID uuid, String achievementKey) throws IllegalArgumentException;
 
 	/**
+	 * Checks if a player has earned an achievement. Also returns false if the
+	 * achievement does not exist.
+	 * 
+	 * @param uuid           the player's {@link UUID}
+	 * @param achievementKey key of the achievement
+	 * @return <code>true</code> if achievement is claimed, <code>false</code> if
+	 *         not or achievement does not exist
+	 */
+	boolean hasAchievement(UUID uuid, String achievementKey);
+
+	/**
 	 * Register a new achievement. If the achievement is already registered, it
 	 * updates the registered achievement.
 	 *
