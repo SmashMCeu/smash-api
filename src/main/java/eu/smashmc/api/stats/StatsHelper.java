@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.bukkit.entity.Player;
 
 /**
- * TODO missing documentation
+ * A simple helper to create and save user statistics.
  * 
  * @author LiquidDev
  *
