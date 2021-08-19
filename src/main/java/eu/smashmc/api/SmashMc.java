@@ -2,11 +2,15 @@ package eu.smashmc.api;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import lombok.NonNull;
 
 /**
  * A global (static use only) component registry for {@link SmashComponent}.
@@ -22,14 +26,19 @@ public final class SmashMc {
 	}
 
 	/**
+	 * Map holding components that are not yet initialized.
+	 */
+	private static final Map<Class<?>, Supplier<?>> LAZY_COMPONENTS = new HashMap<>();
+
+	/**
 	 * The actual component registry map with the component type as the key and the
 	 * implementation as the value.
 	 */
-	private static final Map<Class<?>, Object> REGISTERED_COMPONENTS = new HashMap<>();
+	private static final Map<Class<?>, Object> INITIALIZED_COMPONENTS = new HashMap<>();
 
 	/**
-	 * Registers a new component with it's implementation. An component must have
-	 * the {@link SmashComponent} annotation.
+	 * Registers a new component with it's implementation. A component must have the
+	 * {@link SmashComponent} annotation.
 	 * 
 	 * @param <T>            generic type of the Components interface
 	 * @param type           class type of the Components interface
@@ -40,17 +49,38 @@ public final class SmashMc {
 	 * @throws UnsupportedOperationException if the current environment is not
 	 *                                       supported by Component
 	 */
-	public static <T> void registerComponent(Class<T> type, T implementation) throws IllegalArgumentException, UnsupportedOperationException {
+	public static <T> void registerComponent(Class<T> type, @NonNull T implementation) throws IllegalArgumentException, UnsupportedOperationException {
 		if (!type.isAnnotationPresent(SmashComponent.class)) {
 			throw new IllegalArgumentException("Class is missing the SmashComponent annotation: " + type.getName());
 		}
-		if (implementation == null) {
-			throw new IllegalArgumentException("implementation must not be null");
-		}
 		verifyCompatibility(type);
-		REGISTERED_COMPONENTS.put(type, implementation);
+		INITIALIZED_COMPONENTS.put(type, implementation);
 		Logger logger = Logger.getLogger(SmashMc.class.getName());
 		logger.info("Registered component " + type.getSimpleName());
+	}
+
+	/**
+	 * Registers a component that is later created when needed using the given
+	 * {@link Supplier}. The created component instance will then be cached and
+	 * reused. A component must have the {@link SmashComponent} annotation.
+	 * 
+	 * @param <T>                    generic type of the Components interface
+	 * @param type                   class type of the Components interface
+	 * @param implementationSupplier {@link Supplier} suppling the components
+	 *                               implementation
+	 * @throws IllegalArgumentException      if the class type is not a
+	 *                                       {@link SmashComponent} or the
+	 * @throws UnsupportedOperationException if the current environment is not
+	 *                                       supported by Component
+	 */
+	public static <T> void registerComponent(Class<T> type, @NonNull Supplier<T> implementationSupplier) throws IllegalArgumentException, UnsupportedOperationException {
+		if (!type.isAnnotationPresent(SmashComponent.class)) {
+			throw new IllegalArgumentException("Class is missing the SmashComponent annotation: " + type.getName());
+		}
+		verifyCompatibility(type);
+		LAZY_COMPONENTS.put(type, implementationSupplier);
+		Logger logger = Logger.getLogger(SmashMc.class.getName());
+		logger.info("Registered lazy component " + type.getSimpleName());
 	}
 
 	/**
@@ -70,7 +100,12 @@ public final class SmashMc {
 	 */
 	@Nonnull
 	public static <T> T getComponent(Class<T> component) throws UnsupportedOperationException, IllegalArgumentException, IllegalStateException {
-		Object impl = REGISTERED_COMPONENTS.get(component);
+		Object impl = INITIALIZED_COMPONENTS.get(component);
+
+		/* Implementation might be lazy loadable */
+		if (impl == null) {
+			impl = loadComponent(component);
+		}
 
 		if (impl != null) {
 			return (T) impl;
@@ -91,10 +126,32 @@ public final class SmashMc {
 	 * @return <code>true</code> if component is registered
 	 */
 	public static boolean isPresent(Class<?> component) {
-		return REGISTERED_COMPONENTS.containsKey(component);
+		return INITIALIZED_COMPONENTS.containsKey(component) || LAZY_COMPONENTS.containsKey(component);
 	}
 
-	static void verifyCompatibility(Class<?> component) throws UnsupportedOperationException {
+	@Nullable
+	protected static <T> T loadComponent(Class<T> component) {
+		Supplier<?> supplier = LAZY_COMPONENTS.get(component);
+		if (supplier == null) {
+			return null;
+		}
+
+		Object obj;
+		try {
+			obj = supplier.get();
+		} catch (Throwable t) {
+			throw new RuntimeException("Could not lazy load component " + component.getName(), t);
+		}
+
+		T impl = (T) obj;
+		LAZY_COMPONENTS.remove(component);
+		INITIALIZED_COMPONENTS.put(component, impl);
+		Logger logger = Logger.getLogger(SmashMc.class.getName());
+		logger.info("Lazy loaded component " + component.getSimpleName());
+		return impl;
+	}
+
+	protected static void verifyCompatibility(Class<?> component) throws UnsupportedOperationException {
 		SmashComponent annotation = component.getAnnotation(SmashComponent.class);
 		Environment[] supported = annotation.value();
 		for (Environment env : supported) {
@@ -108,8 +165,9 @@ public final class SmashMc {
 		throw new UnsupportedOperationException(component.getSimpleName() + " requires " + supportedNames);
 	}
 
-	static void clearComponents() {
-		REGISTERED_COMPONENTS.clear();
+	protected static void clearComponents() {
+		INITIALIZED_COMPONENTS.clear();
+		LAZY_COMPONENTS.clear();
 	}
 
 	@Deprecated
