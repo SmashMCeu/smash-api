@@ -2,6 +2,7 @@ package eu.smashmc.api;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -48,6 +49,8 @@ public final class SmashMc {
 		}
 		verifyCompatibility(type);
 		REGISTERED_COMPONENTS.put(type, implementation);
+		Logger logger = Logger.getLogger(SmashMc.class.getName());
+		logger.info("Registered component " + type.getSimpleName());
 	}
 
 	/**
@@ -74,7 +77,7 @@ public final class SmashMc {
 		} else {
 			if (component.isAnnotationPresent(SmashComponent.class)) {
 				verifyCompatibility(component);
-				throw new IllegalStateException(component.getName() + " is not registered");
+				throw new IllegalStateException(component.getName() + " is not (yet) registered, missing dependency?");
 			} else {
 				throw new IllegalArgumentException(component.getName() + " is not a SmashComponent");
 			}
@@ -99,7 +102,9 @@ public final class SmashMc {
 				return;
 			}
 		}
-		String supportedNames = Stream.of(supported).map(e -> e.name()).collect(Collectors.joining(" / "));
+		String supportedNames = Stream.of(supported)
+				.map(e -> e.name())
+				.collect(Collectors.joining(" / "));
 		throw new UnsupportedOperationException(component.getSimpleName() + " requires " + supportedNames);
 	}
 

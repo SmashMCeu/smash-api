@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import eu.smashmc.api.Environment;
 import eu.smashmc.api.SmashComponent;
+import eu.smashmc.api.stats.value.view.StatsValueAccumulation;
 
 /**
  * StatsV2 API component.
@@ -91,5 +92,15 @@ public interface Statistics {
 	 * @return {@link List} of {@link GameMap}
 	 */
 	List<GameMap> getMaps(String gameType);
+
+	/**
+	 * Retrieves a global statistic of all players in a specific game type by name.
+	 * Can be used for stuff like global character statistics.
+	 * 
+	 * @param statName name of the statistic
+	 * @param period   the {@link StatsPeriod} to query for
+	 * @return {@link StatsValueAccumulation} of the statistic
+	 */
+	Optional<StatsValueAccumulation> getGlobalStat(String statName, StatsPeriod period);
 
 }

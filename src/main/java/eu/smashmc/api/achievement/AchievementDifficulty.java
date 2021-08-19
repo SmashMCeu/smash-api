@@ -15,6 +15,6 @@ public enum AchievementDifficulty {
     private int id;
 
     public String getLanguageKey() {
-        return "achievement.difficulty." + name().toLowerCase();
+        return "difficulty." + name().toLowerCase();
     }
 }

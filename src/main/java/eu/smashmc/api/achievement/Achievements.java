@@ -53,4 +53,12 @@ public interface Achievements {
 	 * @param achievementEntity {@link AchievementEntity}
 	 */
 	void registerAchievement(AchievementEntity achievementEntity);
+
+	/**
+	 * Checks if a player has all known achievements.
+	 * 
+	 * @param uuid {@link UUID} of the player
+	 * @return <code>true</code> if player has all achievements
+	 */
+	boolean hasAllAchievements(UUID uuid);
 }
