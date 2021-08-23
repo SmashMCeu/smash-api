@@ -7,11 +7,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.function.Supplier;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+
 public class ThreadPoolDispatcher implements AsyncDispatcher {
 	private static ExecutorService executor;
 
 	public ThreadPoolDispatcher() {
-		executor = Executors.newCachedThreadPool();
+		executor = Executors.newCachedThreadPool((new ThreadFactoryBuilder()).setNameFormat("Smash Plugin Thread - %1$d")
+				.build());
 	}
 
 	public void execute(Runnable runnable) {
