@@ -1,6 +1,7 @@
 package eu.smashmc.api.profile;
 
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
@@ -13,6 +14,13 @@ import com.google.gson.JsonObject;
  * @author LiquidDev
  */
 public interface PlayerProfile {
+
+	/**
+	 * Get the {@link UUID} of the player the profile belongs to.
+	 * 
+	 * @return {@link UUID} of the owning player
+	 */
+	UUID getUuid();
 
 	/**
 	 * Get a map holding all topic names mapped to the topic {@link JsonObject}.
