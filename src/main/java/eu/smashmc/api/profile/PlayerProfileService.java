@@ -26,7 +26,7 @@ public interface PlayerProfileService {
 	PlayerProfile getProfile(UUID uuid) throws IllegalStateException;
 
 	/**
-	 * Updates profile topics to the endpoint.
+	 * Updates specific topics of a profile to the database.
 	 * 
 	 * @param profile the {@link PlayerProfile} to be updated
 	 * @param topics  the topics to be updated
