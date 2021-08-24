@@ -3,8 +3,6 @@ package eu.smashmc.api.profile;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-import javax.annotation.Nullable;
-
 import eu.smashmc.api.Environment;
 import eu.smashmc.api.SmashComponent;
 
@@ -42,6 +40,6 @@ public interface PlayerProfileService {
 	 * @return {@link CompletableFuture} with the {@link PlayerProfile} or
 	 *         <code>null</code>
 	 */
-	CompletableFuture<@Nullable PlayerProfile> getOfflineProfile(UUID uuid);
+	CompletableFuture<PlayerProfile> getOfflineProfile(UUID uuid);
 
 }
