@@ -73,7 +73,7 @@ public final class SmashMc {
 	 * @throws UnsupportedOperationException if the current environment is not
 	 *                                       supported by Component
 	 */
-	public static <T> void registerComponentLazy(Class<T> type, @NonNull Supplier<T> implementationSupplier) throws IllegalArgumentException, UnsupportedOperationException {
+	public static <T> void registerLazyComponent(Class<T> type, @NonNull Supplier<T> implementationSupplier) throws IllegalArgumentException, UnsupportedOperationException {
 		if (!type.isAnnotationPresent(SmashComponent.class)) {
 			throw new IllegalArgumentException("Class is missing the SmashComponent annotation: " + type.getName());
 		}
