@@ -3,8 +3,6 @@ package eu.smashmc.api.profile;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.annotation.Nullable;
-
 import com.google.gson.JsonObject;
 
 /**
@@ -30,12 +28,11 @@ public interface PlayerProfile {
 	Map<String, JsonObject> getTopics();
 
 	/**
-	 * Get a topic by it's name. Returns <code>null</code>, if topic does not exist.
+	 * Get a topic by it's name. Creates a new one if the topic does not exist.
 	 * 
 	 * @param name Name of the topic
-	 * @return {@link JsonObject} or <code>null</code>
+	 * @return {@link JsonObject}
 	 */
-	@Nullable
 	JsonObject getTopic(String name);
 
 	/**
@@ -61,16 +58,4 @@ public interface PlayerProfile {
 	 * @return <code>true</code> if profile is read only
 	 */
 	boolean isReadonly();
-
-	/**
-	 * Gets a topic by it's name, or - in case it does not exist, creates a new one
-	 * and returns it.
-	 * 
-	 * @param name The name of the topic to be retrieved or created
-	 * @return {@link JsonObject} topic
-	 */
-	default JsonObject getOrCreateTopic(String name) {
-		return hasTopic(name) ? getTopic(name) : createTopic(name);
-	}
-
 }
