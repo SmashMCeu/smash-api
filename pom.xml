@@ -3,12 +3,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>eu.smashmc</groupId>
 	<artifactId>smash-api</artifactId>
-	<version>1.2</version>
+	<version>1.4</version>
 
 	<properties>
 		<maven.compiler.target>16</maven.compiler.target>
 		<maven.compiler.source>16</maven.compiler.source>
 		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<lombok.version>1.18.20</lombok.version>
 	</properties>
 
 	<repositories>
@@ -16,18 +18,20 @@
 			<id>papermc</id>
 			<url>https://papermc.io/repo/repository/maven-public/</url>
 		</repository>
-		<repository>
-			<id>spigot-repo</id>
-			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-		</repository>
 	</repositories>
 
 	<dependencies>
 		<!-- Provided Dependencies -->
 		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot</artifactId>
-			<version>1.8.8-R0.1-SNAPSHOT</version>
+			<groupId>com.github.spotbugs</groupId>
+			<artifactId>spotbugs</artifactId>
+			<version>4.4.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.papermc.paper</groupId>
+			<artifactId>paper-api</artifactId>
+			<version>1.17.1-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -39,7 +43,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.20</version>
+			<version>${lombok.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<!-- Test Dependencies -->
@@ -74,7 +78,7 @@
 			<plugin>
 				<groupId>org.projectlombok</groupId>
 				<artifactId>lombok-maven-plugin</artifactId>
-				<version>1.18.20</version>
+				<version>${lombok.version}</version>
 			</plugin>
 			<!-- Run tests with JUnit-Jupiter -->
 			<plugin>
@@ -120,29 +124,18 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- Auto format code -->
+			<!-- Spot those bugs! -->
 			<plugin>
-				<groupId>net.revelc.code.formatter</groupId>
-				<artifactId>formatter-maven-plugin</artifactId>
-				<version>2.15.0</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>format</goal>
-						</goals>
-						<configuration>
-							<configFile>formatter.xml</configFile>
-							<encoding>UTF-8</encoding>
-						</configuration>
-					</execution>
-				</executions>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<version>4.2.0</version>
 			</plugin>
 		</plugins>
 	</build>
 	<distributionManagement>
 		<repository>
 			<id>smashmc</id>
-			<url>https://repo.smashmc.eu/smashmc</url>
+			<url>https://repo.smashmc.eu/public</url>
 		</repository>
 	</distributionManagement>
 </project>
