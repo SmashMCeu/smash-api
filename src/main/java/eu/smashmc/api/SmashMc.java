@@ -162,7 +162,7 @@ public final class SmashMc {
 		String supportedNames = Stream.of(supported)
 				.map(e -> e.name())
 				.collect(Collectors.joining(" / "));
-		throw new UnsupportedOperationException(component.getSimpleName() + " requires " + supportedNames);
+		throw new UnsupportedOperationException(component.getSimpleName() + " requires " + supportedNames + ", current: " + Environment.currentEnvironment());
 	}
 
 	protected static void clearComponents() {
