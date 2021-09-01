@@ -23,18 +23,18 @@ public class VoteEntry {
      *
      * @return timestamp
      */
-    private String timestamp;
+    private long timestamp;
 
     /**
-     * Get the name on the site, where the player has benn vote.
+     * Get the name on the site, where the player has been vote.
      *
      * @return the site name
      */
     private String serviceName;
 
     /**
-     * Get the address from which location the player votes
-     * NOTE: Some vote sites does not send the complete address, they send for example x.x.x.0
+     * Get the address of the voter
+     * NOTE: Some vote sites do not send the complete address, they send for example x.x.x.0
      *
      * @return the address as {@link InetAddress}}
      */
