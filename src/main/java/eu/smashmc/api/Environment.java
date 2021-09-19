@@ -13,7 +13,20 @@ public enum Environment {
 		}
 	}
 
-	public static void setEnvironment(Environment environment) {
+	/**
+	 * Sets the current Environment. Should not be called by Plugins.
+	 * 
+	 * @param environment new environment
+	 * @throws UnsupportedOperationException if environment is already set
+	 */
+	public static void setEnvironment(Environment environment) throws UnsupportedOperationException {
+		if (current != null) {
+			throw new UnsupportedOperationException("Environment is already set to " + current);
+		}
+		current = environment;
+	}
+
+	static void setEnvironmentUnchecked(Environment environment) {
 		current = environment;
 	}
 
