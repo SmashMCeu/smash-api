@@ -7,14 +7,11 @@ import lombok.Getter;
 @Getter
 public enum AchievementDifficulty {
 
-    EASY(0),
-    MEDIUM(1),
-    HARD(2),
-    IMPOSSIBLE(3);
+	EASY(0), MEDIUM(1), HARD(2), IMPOSSIBLE(3);
 
-    private int id;
+	private int id;
 
-    public String getLanguageKey() {
-        return "difficulty." + name().toLowerCase();
-    }
+	public String getLanguageKey() {
+		return "difficulty." + name().toLowerCase();
+	}
 }

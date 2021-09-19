@@ -38,10 +38,11 @@ public class AsyncExecutor {
 
 	public static <T> CompletableFuture<T> supply(Supplier<T> supplier) {
 		verfiyDispatcher();
-		return executor.supply(supplier).exceptionally(ex -> {
-			ex.printStackTrace();
-			throw new RuntimeException(ex);
-		});
+		return executor.supply(supplier)
+				.exceptionally(ex -> {
+					ex.printStackTrace();
+					throw new RuntimeException(ex);
+				});
 	}
 
 	public static void shutdown() {
