@@ -1,5 +1,7 @@
 package eu.smashmc.api;
 
+import java.lang.management.ManagementFactory;
+
 public enum Environment {
 	BUKKIT, BUNGEECORD, NONE;
 
@@ -11,6 +13,17 @@ public enum Environment {
 		} else {
 			return current;
 		}
+	}
+
+	/**
+	 * Checks if the application is running in Debug mode.
+	 * 
+	 * @return <code>true</code> if debug mode is enabled.
+	 */
+	public static boolean isDebug() {
+		return ManagementFactory.getRuntimeMXBean()
+				.getInputArguments()
+				.contains("-Xdebug");
 	}
 
 	/**
