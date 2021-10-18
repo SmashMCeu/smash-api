@@ -90,7 +90,7 @@ public final class SmashMc {
 	 * 
 	 * @param <T>       generic type of the Components interface
 	 * @param component class type of the Components interface used to lookup
-	 * @return an instance of the component *
+	 * @return an instance of the component
 	 * @throws IllegalArgumentException      if the requested type is not a
 	 *                                       {@link SmashComponent}
 	 * @throws UnsupportedOperationException if the current environment is not
@@ -116,6 +116,26 @@ public final class SmashMc {
 			} else {
 				throw new IllegalArgumentException(component.getName() + " is not a SmashComponent");
 			}
+		}
+	}
+
+	/**
+	 * Retrieve an component instance by their interface class, or <code>null</code>
+	 * in case it is not present. Note that there is no guarantee that the requested
+	 * component is implemented or even present at runtime.
+	 * 
+	 * @param <T>       generic type of the Components interface
+	 * @param component class type of the Components interface used to lookup
+	 * @return an instance of the component or <code>null</code>
+	 * @throws UnsupportedOperationException if the current environment is not
+	 *                                       supported by Component
+	 */
+	@Nullable
+	public static <T> T getComponentOrNull(Class<T> component) throws UnsupportedOperationException {
+		if (isPresent(component)) {
+			return getComponent(component);
+		} else {
+			return null;
 		}
 	}
 
