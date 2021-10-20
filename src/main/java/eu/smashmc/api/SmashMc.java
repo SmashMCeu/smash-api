@@ -207,7 +207,7 @@ public final class SmashMc {
 			return null;
 		}
 
-		if (component.isAssignableFrom(fallbackImpl)) {
+		if (!component.isAssignableFrom(fallbackImpl)) {
 			throw new IllegalImplementationException(component.getName() + " is not assignable from " + fallbackImpl.getName());
 		}
 
