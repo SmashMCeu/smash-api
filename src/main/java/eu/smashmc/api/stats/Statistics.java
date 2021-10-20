@@ -14,7 +14,7 @@ import eu.smashmc.api.stats.value.view.StatsValueAccumulation;
  * @author LiquidDev
  *
  */
-@SmashComponent({ Environment.BUKKIT, Environment.BUNGEECORD })
+@SmashComponent(value = { Environment.BUKKIT, Environment.BUNGEECORD }, fallbackImpl = FallbackStatisticsImpl.class)
 public interface Statistics {
 
 	/**
