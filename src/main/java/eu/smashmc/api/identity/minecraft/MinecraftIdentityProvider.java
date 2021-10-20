@@ -17,7 +17,7 @@ import eu.smashmc.api.identity.IdentityProvider;
  * 
  * @author LiquidDev
  */
-@SmashComponent
+@SmashComponent(fallbackImpl = FallbackMinecraftIdentityProviderImpl.class)
 public interface MinecraftIdentityProvider extends IdentityProvider<UUID, MinecraftIdentity> {
 
 	/**
