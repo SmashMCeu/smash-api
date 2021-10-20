@@ -208,21 +208,21 @@ public final class SmashMc {
 		}
 
 		if (component.isAssignableFrom(fallbackImpl)) {
-			throw new IllegalImplementationException(component.getClass() + " not assignable from " + fallbackImpl.getClass());
+			throw new IllegalImplementationException(component.getName() + " is not assignable from " + fallbackImpl.getName());
 		}
 
 		Constructor<?> constructor;
 		try {
 			constructor = fallbackImpl.getConstructor();
 		} catch (NoSuchMethodException | SecurityException e) {
-			throw new IllegalImplementationException("Missing or invalid default constructor for fallback implementation of " + component.getClass(), e);
+			throw new IllegalImplementationException("Missing or invalid default constructor for fallback implementation " + fallbackImpl.getName(), e);
 		}
 
 		Object instance;
 		try {
 			instance = constructor.newInstance();
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			throw new IllegalImplementationException("Exception initializing fallback implementation of " + component.getClass(), e);
+			throw new IllegalImplementationException("Exception initializing fallback implementation " + fallbackImpl.getName(), e);
 		}
 
 		/* This cast should now be safe */
