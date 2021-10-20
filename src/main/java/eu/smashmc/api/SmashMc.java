@@ -213,7 +213,7 @@ public final class SmashMc {
 
 		Constructor<?> constructor;
 		try {
-			constructor = fallbackImpl.getConstructor();
+			constructor = fallbackImpl.getDeclaredConstructor();
 		} catch (NoSuchMethodException | SecurityException e) {
 			throw new IllegalImplementationException("Missing or invalid default constructor for fallback implementation " + fallbackImpl.getName(), e);
 		}
