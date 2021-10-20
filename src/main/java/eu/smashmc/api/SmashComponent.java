@@ -17,4 +17,15 @@ public @interface SmashComponent {
 	 * by any.
 	 */
 	Environment[] value() default { Environment.NONE };
+
+	/**
+	 * A fallback implementation of the component in case none was registered during
+	 * runtime. Usually used in development or debug environments.
+	 *
+	 * Please make sure the fallback implementation has a default constructor and
+	 * implements the annotated interface.
+	 * 
+	 * @return Class of fallback implementation. {@link Object} if non is present.
+	 */
+	Class<?> fallbackImpl() default Object.class;
 }

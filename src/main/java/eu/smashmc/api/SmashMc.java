@@ -1,5 +1,7 @@
 package eu.smashmc.api;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -24,6 +26,8 @@ public final class SmashMc {
 	 */
 	private SmashMc() {
 	}
+
+	private static final Logger LOGGER = Logger.getLogger(SmashMc.class.getName());
 
 	/**
 	 * Map holding components that are not yet initialized.
@@ -51,12 +55,12 @@ public final class SmashMc {
 	 */
 	public static <T> void registerComponent(Class<T> type, @NonNull T implementation) throws IllegalArgumentException, UnsupportedOperationException {
 		if (!type.isAnnotationPresent(SmashComponent.class)) {
-			throw new IllegalArgumentException("Class is missing the SmashComponent annotation: " + type.getName());
+			throw new IllegalArgumentException(type.getName() + " is missing the SmashComponent annotation");
 		}
 		verifyCompatibility(type);
+		validateFallbackImplementation(type);
 		INITIALIZED_COMPONENTS.put(type, implementation);
-		Logger logger = Logger.getLogger(SmashMc.class.getName());
-		logger.info("Registered component " + type.getSimpleName());
+		LOGGER.info("Registered component " + type.getSimpleName());
 	}
 
 	/**
@@ -75,12 +79,12 @@ public final class SmashMc {
 	 */
 	public static <T> void registerLazyComponent(Class<T> type, @NonNull Supplier<T> implementationSupplier) throws IllegalArgumentException, UnsupportedOperationException {
 		if (!type.isAnnotationPresent(SmashComponent.class)) {
-			throw new IllegalArgumentException("Class is missing the SmashComponent annotation: " + type.getName());
+			throw new IllegalArgumentException(type.getName() + " is missing the SmashComponent annotation");
 		}
 		verifyCompatibility(type);
+		validateFallbackImplementation(type);
 		LAZY_COMPONENTS.put(type, implementationSupplier);
-		Logger logger = Logger.getLogger(SmashMc.class.getName());
-		logger.info("Registered lazy component " + type.getSimpleName());
+		LOGGER.info("Registered lazy component " + type.getSimpleName());
 	}
 
 	/**
@@ -112,6 +116,13 @@ public final class SmashMc {
 		} else {
 			if (component.isAnnotationPresent(SmashComponent.class)) {
 				verifyCompatibility(component);
+
+				T fallback = validateFallbackImplementation(component);
+
+				if (fallback != null) {
+					LOGGER.warning("Using fallback implementation for " + component.getSimpleName());
+					return fallback;
+				}
 				throw new IllegalStateException(component.getName() + " is not (yet) registered, missing dependency?");
 			} else {
 				throw new IllegalArgumentException(component.getName() + " is not a SmashComponent");
@@ -166,8 +177,7 @@ public final class SmashMc {
 		T impl = (T) obj;
 		LAZY_COMPONENTS.remove(component);
 		INITIALIZED_COMPONENTS.put(component, impl);
-		Logger logger = Logger.getLogger(SmashMc.class.getName());
-		logger.info("Lazy loaded component " + component.getSimpleName());
+		LOGGER.info("Lazy loaded component " + component.getSimpleName());
 		return impl;
 	}
 
@@ -183,6 +193,41 @@ public final class SmashMc {
 				.map(e -> e.name())
 				.collect(Collectors.joining(" / "));
 		throw new UnsupportedOperationException(component.getSimpleName() + " requires " + supportedNames + ", current: " + Environment.currentEnvironment());
+	}
+
+	protected static <T> T validateFallbackImplementation(Class<T> component) throws IllegalArgumentException, IllegalImplementationException {
+		if (!component.isAnnotationPresent(SmashComponent.class)) {
+			throw new IllegalArgumentException(component.getName() + " is missing the SmashComponent annotation");
+		}
+		SmashComponent sc = component.getAnnotation(SmashComponent.class);
+		Class<?> fallbackImpl = sc.fallbackImpl();
+
+		/* Object indicates no fallback implementation */
+		if (Object.class.equals(fallbackImpl)) {
+			return null;
+		}
+
+		if (component.isAssignableFrom(fallbackImpl)) {
+			throw new IllegalImplementationException(component.getClass() + " not assignable from " + fallbackImpl.getClass());
+		}
+
+		Constructor<?> constructor;
+		try {
+			constructor = fallbackImpl.getConstructor();
+		} catch (NoSuchMethodException | SecurityException e) {
+			throw new IllegalImplementationException("Missing or invalid default constructor for fallback implementation of " + component.getClass(), e);
+		}
+
+		Object instance;
+		try {
+			instance = constructor.newInstance();
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			throw new IllegalImplementationException("Exception initializing fallback implementation of " + component.getClass(), e);
+		}
+
+		/* This cast should now be safe */
+		T obj = (T) instance;
+		return obj;
 	}
 
 	protected static void clearComponents() {
