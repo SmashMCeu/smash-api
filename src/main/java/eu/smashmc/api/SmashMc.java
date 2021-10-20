@@ -120,7 +120,7 @@ public final class SmashMc {
 				T fallback = validateFallbackImplementation(component);
 
 				if (fallback != null) {
-					LOGGER.warning("Using fallback implementation for " + component.getSimpleName());
+					LOGGER.warning("Using fallback implementation for " + component.getSimpleName() + ". DO NOT USE IN PRODUCTION!");
 					return fallback;
 				}
 				throw new IllegalStateException(component.getName() + " is not (yet) registered, missing dependency?");
