@@ -220,6 +220,7 @@ public final class SmashMc {
 
 		Object instance;
 		try {
+			constructor.setAccessible(true);
 			instance = constructor.newInstance();
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			throw new IllegalImplementationException("Exception initializing fallback implementation " + fallbackImpl.getName(), e);
