@@ -195,7 +195,7 @@ public final class SmashMc {
 		throw new UnsupportedOperationException(component.getSimpleName() + " requires " + supportedNames + ", current: " + Environment.currentEnvironment());
 	}
 
-	protected static <T> T validateFallbackImplementation(Class<T> component) throws IllegalArgumentException, IllegalImplementationException {
+	protected static <T> T validateFallbackImplementation(Class<T> component) throws IllegalArgumentException, InvalidImplementationException {
 		if (!component.isAnnotationPresent(SmashComponent.class)) {
 			throw new IllegalArgumentException(component.getName() + " is missing the SmashComponent annotation");
 		}
@@ -208,14 +208,14 @@ public final class SmashMc {
 		}
 
 		if (!component.isAssignableFrom(fallbackImpl)) {
-			throw new IllegalImplementationException(component.getName() + " is not assignable from " + fallbackImpl.getName());
+			throw new InvalidImplementationException(component.getName() + " is not assignable from " + fallbackImpl.getName());
 		}
 
 		Constructor<?> constructor;
 		try {
 			constructor = fallbackImpl.getDeclaredConstructor();
 		} catch (NoSuchMethodException | SecurityException e) {
-			throw new IllegalImplementationException("Missing or invalid default constructor for fallback implementation " + fallbackImpl.getName(), e);
+			throw new InvalidImplementationException("Missing or invalid default constructor for fallback implementation " + fallbackImpl.getName(), e);
 		}
 
 		Object instance;
@@ -223,7 +223,7 @@ public final class SmashMc {
 			constructor.setAccessible(true);
 			instance = constructor.newInstance();
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			throw new IllegalImplementationException("Exception initializing fallback implementation " + fallbackImpl.getName(), e);
+			throw new InvalidImplementationException("Exception initializing fallback implementation " + fallbackImpl.getName(), e);
 		}
 
 		/* This cast should now be safe */

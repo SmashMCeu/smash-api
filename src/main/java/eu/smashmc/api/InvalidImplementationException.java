@@ -7,15 +7,15 @@ package eu.smashmc.api;
  * @author LiquidDev
  *
  */
-public class IllegalImplementationException extends RuntimeException {
+public class InvalidImplementationException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	public IllegalImplementationException(String message) {
+	public InvalidImplementationException(String message) {
 		super(message);
 	}
 
-	public IllegalImplementationException(String message, Exception cause) {
+	public InvalidImplementationException(String message, Exception cause) {
 		super(message, cause);
 	}
 }
