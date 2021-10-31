@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 import eu.smashmc.api.Environment;
 import eu.smashmc.api.SmashComponent;
 
-@SmashComponent({ Environment.BUKKIT, Environment.BUNGEECORD })
+@SmashComponent(value = { Environment.BUKKIT, Environment.BUNGEECORD }, fallbackImpl = FallbackLanguageImpl.class)
 public abstract class Language<T> {
 
 	static Logger LOGGER = Logger.getLogger(LanguageProvider.class.getName());

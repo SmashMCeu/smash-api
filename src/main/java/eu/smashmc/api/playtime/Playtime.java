@@ -6,7 +6,7 @@ import java.util.concurrent.CompletableFuture;
 import eu.smashmc.api.Environment;
 import eu.smashmc.api.SmashComponent;
 
-@SmashComponent({ Environment.BUNGEECORD })
+@SmashComponent(value = { Environment.BUNGEECORD }, fallbackImpl = FallbackPlaytimeImpl.class)
 public interface Playtime {
 
 	/**

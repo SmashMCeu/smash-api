@@ -1,5 +1,7 @@
 package eu.smashmc.api;
 
+import java.lang.management.ManagementFactory;
+
 public enum Environment {
 	BUKKIT, BUNGEECORD, NONE;
 
@@ -13,7 +15,31 @@ public enum Environment {
 		}
 	}
 
-	public static void setEnvironment(Environment environment) {
+	/**
+	 * Checks if the application is running in Debug mode.
+	 * 
+	 * @return <code>true</code> if debug mode is enabled.
+	 */
+	public static boolean isDebug() {
+		return ManagementFactory.getRuntimeMXBean()
+				.getInputArguments()
+				.contains("-Xdebug");
+	}
+
+	/**
+	 * Sets the current Environment. Should not be called by Plugins.
+	 * 
+	 * @param environment new environment
+	 * @throws UnsupportedOperationException if environment is already set
+	 */
+	public static void setEnvironment(Environment environment) throws UnsupportedOperationException {
+		if (current != null) {
+			throw new UnsupportedOperationException("Environment is already set to " + current);
+		}
+		current = environment;
+	}
+
+	static void setEnvironmentUnchecked(Environment environment) {
 		current = environment;
 	}
 

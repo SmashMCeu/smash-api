@@ -6,7 +6,7 @@ import java.util.UUID;
 import eu.smashmc.api.Environment;
 import eu.smashmc.api.SmashComponent;
 
-@SmashComponent({ Environment.BUKKIT })
+@SmashComponent(value = { Environment.BUKKIT }, fallbackImpl = FallbackAchievementsImpl.class)
 public interface Achievements {
 
 	/**

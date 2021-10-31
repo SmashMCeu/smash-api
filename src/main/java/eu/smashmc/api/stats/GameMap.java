@@ -1,5 +1,7 @@
 package eu.smashmc.api.stats;
 
+import java.time.LocalDateTime;
+
 /**
  * Represents a map from a game with a name and amount of played games on that
  * map.
@@ -29,5 +31,12 @@ public interface GameMap {
 	 * @return amount of games on the map
 	 */
 	int getGames();
+
+	/**
+	 * Get the {@link LocalDateTime} of when the map was played for the first time.
+	 * 
+	 * @return {@link LocalDateTime} when the map was initially registered
+	 */
+	LocalDateTime getFirstSeen();
 
 }

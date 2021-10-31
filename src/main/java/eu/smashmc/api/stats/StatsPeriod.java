@@ -15,12 +15,14 @@ public class StatsPeriod {
 	}
 
 	public static StatsPeriod weekly(String gameType) {
-		LocalDate from = LocalDate.now().minusDays(7);
+		LocalDate from = LocalDate.now()
+				.minusDays(7);
 		return new StatsPeriod(gameType, from, LocalDate.now());
 	}
 
 	public static StatsPeriod monthly(String gameType) {
-		LocalDate from = LocalDate.now().minusDays(30);
+		LocalDate from = LocalDate.now()
+				.minusDays(30);
 		return new StatsPeriod(gameType, from, LocalDate.now());
 	}
 

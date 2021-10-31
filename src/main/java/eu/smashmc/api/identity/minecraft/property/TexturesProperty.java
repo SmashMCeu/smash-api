@@ -16,7 +16,8 @@ public class TexturesProperty extends Property {
 	}
 
 	public TexturesPropertyValue decodeValue() {
-		byte[] data = Base64.getDecoder().decode(this.getValue());
+		byte[] data = Base64.getDecoder()
+				.decode(this.getValue());
 		String json = new String(data);
 		Gson gson = new Gson();
 		TexturesPropertyValue value = gson.fromJson(json, TexturesPropertyValue.class);

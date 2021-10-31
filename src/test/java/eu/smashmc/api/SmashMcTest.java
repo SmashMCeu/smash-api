@@ -57,7 +57,7 @@ public class SmashMcTest {
 
 	@Test
 	public void testDependentApi() {
-		Environment.setEnvironment(Environment.BUKKIT);
+		Environment.setEnvironmentUnchecked(Environment.BUKKIT);
 		DependentApi mock = mock(DependentApi.class);
 		SmashMc.registerComponent(DependentApi.class, mock);
 		DependentApi api = SmashMc.getComponent(DependentApi.class);
@@ -66,7 +66,7 @@ public class SmashMcTest {
 
 	@Test
 	public void testDependentApiAlternative() {
-		Environment.setEnvironment(Environment.BUNGEECORD);
+		Environment.setEnvironmentUnchecked(Environment.BUNGEECORD);
 		DependentApi mock = mock(DependentApi.class);
 		SmashMc.registerComponent(DependentApi.class, mock);
 		DependentApi api = SmashMc.getComponent(DependentApi.class);
@@ -75,7 +75,7 @@ public class SmashMcTest {
 
 	@Test
 	public void testDependentApiFail() {
-		Environment.setEnvironment(Environment.NONE);
+		Environment.setEnvironmentUnchecked(Environment.NONE);
 		DependentApi mock = mock(DependentApi.class);
 		assertThrows(UnsupportedOperationException.class, () -> SmashMc.registerComponent(DependentApi.class, mock));
 	}

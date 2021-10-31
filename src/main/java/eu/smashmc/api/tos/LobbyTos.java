@@ -13,7 +13,7 @@ import eu.smashmc.api.SmashComponent;
  * @author LiquidDev
  *
  */
-@SmashComponent(Environment.BUKKIT)
+@SmashComponent(value = Environment.BUKKIT, fallbackImpl = FallbackLobbyTosImpl.class)
 public interface LobbyTos {
 
 	/**
