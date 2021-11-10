@@ -6,7 +6,7 @@ import eu.smashmc.api.SmashComponent;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-@SmashComponent(value = { Environment.BUNGEECORD }, fallbackImpl = FallbackFriendsImpl.class)
+@SmashComponent(value = { Environment.BUKKIT }, fallbackImpl = FallbackFriendsImpl.class)
 public interface Friends {
 
     /**
