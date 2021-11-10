@@ -7,6 +7,8 @@ public interface FriendRequest {
 
     public UUID getRequester();
 
+    public String getName();
+
     public LocalDateTime getWhenCreated();
 
 }

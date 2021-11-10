@@ -7,6 +7,8 @@ public interface Friendship {
 
     public UUID getUuid();
 
+    public String getName();
+
     public LocalDateTime getWhenCreated();
 
 }

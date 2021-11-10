@@ -13,6 +13,13 @@ public interface FriendUser {
     public UUID getUuid();
 
     /**
+     * Get the name of the player the friend user informations belongs to {@link String}.
+     *
+     * @return {@link String} name of the owning player
+     */
+    public String getName();
+
+    /**
      * Get a list of all pending friend requests {@link FriendRequest}.
      *
      * @return {@link List} with {@link FriendRequest} as element
