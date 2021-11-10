@@ -15,6 +15,6 @@ public interface Friends {
      * @param uuid the players {@link UUID}
      * @return the {@link FriendUser}
      */
-    public CompletableFuture<FriendUser> getFriendUser(UUID uuid);
+    public CompletableFuture<? extends FriendUser> getFriendUser(UUID uuid);
 
 }
