@@ -8,6 +8,7 @@ import java.util.concurrent.CompletableFuture;
 import eu.smashmc.api.SmashMc;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 
 /**
  * Class representing a database operation consisting of multiple
@@ -16,6 +17,7 @@ import lombok.NonNull;
  * @author LiquidDev
  *
  */
+@ToString
 public class Transaction {
 
 	@Getter
