@@ -1,6 +1,5 @@
 package eu.smashmc.api.economy;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
@@ -10,13 +9,16 @@ import lombok.Getter;
  *
  */
 @Getter
-@AllArgsConstructor
 public class TransactionFailException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
 	private Transaction transaction;
 	private Trade[] failedTrades;
-	private String reason;
 
+	public TransactionFailException(Transaction transaction, Trade[] failed, String reason) {
+		super(reason);
+		this.transaction = transaction;
+		this.failedTrades = failed;
+	}
 }
