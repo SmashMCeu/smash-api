@@ -4,10 +4,10 @@ public interface FriendSettings {
 
     public boolean isAllowingJump();
 
-    public FriendAllowType getPrivateMessage();
+    public FriendAllowType getPrivateMessageType();
 
     public boolean isAllowingFriendRequests();
 
-    public FriendAllowType getPartyRequest();
+    public FriendAllowType getPartyRequestType();
 
 }

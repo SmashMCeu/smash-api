@@ -34,7 +34,7 @@ class FallbackFriendsImpl implements Friends {
                     }
 
                     @Override
-                    public FriendAllowType getPrivateMessage() {
+                    public FriendAllowType getPrivateMessageType() {
                         return FriendAllowType.ONLY_FRIENDS;
                     }
 
@@ -44,7 +44,7 @@ class FallbackFriendsImpl implements Friends {
                     }
 
                     @Override
-                    public FriendAllowType getPartyRequest() {
+                    public FriendAllowType getPartyRequestType() {
                         return FriendAllowType.ALL;
                     }
                 };
