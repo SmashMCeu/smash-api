@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-public class FallbackFriendsImpl implements Friends {
+class FallbackFriendsImpl implements Friends {
 
     @Override
     public CompletableFuture<FriendUser> getFriendUser(UUID uuid) {
