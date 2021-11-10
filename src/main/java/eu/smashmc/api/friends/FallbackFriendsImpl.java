@@ -16,6 +16,16 @@ class FallbackFriendsImpl implements Friends {
             }
 
             @Override
+            public String getName() {
+                return "NoName";
+            }
+
+            @Override
+            public boolean isOnline() {
+                return false;
+            }
+
+            @Override
             public List<FriendRequest> getRequests() {
                 return Collections.emptyList();
             }
