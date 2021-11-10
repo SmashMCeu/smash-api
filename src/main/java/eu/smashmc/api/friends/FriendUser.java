@@ -20,6 +20,13 @@ public interface FriendUser {
     public String getName();
 
     /**
+     * Get the current online state of the player the friend user informations belongs to {@link Boolean}.
+     *
+     * @return {@link Boolean} online state of the owning player
+     */
+    public boolean isOnline();
+
+    /**
      * Get a list of all pending friend requests {@link FriendRequest}.
      *
      * @return {@link List} with {@link FriendRequest} as element

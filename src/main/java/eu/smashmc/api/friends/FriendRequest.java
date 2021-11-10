@@ -11,4 +11,6 @@ public interface FriendRequest {
 
     public LocalDateTime getWhenCreated();
 
+    public boolean isOnline();
+
 }

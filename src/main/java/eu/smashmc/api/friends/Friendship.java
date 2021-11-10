@@ -11,4 +11,6 @@ public interface Friendship {
 
     public LocalDateTime getWhenCreated();
 
+    public boolean isOnline();
+
 }
