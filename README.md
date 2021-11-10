@@ -25,5 +25,6 @@ The list of currently implemented SmashComponents:
 * LobbyTos
 * Statistics
 * PlayerProfileService
+* Economy
 
 *For a more conveniente use, you can stick to the `Lang` wrapper in `eu.smashmc.api.lang.Lang`
