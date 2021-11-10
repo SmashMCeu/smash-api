@@ -1,8 +1,10 @@
 package eu.smashmc.api.economy;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
-import lombok.AllArgsConstructor;
+import javax.annotation.Nullable;
+
 import lombok.Data;
 import lombok.NonNull;
 
@@ -13,7 +15,6 @@ import lombok.NonNull;
  *
  */
 @Data
-@AllArgsConstructor
 public class Trade {
 
 	@NonNull
@@ -24,4 +25,19 @@ public class Trade {
 	private final String reason;
 	private final String description;
 
+	@Nullable
+	private final Long id;
+	@Nullable
+	private final LocalDateTime date;
+
+	public Trade(UUID account, Currency currency, double amount, String reason, String description) {
+		this.account = account;
+		this.currency = currency;
+		this.amount = amount;
+		this.reason = reason;
+		this.description = description;
+
+		this.id = null;
+		this.date = null;
+	}
 }
