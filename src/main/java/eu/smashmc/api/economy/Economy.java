@@ -6,7 +6,7 @@ import java.util.concurrent.CompletableFuture;
 import eu.smashmc.api.Environment;
 import eu.smashmc.api.SmashComponent;
 
-@SmashComponent(Environment.BUKKIT)
+@SmashComponent(value = Environment.BUKKIT, fallbackImpl = FallbackEconomyImpl.class)
 public interface Economy {
 
 	/**
