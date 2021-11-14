@@ -10,18 +10,18 @@ import com.sun.jdi.event.Event;
 import lombok.Getter;
 
 /**
- * Bukkit {@link Event} that is called when a player initially joined the
- * network on this specific server.
+ * Bukkit {@link Event} that is called when a player quits the network from this
+ * specific server.
  * 
  * @author LiquidDev
  *
  */
 @Getter
-public class PlayerNetworkJoinEvent extends PlayerEvent {
+public class PlayerNetworkQuitEvent extends PlayerEvent {
 
 	private static final HandlerList handlers = new HandlerList();
 
-	public PlayerNetworkJoinEvent(@NotNull Player who) {
+	public PlayerNetworkQuitEvent(@NotNull Player who) {
 		super(who);
 	}
 
