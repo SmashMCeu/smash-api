@@ -1,7 +1,6 @@
 package eu.smashmc.api.permission;
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -25,12 +24,12 @@ class FallbackPermissionProvider implements PermissionsProvider {
 
 	@Override
 	public CompletableFuture<List<String>> getGroups() {
-		return CompletableFuture.completedFuture(Arrays.asList(PermissionUtil.DEFAULT_RANK));
+		return CompletableFuture.completedFuture(List.of(PermissionUtil.DEFAULT_RANK));
 	}
 
 	@Override
 	public CompletableFuture<List<String>> getGroups(UUID playerUuid) {
-		return CompletableFuture.completedFuture(Arrays.asList(PermissionUtil.DEFAULT_RANK));
+		return CompletableFuture.completedFuture(List.of(PermissionUtil.DEFAULT_RANK));
 	}
 
 	@Override

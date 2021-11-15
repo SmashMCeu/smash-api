@@ -236,7 +236,7 @@ public final class SmashMc {
 		LAZY_COMPONENTS.clear();
 	}
 
-	@Deprecated
+	@Deprecated(since = "1.2")
 	public static <T> T getApi(Class<T> api) throws UnsupportedOperationException, IllegalArgumentException, IllegalStateException {
 		return getComponent(api);
 	}

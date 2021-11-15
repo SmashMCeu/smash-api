@@ -1,6 +1,5 @@
 package eu.smashmc.api.identity.minecraft;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +22,7 @@ class FallbackMinecraftIdentityProviderImpl implements MinecraftIdentityProvider
 	public List<MinecraftIdentity> findByName(String name, boolean loadTexture) {
 		for (MinecraftIdentity id : idMap.values()) {
 			if (name.equalsIgnoreCase(id.getName())) {
-				return Arrays.asList(id);
+				return List.of(id);
 			}
 		}
 		return Collections.emptyList();
