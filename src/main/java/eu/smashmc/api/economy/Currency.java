@@ -7,5 +7,5 @@ package eu.smashmc.api.economy;
  *
  */
 public enum Currency {
-	COINS, GEMS;
+	COINS, GEMS, VIP_KEYS;
 }
