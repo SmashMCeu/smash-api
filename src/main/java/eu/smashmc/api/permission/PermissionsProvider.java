@@ -126,5 +126,14 @@ public interface PermissionsProvider {
 	 */
 	public CompletableFuture<Void> setPermission(UUID uuid, String permission, boolean value, String server);
 
+	/**
+	 * Set a group temporally for a Player
+	 *
+	 * @param uuid   UUID of Player
+	 * @param group  Permission to set
+	 * @param value  If group should be added or removed
+	 * @param expiry end of the effect
+	 * @return void
+	 */
 	public CompletableFuture<Void> addGroupTemporarly(UUID uuid, String group, boolean value, Duration expiry);
 }
