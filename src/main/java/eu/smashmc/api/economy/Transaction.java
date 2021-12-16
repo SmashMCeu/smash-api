@@ -38,7 +38,7 @@ public class Transaction {
 
 	public void addBalance(double amount, Currency currency, UUID accountHolder, String reason, String description) {
 		if (amount < 0) {
-			throw new IllegalArgumentException("Amount to deposit must not be nagative");
+			throw new IllegalArgumentException("Amount to deposit must not be negative");
 		}
 		var trade = new Trade(accountHolder, currency, amount, reason, description);
 		this.trades.add(trade);
@@ -46,7 +46,7 @@ public class Transaction {
 
 	public void removeBalance(double amount, Currency currency, UUID accountHolder, String reason, String description) {
 		if (amount < 0) {
-			throw new IllegalArgumentException("Amount to withdraw must not be nagative");
+			throw new IllegalArgumentException("Amount to withdraw must not be negative");
 		}
 		var trade = new Trade(accountHolder, currency, -amount, reason, description);
 		this.trades.add(trade);
