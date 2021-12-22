@@ -50,7 +50,6 @@ public interface Statistics {
 	 * 
 	 * @param playerUuid the players {@link UUID}
 	 * @param period     the {@link StatsPeriod} to query for
-	 * @param sortBy     the statistics key to rank by
 	 * @return ranking position of the player starting from 0
 	 */
 	long getPositionOf(UUID playerUuid, StatsPeriod period);
@@ -61,7 +60,6 @@ public interface Statistics {
 	 * 
 	 * @param position the position to search for starting from 0
 	 * @param period   the {@link StatsPeriod} to query for
-	 * @param sortBy   the statistics key to rank by
 	 * @return optional {@link UUID} of the player at that position
 	 */
 	Optional<UUID> getAtPosition(int position, StatsPeriod period);
@@ -72,7 +70,6 @@ public interface Statistics {
 	 * 
 	 * @param limit  limit for the list size
 	 * @param period the {@link StatsPeriod} to query for
-	 * @param sortBy the statistics key to rank by
 	 * @return list a descending {@link List} of {@link UUID} with the very best at
 	 *         index 0
 	 */
