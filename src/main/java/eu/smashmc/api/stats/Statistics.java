@@ -53,7 +53,7 @@ public interface Statistics {
 	 * @param sortBy     the statistics key to rank by
 	 * @return ranking position of the player starting from 0
 	 */
-	long getPositionOf(UUID playerUuid, StatsPeriod period, String sortBy);
+	long getPositionOf(UUID playerUuid, StatsPeriod period);
 
 	/**
 	 * Retrieve the {@link UUID} of the player that is at the given position for the
@@ -64,7 +64,7 @@ public interface Statistics {
 	 * @param sortBy   the statistics key to rank by
 	 * @return optional {@link UUID} of the player at that position
 	 */
-	Optional<UUID> getAtPosition(int position, StatsPeriod period, String sortBy);
+	Optional<UUID> getAtPosition(int position, StatsPeriod period);
 
 	/**
 	 * Retrieves a {@link List} of {@link UUID} from the top players in the given
@@ -76,7 +76,7 @@ public interface Statistics {
 	 * @return list a descending {@link List} of {@link UUID} with the very best at
 	 *         index 0
 	 */
-	List<UUID> getTop(int limit, StatsPeriod period, String sortBy);
+	List<UUID> getTop(int limit, StatsPeriod period);
 
 	/**
 	 * Retrieves a list of all game types.
