@@ -45,8 +45,8 @@ public interface Statistics {
 	void saveGame(GameEntity game) throws IllegalArgumentException;
 
 	/**
-	 * Retrieve the ranking position of a player in a specific time window using a
-	 * sortKey.
+	 * Retrieve the ranking position of a player in a specific time window starting
+	 * at 0.
 	 * 
 	 * @param playerUuid the players {@link UUID}
 	 * @param period     the {@link StatsPeriod} to query for
@@ -56,7 +56,7 @@ public interface Statistics {
 
 	/**
 	 * Retrieve the {@link UUID} of the player that is at the given position for the
-	 * given time frame ranked by the sortKey.
+	 * given time frame starting at 0.
 	 * 
 	 * @param position the position to search for starting from 0
 	 * @param period   the {@link StatsPeriod} to query for
@@ -66,7 +66,7 @@ public interface Statistics {
 
 	/**
 	 * Retrieves a {@link List} of {@link UUID} from the top players in the given
-	 * time frame ranked by the sortKey.
+	 * time frame.
 	 * 
 	 * @param limit  limit for the list size
 	 * @param period the {@link StatsPeriod} to query for
