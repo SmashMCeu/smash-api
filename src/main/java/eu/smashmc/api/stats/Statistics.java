@@ -100,4 +100,12 @@ public interface Statistics {
 	 */
 	Optional<StatsValueAccumulation> getGlobalStat(String statName, StatsPeriod period);
 
+	/**
+	 * Checks if the player is ranked top 100 in the global smash ranking.
+	 * 
+	 * @param uuid UUID of the player to check
+	 * @return <code>true</code> if top player
+	 */
+	boolean isGlobalElite(UUID uuid);
+
 }

@@ -124,4 +124,9 @@ class FallbackStatisticsImpl implements Statistics {
 	public Optional<StatsValueAccumulation> getGlobalStat(String statName, StatsPeriod period) {
 		return Optional.empty();
 	}
+
+	@Override
+	public boolean isGlobalElite(UUID uuid) {
+		return false;
+	}
 }
