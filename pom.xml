@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>eu.smashmc</groupId>
 	<artifactId>smash-api</artifactId>
-	<version>1.7-SNAPSHOT</version>
+	<version>1.7</version>
 
 	<properties>
 		<maven.compiler.target>17</maven.compiler.target>
@@ -36,13 +36,7 @@
 		<dependency>
 			<groupId>io.github.waterfallmc</groupId>
 			<artifactId>waterfall-api</artifactId>
-			<version>1.16-R0.4-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.github.waterfallmc</groupId>
-			<artifactId>waterfall-api</artifactId>
-			<version>1.17-R0.1-SNAPSHOT</version>
+			<version>1.18-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
