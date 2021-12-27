@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>eu.smashmc</groupId>
 	<artifactId>smash-api</artifactId>
-	<version>1.7</version>
+	<version>1.8-SNAPSHOT</version>
 
 	<properties>
 		<maven.compiler.target>17</maven.compiler.target>
