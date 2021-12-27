@@ -45,38 +45,35 @@ public interface Statistics {
 	void saveGame(GameEntity game) throws IllegalArgumentException;
 
 	/**
-	 * Retrieve the ranking position of a player in a specific time window using a
-	 * sortKey.
+	 * Retrieve the ranking position of a player in a specific time window starting
+	 * at 0.
 	 * 
 	 * @param playerUuid the players {@link UUID}
 	 * @param period     the {@link StatsPeriod} to query for
-	 * @param sortBy     the statistics key to rank by
 	 * @return ranking position of the player starting from 0
 	 */
-	long getPositionOf(UUID playerUuid, StatsPeriod period, String sortBy);
+	long getPositionOf(UUID playerUuid, StatsPeriod period);
 
 	/**
 	 * Retrieve the {@link UUID} of the player that is at the given position for the
-	 * given time frame ranked by the sortKey.
+	 * given time frame starting at 0.
 	 * 
 	 * @param position the position to search for starting from 0
 	 * @param period   the {@link StatsPeriod} to query for
-	 * @param sortBy   the statistics key to rank by
 	 * @return optional {@link UUID} of the player at that position
 	 */
-	Optional<UUID> getAtPosition(int position, StatsPeriod period, String sortBy);
+	Optional<UUID> getAtPosition(int position, StatsPeriod period);
 
 	/**
 	 * Retrieves a {@link List} of {@link UUID} from the top players in the given
-	 * time frame ranked by the sortKey.
+	 * time frame.
 	 * 
 	 * @param limit  limit for the list size
 	 * @param period the {@link StatsPeriod} to query for
-	 * @param sortBy the statistics key to rank by
 	 * @return list a descending {@link List} of {@link UUID} with the very best at
 	 *         index 0
 	 */
-	List<UUID> getTop(int limit, StatsPeriod period, String sortBy);
+	List<UUID> getTop(int limit, StatsPeriod period);
 
 	/**
 	 * Retrieves a list of all game types.
@@ -102,5 +99,13 @@ public interface Statistics {
 	 * @return {@link StatsValueAccumulation} of the statistic
 	 */
 	Optional<StatsValueAccumulation> getGlobalStat(String statName, StatsPeriod period);
+
+	/**
+	 * Checks if the player is ranked top 100 in the global smash ranking.
+	 * 
+	 * @param uuid UUID of the player to check
+	 * @return <code>true</code> if top player
+	 */
+	boolean isGlobalElite(UUID uuid);
 
 }

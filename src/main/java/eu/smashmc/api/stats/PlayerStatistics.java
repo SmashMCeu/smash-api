@@ -49,14 +49,6 @@ public interface PlayerStatistics {
 	String getGameType();
 
 	/**
-	 * Get the ranking of the player for the game type in the given time frame
-	 * starting from 0.
-	 * 
-	 * @return ranking of the player
-	 */
-	int getRank();
-
-	/**
 	 * Get the actual statistics of the player stored in a {@link Map} mapping the
 	 * statistics type name to it's value. An example would be "kills" and
 	 * {@link IntStatsValueAccumulation} with sum=5.

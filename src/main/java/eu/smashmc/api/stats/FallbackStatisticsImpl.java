@@ -96,17 +96,17 @@ class FallbackStatisticsImpl implements Statistics {
 	}
 
 	@Override
-	public long getPositionOf(UUID playerUuid, StatsPeriod period, String sortBy) {
+	public long getPositionOf(UUID playerUuid, StatsPeriod period) {
 		return 0;
 	}
 
 	@Override
-	public Optional<UUID> getAtPosition(int position, StatsPeriod period, String sortBy) {
+	public Optional<UUID> getAtPosition(int position, StatsPeriod period) {
 		return Optional.empty();
 	}
 
 	@Override
-	public List<UUID> getTop(int limit, StatsPeriod period, String sortBy) {
+	public List<UUID> getTop(int limit, StatsPeriod period) {
 		return Collections.emptyList();
 	}
 
@@ -123,5 +123,10 @@ class FallbackStatisticsImpl implements Statistics {
 	@Override
 	public Optional<StatsValueAccumulation> getGlobalStat(String statName, StatsPeriod period) {
 		return Optional.empty();
+	}
+
+	@Override
+	public boolean isGlobalElite(UUID uuid) {
+		return false;
 	}
 }

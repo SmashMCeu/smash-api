@@ -28,5 +28,6 @@ The list of currently implemented SmashComponents:
 * Economy
 * Friends
 * PermissionsProvider
+* ProxyService
 
 *For a more conveniente use, you can stick to the `Lang` wrapper in `eu.smashmc.api.lang.Lang`
