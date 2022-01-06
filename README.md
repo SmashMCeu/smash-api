@@ -31,3 +31,44 @@ The list of currently implemented SmashComponents:
 * ProxyService
 
 *For a more conveniente use, you can stick to the `Lang` wrapper in `eu.smashmc.api.lang.Lang`
+
+
+## @AutoRegister and @AutoInject
+If you are developing for a Bukkit environment, you can automatically register your listeners and commands with basic dependency injection using the `@AutoRegister` and `@AutoInject` annotations.
+```java
+@AutoRegister
+public class ExampleListener implements Listener {
+
+	@AutoInject
+	private Economy economy;
+
+	@EventHandler
+	public void onJoin(PlayerJoinEvent event) {
+		var player = event.getPlayer();
+		var uuid = player.getUniqueId();
+		var coins = economy.getBalance(uuid, Currency.COINS);
+		player.sendMessage("Your balance: " + coins);
+	}
+}
+```
+
+Injection also works for constructor parameters:
+```java
+@AutoRegister
+public class ExampleCommand extends PlayerCommand {
+
+	public ExampleCommand(Logger logger, Plugin plugin) {
+		super(Constants.PREFIX, "example", "");
+		
+		logger.info("I'm an injected logger!");
+		plugin.getServer().broadcastMessage("I'm an injected plugin instance!");
+	}
+
+	@Override
+	protected void onCommand(Player sender, Arguments args) throws CommandFailException {
+		// TODO
+	}
+}
+```
+
+For more information, please refer to the javadoc of `@AutoRegister`.
