@@ -25,7 +25,7 @@ import eu.smashmc.api.SmashComponent;
  * <br>
  * 
  * Instances of all instantiated classes can be retrieved using the
- * {@link Registered} helper class. <br>
+ * {@link Register} helper class. <br>
  * <br>
  *
  * Reasons for why a class might not automatically be registered: <br>
