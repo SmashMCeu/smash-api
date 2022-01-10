@@ -12,6 +12,4 @@ public interface PlaytimeInfo {
 	public LocalDateTime getFirstSeen();
 
 	public UUID getUuid();
-
-	public String getName();
 }
