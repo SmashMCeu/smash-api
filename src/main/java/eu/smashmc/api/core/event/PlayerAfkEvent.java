@@ -7,10 +7,9 @@ import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
 import lombok.Getter;
-import net.md_5.bungee.api.ServerPing.Players;
 
 /**
- * {@link Bukkit} event fired when a {@link Players} changes it's AFK state.
+ * {@link Bukkit} event fired when a {@link Player} changed it's AFK state.
  * 
  * @author LiquidDev
  */
@@ -18,8 +17,10 @@ import net.md_5.bungee.api.ServerPing.Players;
 public class PlayerAfkEvent extends PlayerEvent {
 
 	/**
-	 * Returns <code>true</code> if the event was called due to the player going
-	 * AFK.
+	 * The new AFK state. <br>
+	 * - <code>true</code> if the event was called due to the player going AFK<br>
+	 * - <code>false</code> if the event was called due to the player becoming
+	 * active again
 	 */
 	private boolean afk;
 
