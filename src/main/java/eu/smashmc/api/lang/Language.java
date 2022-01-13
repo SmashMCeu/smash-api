@@ -68,6 +68,9 @@ public abstract class Language<T> {
 	}
 
 	public boolean existsLanguageProvider(String scope) {
+		if (scope == null) {
+			return false;
+		}
 		return this.providers.get(scope.toLowerCase()) != null;
 	}
 

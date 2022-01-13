@@ -13,19 +13,6 @@ import net.md_5.bungee.api.CommandSender;
  */
 public class BLang {
 
-	/**
-	 * Initializes and sets the default {@link LanguageProvider} instance. This can
-	 * only be done once.
-	 * 
-	 * For Bukkit use {@link Lang#initialize(String, String)} instead.
-	 * 
-	 * @param scope default scope
-	 */
-	public static void initializeScope(String scope) {
-		Language<CommandSender> api = SmashMc.getComponent(Language.class);
-		api.createLanguageProvider(scope);
-	}
-
 	@Deprecated
 	public static void initialize(String scope, String prefix) {
 		Language<CommandSender> api = SmashMc.getComponent(Language.class);
