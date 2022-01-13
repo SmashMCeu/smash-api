@@ -1,5 +1,7 @@
 package eu.smashmc.api.lang;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import eu.smashmc.api.Environment;
@@ -10,7 +12,9 @@ public abstract class Language<T> {
 
 	static Logger LOGGER = Logger.getLogger(LanguageProvider.class.getName());
 
-	static LanguageProvider<?> defaultProvider;
+	static LanguageProvider<?> globalProvider;
+
+	private Map<String, LanguageProvider<?>> providers = new HashMap<>();
 
 	/**
 	 * Get the default scope {@link LanguageProvider}.
@@ -18,12 +22,12 @@ public abstract class Language<T> {
 	 * @return default language
 	 */
 	public LanguageProvider<T> getDefaultProvider() {
-		if (defaultProvider == null) {
+		if (globalProvider == null) {
 			/* Return new language with global scope */
 			/* This operation is cheap */
-			return createLanguageProvider("global", "");
+			return createLanguageProvider("global");
 		}
-		return (LanguageProvider<T>) defaultProvider;
+		return (LanguageProvider<T>) globalProvider;
 	}
 
 	/**
@@ -31,24 +35,47 @@ public abstract class Language<T> {
 	 * 
 	 * @param language default scope language
 	 */
+	@Deprecated
 	public void setDefaultProvider(LanguageProvider<T> language) {
-		/*
-		 * To prevent race conditions with setting the default we only allow for one
-		 * initialization of the default BukkitLanguage.
-		 */
-		if (defaultProvider != null) {
-			throw new IllegalStateException("Default language provider already set to " + defaultProvider.getScope());
-		}
-		defaultProvider = language;
-		LOGGER.info("Default scope is now " + language.getScope());
+		globalProvider = language;
 	}
 
 	/**
 	 * Create a new language object with a different scope
 	 * 
-	 * @param scope  language key prefix
-	 * @param prefix the prefix for chat messages
+	 * @param scope language key prefix
+	 * @throws IllegalStateException if a language provider with the given scope
+	 *                               already exists.
 	 * @return new {@link LanguageProvider} instance
 	 */
-	public abstract LanguageProvider<T> createLanguageProvider(String scope, String prefix);
+	public LanguageProvider<T> createLanguageProvider(String scope) throws IllegalStateException {
+		if (existsLanguageProvider(scope)) {
+			throw new IllegalStateException("Language provider with scope '" + scope + "' already exists.");
+		}
+		final String lowerScope = scope.toLowerCase();
+		var provider = this.constructProvider(lowerScope);
+		providers.put(lowerScope, provider);
+		return provider;
+	}
+
+	public LanguageProvider<T> getLanguageProvider(String scope) throws IllegalStateException {
+		final String lowerScope = scope.toLowerCase();
+		var provider = this.providers.get(lowerScope);
+		if (provider == null) {
+			throw new IllegalStateException("No language provider with scope '" + scope + "' found.");
+		}
+		return (LanguageProvider<T>) provider;
+	}
+
+	public boolean existsLanguageProvider(String scope) {
+		return this.providers.get(scope.toLowerCase()) != null;
+	}
+
+	@Deprecated
+	public LanguageProvider<T> createLanguageProvider(String scope, String prefix) {
+		return this.createLanguageProvider(scope);
+	}
+
+	protected abstract LanguageProvider<T> constructProvider(String scope);
+
 }

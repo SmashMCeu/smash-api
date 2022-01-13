@@ -11,7 +11,7 @@ import eu.smashmc.api.Constants;
 class FallbackLanguageImpl extends Language {
 
 	@Override
-	public LanguageProvider createLanguageProvider(String scope, String prefix) {
+	protected LanguageProvider constructProvider(String scope) {
 		return new LanguageProvider() {
 
 			@Override
