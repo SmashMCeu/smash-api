@@ -10,9 +10,6 @@ import org.bukkit.event.Listener;
 import eu.smashmc.api.SmashComponent;
 
 /**
- * TODO Experimental<br>
- * <br>
- * 
  * Allows you to automatically instantiate and register listeners, commands and
  * more. Also allows you to use {@link AutoInject} to automatically inject
  * dependencies into fields and constructors. <br>
