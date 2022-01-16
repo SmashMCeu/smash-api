@@ -49,4 +49,9 @@ class FallbackPlaytimeImpl implements Playtime {
 	public boolean isCountingPlaytime(UUID uuid) {
 		return false;
 	}
+
+	@Override
+	public PlaytimeInfo getPlaytimeInfo(Object onlinePlayer) {
+		return null;
+	}
 }

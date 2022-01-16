@@ -18,6 +18,14 @@ public interface Playtime {
 	public CompletableFuture<PlaytimeInfo> getPlaytimeInfo(UUID uuid);
 
 	/**
+	 * Retrieves the cached play time information of an online player.
+	 * 
+	 * @param onlinePlayer instance of the online player.
+	 * @return the players {@link PlaytimeInfo}
+	 */
+	public PlaytimeInfo getPlaytimeInfo(Object onlinePlayer);
+
+	/**
 	 * Add playtime to a player.
 	 * 
 	 * @param uuid     the players {@link UUID}
