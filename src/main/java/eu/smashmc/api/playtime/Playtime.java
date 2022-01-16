@@ -18,12 +18,16 @@ public interface Playtime {
 	public CompletableFuture<PlaytimeInfo> getPlaytimeInfo(UUID uuid);
 
 	/**
-	 * Retrieves the cached play time information of an online player.
+	 * Retrieves the cached play time information of an online player. Might not be
+	 * supported on all platforms, where it will throw an
+	 * {@link UnsupportedOperationException}.
 	 * 
 	 * @param onlinePlayer instance of the online player.
 	 * @return the players {@link PlaytimeInfo}
+	 * @throws UnsupportedOperationException if not supported on current platform
+	 *                                       (e.g. BungeeCord)
 	 */
-	public PlaytimeInfo getPlaytimeInfo(Object onlinePlayer);
+	public PlaytimeInfo getPlaytimeInfo(Object onlinePlayer) throws UnsupportedOperationException;
 
 	/**
 	 * Add playtime to a player.
