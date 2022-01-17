@@ -15,30 +15,35 @@ import eu.smashmc.api.SmashMc;
  */
 public class AsyncExecutor {
 
-	private static AsyncDispatcher executor;
+	private static AsyncDispatcher dispatcher;
 
-	public static void setDispatcher(AsyncDispatcher dispatcher) {
-		SmashMc.registerComponent(AsyncDispatcher.class, dispatcher);
-		executor = dispatcher;
+	public static void setDispatcher(AsyncDispatcher newDispatcher) {
+		SmashMc.registerComponent(AsyncDispatcher.class, newDispatcher);
+		dispatcher = newDispatcher;
 	}
 
+	@Deprecated
 	public static AsyncDispatcher getDisptacher() {
-		return executor;
+		return dispatcher;
+	}
+
+	public static AsyncDispatcher getDispatcher() {
+		return dispatcher;
 	}
 
 	public static void execute(Runnable runnable) {
 		verfiyDispatcher();
-		executor.execute(runnable);
+		dispatcher.execute(runnable);
 	}
 
 	public static <T> Future<T> submit(Callable<T> task) {
 		verfiyDispatcher();
-		return executor.submit(task);
+		return dispatcher.submit(task);
 	}
 
 	public static <T> CompletableFuture<T> supply(Supplier<T> supplier) {
 		verfiyDispatcher();
-		return executor.supply(supplier)
+		return dispatcher.supply(supplier)
 				.exceptionally(ex -> {
 					ex.printStackTrace();
 					throw new RuntimeException(ex);
@@ -46,12 +51,12 @@ public class AsyncExecutor {
 	}
 
 	public static void shutdown() {
-		executor.shutdown();
+		dispatcher.shutdown();
 	}
 
 	private static void verfiyDispatcher() {
-		if (executor == null) {
-			executor = new ThreadPoolDispatcher();
+		if (dispatcher == null) {
+			dispatcher = new ThreadPoolDispatcher();
 		}
 	}
 }
