@@ -13,7 +13,7 @@ public class ThreadPoolDispatcher implements AsyncDispatcher {
 	private static ExecutorService executor;
 
 	public ThreadPoolDispatcher() {
-		executor = Executors.newCachedThreadPool((new ThreadFactoryBuilder()).setNameFormat("Smash Plugin Thread - %1$d")
+		executor = Executors.newCachedThreadPool((new ThreadFactoryBuilder()).setNameFormat("smash-api-thread-%d")
 				.build());
 	}
 
