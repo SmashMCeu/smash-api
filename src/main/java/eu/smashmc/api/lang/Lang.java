@@ -4,6 +4,8 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.PluginClassLoader;
 
 import eu.smashmc.api.SmashMc;
 
@@ -16,18 +18,20 @@ import eu.smashmc.api.SmashMc;
 public class Lang {
 
 	/**
-	 * Initializes and sets the default {@link LanguageProvider} instance. This can
-	 * only be done once.
+	 * Initializes the language system for the calling {@link Plugin}.
 	 * 
 	 * For BungeeCord use {@link BLang#initialize(String, String)} instead.
 	 * 
-	 * @param scope  default scope
-	 * @param prefix default prefix
 	 */
+	public static void initialize() {
+		Language<CommandSender> api = SmashMc.getComponent(Language.class);
+		api.createLanguageProvider(getScope());
+	}
+
+	@Deprecated
 	public static void initialize(String scope, String prefix) {
 		Language<CommandSender> api = SmashMc.getComponent(Language.class);
-		LanguageProvider<CommandSender> language = api.createLanguageProvider(scope, prefix);
-		api.setDefaultProvider(language);
+		api.setDefaultProvider(api.createLanguageProvider(scope));
 	}
 
 	public static void sendMessage(CommandSender player, String translationKey) {
@@ -35,7 +39,7 @@ public class Lang {
 	}
 
 	public static void sendMessage(CommandSender player, String translationKey, Object... format) {
-		LanguageProvider<CommandSender> language = (LanguageProvider<CommandSender>) Language.defaultProvider;
+		LanguageProvider<CommandSender> language = findProvider();
 		language.sendMessage(player, translationKey, format);
 	}
 
@@ -44,7 +48,7 @@ public class Lang {
 	}
 
 	public static void sendUnprefixedMessage(CommandSender player, String translationKey, Object... format) {
-		LanguageProvider<CommandSender> language = (LanguageProvider<CommandSender>) Language.defaultProvider;
+		LanguageProvider<CommandSender> language = findProvider();
 		language.sendUnprefixedMessage(player, translationKey, format);
 	}
 
@@ -53,27 +57,64 @@ public class Lang {
 	}
 
 	public static void broadcast(String translationKey, Object... format) {
-		LanguageProvider<CommandSender> language = (LanguageProvider<CommandSender>) Language.defaultProvider;
+		LanguageProvider<CommandSender> language = findProvider();
 		language.broadcast(translationKey, format);
 	}
 
 	public static String get(CommandSender player, String translationKey) {
-		LanguageProvider<CommandSender> language = (LanguageProvider<CommandSender>) Language.defaultProvider;
+		LanguageProvider<CommandSender> language = findProvider();
 		return language.get(player, translationKey);
 	}
 
 	public static String get(CommandSender player, String translationKey, Object... format) {
-		LanguageProvider<CommandSender> language = (LanguageProvider<CommandSender>) Language.defaultProvider;
+		LanguageProvider<CommandSender> language = findProvider();
 		return language.get(player, translationKey, format);
 	}
 
 	public static String get(UUID playerUuid, String translationKey) {
-		LanguageProvider<CommandSender> language = (LanguageProvider<CommandSender>) Language.defaultProvider;
+		LanguageProvider<CommandSender> language = findProvider();
 		return language.get(playerUuid, translationKey);
 	}
 
 	public static String get(UUID playerUuid, String translationKey, Object... format) {
-		LanguageProvider<CommandSender> language = (LanguageProvider<CommandSender>) Language.defaultProvider;
+		LanguageProvider<CommandSender> language = findProvider();
 		return language.get(playerUuid, translationKey, format);
+	}
+
+	protected static LanguageProvider<CommandSender> findProvider() {
+		Language<CommandSender> api = SmashMc.getComponent(Language.class);
+		String scope = getScope();
+		if (api.existsLanguageProvider(scope)) {
+			return api.getLanguageProvider(scope);
+		}
+		return api.getDefaultProvider();
+	}
+
+	protected static String getScope() {
+		Class<?> caller = getCallingClass();
+		ClassLoader classLoader = caller.getClassLoader();
+		if (classLoader instanceof PluginClassLoader pluginClassLoader) {
+			Plugin plugin = pluginClassLoader.getPlugin();
+			String scope = plugin.getName();
+			return scope;
+		}
+		return null;
+	}
+
+	protected static Class<?> getCallingClass() {
+		try {
+			final StackTraceElement[] stElements = Thread.currentThread()
+					.getStackTrace();
+			for (int i = 1; i < stElements.length; i++) {
+				StackTraceElement ste = stElements[i];
+				String className = ste.getClassName();
+				if (!className.equals(Lang.class.getName()) && className.indexOf("java.lang.Thread") != 0) {
+					return Class.forName(className);
+				}
+			}
+		} catch (ClassNotFoundException e) {
+			throw new IllegalStateException("Could not find calling class", e);
+		}
+		throw new IllegalStateException("Could not find calling class");
 	}
 }

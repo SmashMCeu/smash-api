@@ -15,12 +15,7 @@ class FallbackPlaytimeImpl implements Playtime {
 	}
 
 	@Override
-	public CompletableFuture<PlaytimeInfo> getPlaytimeInfo(String playername) {
-		return CompletableFuture.completedFuture(new Info(UUID.randomUUID(), playername));
-	}
-
-	@Override
-	public void addPlaytime(UUID uuid, String name, long playtime) {
+	public void addPlaytime(UUID uuid, long playtime) {
 	}
 
 	@AllArgsConstructor
@@ -48,10 +43,15 @@ class FallbackPlaytimeImpl implements Playtime {
 		public UUID getUuid() {
 			return uuid;
 		}
+	}
 
-		@Override
-		public String getName() {
-			return name;
-		}
+	@Override
+	public boolean isCountingPlaytime(UUID uuid) {
+		return false;
+	}
+
+	@Override
+	public PlaytimeInfo getPlaytimeInfo(Object onlinePlayer) {
+		return null;
 	}
 }

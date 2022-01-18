@@ -13,15 +13,7 @@ import net.md_5.bungee.api.CommandSender;
  */
 public class BLang {
 
-	/**
-	 * Initializes and sets the default {@link LanguageProvider} instance. This can
-	 * only be done once.
-	 * 
-	 * For Bukkit use {@link Lang#initialize(String, String)} instead.
-	 * 
-	 * @param scope  default scope
-	 * @param prefix default prefix
-	 */
+	@Deprecated
 	public static void initialize(String scope, String prefix) {
 		Language<CommandSender> api = SmashMc.getComponent(Language.class);
 		LanguageProvider<CommandSender> language = api.createLanguageProvider(scope, prefix);
@@ -33,7 +25,7 @@ public class BLang {
 	}
 
 	public static void sendMessage(CommandSender player, String translationKey, Object... format) {
-		LanguageProvider<CommandSender> language = (LanguageProvider<CommandSender>) Language.defaultProvider;
+		LanguageProvider<CommandSender> language = (LanguageProvider<CommandSender>) Language.globalProvider;
 		language.sendMessage(player, translationKey, format);
 	}
 
@@ -42,7 +34,7 @@ public class BLang {
 	}
 
 	public static void sendUnprefixedMessage(CommandSender player, String translationKey, Object... format) {
-		LanguageProvider<CommandSender> language = (LanguageProvider<CommandSender>) Language.defaultProvider;
+		LanguageProvider<CommandSender> language = (LanguageProvider<CommandSender>) Language.globalProvider;
 		language.sendUnprefixedMessage(player, translationKey, format);
 	}
 
@@ -51,27 +43,27 @@ public class BLang {
 	}
 
 	public static void broadcast(String translationKey, Object... format) {
-		LanguageProvider<CommandSender> language = (LanguageProvider<CommandSender>) Language.defaultProvider;
+		LanguageProvider<CommandSender> language = (LanguageProvider<CommandSender>) Language.globalProvider;
 		language.broadcast(translationKey, format);
 	}
 
 	public static String get(CommandSender player, String translationKey) {
-		LanguageProvider<CommandSender> language = (LanguageProvider<CommandSender>) Language.defaultProvider;
+		LanguageProvider<CommandSender> language = (LanguageProvider<CommandSender>) Language.globalProvider;
 		return language.get(player, translationKey);
 	}
 
 	public static String get(CommandSender player, String translationKey, Object... format) {
-		LanguageProvider<CommandSender> language = (LanguageProvider<CommandSender>) Language.defaultProvider;
+		LanguageProvider<CommandSender> language = (LanguageProvider<CommandSender>) Language.globalProvider;
 		return language.get(player, translationKey, format);
 	}
 
 	public static String get(UUID playerUuid, String translationKey) {
-		LanguageProvider<CommandSender> language = (LanguageProvider<CommandSender>) Language.defaultProvider;
+		LanguageProvider<CommandSender> language = (LanguageProvider<CommandSender>) Language.globalProvider;
 		return language.get(playerUuid, translationKey);
 	}
 
 	public static String get(UUID playerUuid, String translationKey, Object... format) {
-		LanguageProvider<CommandSender> language = (LanguageProvider<CommandSender>) Language.defaultProvider;
+		LanguageProvider<CommandSender> language = (LanguageProvider<CommandSender>) Language.globalProvider;
 		return language.get(playerUuid, translationKey, format);
 	}
 }
