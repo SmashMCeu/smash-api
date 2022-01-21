@@ -52,6 +52,6 @@ class FallbackPlaytimeImpl implements Playtime {
 
 	@Override
 	public PlaytimeInfo getPlaytimeInfo(Object onlinePlayer) {
-		return null;
+		return new Info(UUID.randomUUID(), "");
 	}
 }
