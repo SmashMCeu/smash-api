@@ -37,7 +37,7 @@ import eu.smashmc.api.SmashComponent;
  * - {@link ItemFactory}<br>
  * - {@link HelpMap}<br>
  * 
- * And everything registered using {@link Register#bind(Object)}.
+ * And everything registered using {@link RegistryService#bind(Object)}.
  * 
  * @author LiquidDev
  *
