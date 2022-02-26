@@ -12,6 +12,30 @@ public interface LanguageProvider<T> {
 	public String getScope();
 
 	/**
+	 * Get the scopes chat prefix.
+	 * 
+	 * @param countryCode the country code used for the translation
+	 * @return chat prefix
+	 */
+	public String getChatPrefix(String countryCode);
+
+	/**
+	 * Get the scopes chat prefix.
+	 * 
+	 * @param uuid the users {@link UUID} to get the translation for
+	 * @return chat prefix
+	 */
+	public String getChatPrefix(UUID uuid);
+
+	/**
+	 * Get the scopes chat prefix.
+	 * 
+	 * @param player the target player
+	 * @return chat prefix
+	 */
+	public String getChatPrefix(T player);
+
+	/**
 	 * Broadcasts the translation of the given message to all online players.
 	 * 
 	 * @param translationKey the translation key of the message
