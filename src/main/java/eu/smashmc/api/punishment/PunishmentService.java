@@ -29,4 +29,12 @@ public interface PunishmentService {
 	 */
 	Collection<? extends Punishment> getActivePunishments(ProxiedPlayer player);
 
+	/**
+	 * Get users that share the same IP address with the given user.
+	 * 
+	 * @param userUuid {@link UUID} from the reference user
+	 * @return {@link Collection} of all users seen with the same IP
+	 */
+	CompletableFuture<Collection<UUID>> getUsersWithSameIp(UUID userUuid);
+
 }

@@ -19,4 +19,9 @@ class PunishmentServiceFallback implements PunishmentService {
 	public Collection<Punishment> getActivePunishments(ProxiedPlayer player) {
 		return Collections.emptyList();
 	}
+
+	@Override
+	public CompletableFuture<Collection<UUID>> getUsersWithSameIp(UUID userUuid) {
+		return CompletableFuture.completedFuture(Collections.emptyList());
+	}
 }
