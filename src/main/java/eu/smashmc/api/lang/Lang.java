@@ -2,7 +2,6 @@ package eu.smashmc.api.lang;
 
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.PluginClassLoader;
@@ -10,15 +9,19 @@ import org.bukkit.plugin.java.PluginClassLoader;
 import eu.smashmc.api.SmashMc;
 
 /**
- * Simple {@link LanguageProvider} wrapper for {@link Bukkit} using the default
- * (Language#getDefault()) instance.
+ * 'Smart' wrapper for {@link LanguageProvider}. <br>
+ * Uses the name of the calling plugin as the scope. If no provider with the
+ * plugins name as scope was found, it uses the global provider instead.
  * 
  * For BungeeCord use {@link BLang} instead.
  */
 public class Lang {
 
 	/**
-	 * Initializes the language system for the calling {@link Plugin}.
+	 * Initializes the language system for the calling {@link Plugin}.<br>
+	 * The calling plugins name will be used as the scope.<br>
+	 * The chat prefix can be defined in the scopes language files with 'prefix' as
+	 * the key.
 	 * 
 	 * For BungeeCord use {@link BLang#initialize(String, String)} instead.
 	 * 
