@@ -10,7 +10,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
  * @author LiquidDev
  *
  */
-@SmashComponent(Environment.BUNGEECORD)
+@SmashComponent(value = Environment.BUNGEECORD, fallbackImpl = ProxyServiceFallback.class)
 public interface ProxyService {
 
 	/**
