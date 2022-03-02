@@ -105,6 +105,8 @@ public interface Punishment {
 	 * including appeal and editions. Returns {@link Long#MAX_VALUE} if the
 	 * punishment is permanent.
 	 * 
+	 * Note: creationTime + duration != endTime if an appeal has been created
+	 * 
 	 * @return effective duration in milliseconds
 	 */
 	long getDuration();
@@ -113,6 +115,8 @@ public interface Punishment {
 	 * Returns the effective time in milliseconds left the punishment will be
 	 * active. Might be zero or negative if the punishment has elapsed or is
 	 * forgiven.
+	 * 
+	 * Note: creationTime + duration != endTime if an appeal has been created
 	 * 
 	 * @return effective time left in milliseconds
 	 */

@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 @RequiredArgsConstructor
 public enum PunishmentType {
 
-	KICK(false), MUTE(true), BAN(true);
+	BAN(true), MUTE(true), KICK(false);
 	/* SKIN_BAN(true), SHADOW_BAN(true) */;
 
 	@Accessors(fluent = true)
