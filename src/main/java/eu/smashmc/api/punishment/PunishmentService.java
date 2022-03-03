@@ -35,6 +35,6 @@ public interface PunishmentService {
 	 * @param userUuid {@link UUID} from the reference user
 	 * @return {@link Collection} of all users seen with the same IP
 	 */
-	CompletableFuture<Collection<UUID>> getUsersWithSameIp(UUID userUuid);
+	CompletableFuture<Collection<? extends PunishmentUser>> getUsersWithSameIp(UUID userUuid);
 
 }

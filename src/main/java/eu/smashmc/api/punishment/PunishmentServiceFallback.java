@@ -21,7 +21,7 @@ class PunishmentServiceFallback implements PunishmentService {
 	}
 
 	@Override
-	public CompletableFuture<Collection<UUID>> getUsersWithSameIp(UUID userUuid) {
+	public CompletableFuture<Collection<? extends PunishmentUser>> getUsersWithSameIp(UUID userUuid) {
 		return CompletableFuture.completedFuture(Collections.emptyList());
 	}
 }
