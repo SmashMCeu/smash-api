@@ -45,6 +45,6 @@ public interface GameEntity {
 	 * 
 	 * @return {@link List} of {@link GameParticipant}
 	 */
-	List<GameParticipant> getParticipants();
+	List<? extends GameParticipant> getParticipants();
 
 }
