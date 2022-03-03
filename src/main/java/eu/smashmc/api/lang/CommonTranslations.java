@@ -7,6 +7,7 @@ package eu.smashmc.api.lang;
 public class CommonTranslations {
 
 	public static String CHAT_COOLDOWN = "chat.cooldown";
+	public static String CHAT_ERROR = "chat.error";
 	public static String CHAT_NO_PERMISSION = "chat.no_permission";
 	public static String CHAT_INVALID_ARGUMENTS = "chat.invalid_arguments";
 	public static String CHAT_INVALID_ARGUMENTS_USE = "chat.invalid_arguments_use";
