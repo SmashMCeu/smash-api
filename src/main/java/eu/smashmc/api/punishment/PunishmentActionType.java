@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 
 @Getter
 @RequiredArgsConstructor
-public enum PunishmentType {
+public enum PunishmentActionType {
 
 	BAN(true), MUTE(true), KICK(false);
 	/* SKIN_BAN(true), SHADOW_BAN(true) */;

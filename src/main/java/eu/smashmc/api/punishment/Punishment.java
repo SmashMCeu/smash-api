@@ -39,19 +39,19 @@ public interface Punishment {
 	String getTranslatedReason(UUID userUuid);
 
 	/**
-	 * The original scope of the punishment without any appeals.
+	 * The original action of the punishment without any appeals.
 	 * 
-	 * @return original {@link PunishmentScope}
+	 * @return original {@link PunishmentAction}
 	 */
-	PunishmentScope getOriginalScope();
+	PunishmentAction getOriginalAction();
 
 	/**
-	 * The resulting effective punishment scope including possible punishment
+	 * The resulting effective punishment action including possible punishment
 	 * appeals.
 	 * 
-	 * @return {@link PunishmentScope} adapted to possible appeals
+	 * @return {@link PunishmentAction} adapted to possible appeals
 	 */
-	PunishmentScope getEffectiveScope();
+	PunishmentAction getEffectiveAction();
 
 	/**
 	 * Optional comment further describing the punishment. Moderators are lazy so

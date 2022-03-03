@@ -1,19 +1,19 @@
 package eu.smashmc.api.punishment;
 
-public interface PunishmentScope {
+public interface PunishmentAction {
 
 	/**
 	 * Is the punishment a ban, kick or mute?
 	 * 
 	 * @return type of punishment
 	 */
-	PunishmentType getType();
+	PunishmentActionType getType();
 
 	/**
-	 * Checks if the punishment scope has a duration. E.g. a
-	 * {@link PunishmentType#KICK} would not have a duration.
+	 * Checks if the punishment action has a duration. E.g. a
+	 * {@link PunishmentActionType#KICK} would not have a duration.
 	 * 
-	 * @return <code>true</code> if scope has a duration.
+	 * @return <code>true</code> if action has a duration.
 	 */
 	boolean hasDuration();
 
