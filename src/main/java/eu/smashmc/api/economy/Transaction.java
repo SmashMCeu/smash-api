@@ -51,4 +51,8 @@ public class Transaction {
 		var trade = new Trade(accountHolder, currency, -amount, reason, description);
 		this.trades.add(trade);
 	}
+
+	public boolean isEmpty() {
+		return this.trades.isEmpty();
+	}
 }
