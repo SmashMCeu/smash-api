@@ -7,9 +7,8 @@ import java.util.concurrent.CompletableFuture;
 
 import eu.smashmc.api.Environment;
 import eu.smashmc.api.SmashComponent;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-@SmashComponent(value = Environment.BUNGEECORD, fallbackImpl = PunishmentServiceFallback.class)
+@SmashComponent(value = { Environment.BUNGEECORD, Environment.BUKKIT }, fallbackImpl = PunishmentServiceFallback.class)
 public interface PunishmentService {
 
 	/**
@@ -27,7 +26,7 @@ public interface PunishmentService {
 	 * @param player online player
 	 * @return {@link Collection} active punishments
 	 */
-	Collection<? extends Punishment> getActivePunishments(ProxiedPlayer player);
+	Collection<? extends Punishment> getActivePunishments(Object player);
 
 	/**
 	 * Get users that share the same IP address with the given user.
@@ -37,4 +36,8 @@ public interface PunishmentService {
 	 */
 	CompletableFuture<? extends Collection<? extends PunishmentUser>> getUsersWithSameIp(UUID userUuid);
 
+	@Deprecated
+	default Collection<? extends Punishment> getActivePunishments(net.md_5.bungee.api.connection.ProxiedPlayer player) {
+		return getActivePunishments((Object) player);
+	}
 }

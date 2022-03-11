@@ -6,8 +6,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-
 class PunishmentServiceFallback implements PunishmentService {
 
 	@Override
@@ -16,7 +14,7 @@ class PunishmentServiceFallback implements PunishmentService {
 	}
 
 	@Override
-	public Collection<Punishment> getActivePunishments(ProxiedPlayer player) {
+	public Collection<Punishment> getActivePunishments(Object player) {
 		return Collections.emptyList();
 	}
 
