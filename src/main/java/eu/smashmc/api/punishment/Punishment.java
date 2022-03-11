@@ -15,6 +15,13 @@ public interface Punishment {
 	int getId();
 
 	/**
+	 * Returns the {@link UUID} of the user the punishment belongs to.
+	 * 
+	 * @return {@link UUID} of owner
+	 */
+	UUID getUserUuid();
+
+	/**
 	 * Creation time of the punishment in Unix time in milliseconds.
 	 * 
 	 * @return time stamp of creation
