@@ -36,6 +36,16 @@ public interface PunishmentService {
 	 */
 	CompletableFuture<? extends Collection<? extends PunishmentUser>> getUsersWithSameIp(UUID userUuid);
 
+	/**
+	 * Retrieves all active, permanent punishments with the given type and reason.
+	 * 
+	 * @param type   Action type for the punishment, e.g. BAN
+	 * @param reason Reason of the punishment, e.g. "Cheating"
+	 * @param limit  Maximum punishments to be retrieved
+	 * @return {@link Collection} of found {@link Punishment}s
+	 */
+	CompletableFuture<Collection<? extends Punishment>> getPermanentPunishments(PunishmentActionType type, String reason, int limit);
+
 	@Deprecated
 	default Collection<? extends Punishment> getActivePunishments(net.md_5.bungee.api.connection.ProxiedPlayer player) {
 		return getActivePunishments((Object) player);
