@@ -17,12 +17,12 @@ import net.md_5.bungee.api.ServerPing.Players;
  *
  */
 @Getter
-public class PlayerBalanceChangeEvent extends PlayerEvent {
+public class PlayerBalanceUpdateEvent extends PlayerEvent {
 
 	private Currency currency;
 	private double balance;
 
-	public PlayerBalanceChangeEvent(@NotNull Player who, Currency currency, double balance) {
+	public PlayerBalanceUpdateEvent(@NotNull Player who, Currency currency, double balance) {
 		super(who);
 		this.currency = currency;
 		this.balance = balance;
