@@ -27,12 +27,12 @@ public class SpigotAchievementsHelper {
 		achievements.registerAchievement(achievement);
 	}
 
-	public static void registerAchievement(String key, String gameType, AchievementDifficulty difficulty, String description) {
+	public static void registerAchievement(String key, String gameType, AchievementDifficulty difficulty) {
 		registerAchievement(AchievementBuilder.newBuilder()
 				.key(key)
 				.type(gameType)
 				.difficulty(difficulty)
-				.description(description)
+				.description("lore." + key)
 				.build());
 	}
 }
