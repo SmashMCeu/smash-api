@@ -38,4 +38,13 @@ import eu.smashmc.api.SmashComponent;
 @Target(ElementType.TYPE)
 public @interface AutoRegister {
 
+	/**
+	 * Use this to add an NMS version contraint, where the class will only be
+	 * instantiated and registered when one of the specified NMS versions is
+	 * present. If empty or null, this field is ignored.
+	 * 
+	 * @return comptaible nms versions
+	 */
+	NmsVersion[] nmsVersion() default {};
+
 }
