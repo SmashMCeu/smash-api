@@ -12,7 +12,7 @@ import eu.smashmc.api.SmashComponent;
  *
  * @param <T> type of Player
  */
-@SmashComponent(value = { Environment.BUKKIT })
+@SmashComponent(value = { Environment.BUKKIT }, fallbackImpl = NickServiceFallback.class)
 public interface NickService<T> {
 
 	boolean isNicked(T player);
