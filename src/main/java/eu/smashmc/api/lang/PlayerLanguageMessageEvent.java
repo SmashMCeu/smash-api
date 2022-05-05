@@ -43,6 +43,10 @@ public class PlayerLanguageMessageEvent extends PlayerEvent {
 		return prefix != null;
 	}
 
+	public String getTranslatedMessage(boolean withPrefix) {
+		return ((withPrefix && hasPrefix()) ? prefix : "") + translatedMessage;
+	}
+
 	@Override
 	public HandlerList getHandlers() {
 		return handlers;
