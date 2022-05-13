@@ -44,7 +44,7 @@ public interface PunishmentService {
 	 * @param limit  Maximum punishments to be retrieved
 	 * @return {@link Collection} of found {@link Punishment}s
 	 */
-	CompletableFuture<Collection<? extends Punishment>> getPermanentPunishments(PunishmentActionType type, String reason, int limit);
+	CompletableFuture<? extends Collection<? extends Punishment>> getPermanentPunishments(PunishmentActionType type, String reason, int limit);
 
 	@Deprecated
 	default Collection<? extends Punishment> getActivePunishments(net.md_5.bungee.api.connection.ProxiedPlayer player) {
