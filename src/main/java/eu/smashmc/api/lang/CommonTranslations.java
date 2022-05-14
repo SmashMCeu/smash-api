@@ -21,5 +21,6 @@ public class CommonTranslations {
 	public static final String CHAT_BUTTON_ACCEPT = "chat.button.accept";
 	public static final String CHAT_BUTTON_DENY = "hat.button.deny";
 	public static final String CHAT_BUTTON_CONFIRM = "chat.button.confirm";
+	public static final String CHAT_CANNOT_PLAY_WITH_YOURSELF = "chat.no_self_play";
 
 }
