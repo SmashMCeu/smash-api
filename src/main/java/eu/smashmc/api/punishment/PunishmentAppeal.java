@@ -1,5 +1,6 @@
 package eu.smashmc.api.punishment;
 
+import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,11 +23,11 @@ public interface PunishmentAppeal {
 	UUID getBy();
 
 	/**
-	 * Creation time of the appeal in Unix time in milliseconds.
+	 * Creation timestamp of the appeal.
 	 * 
 	 * @return time stamp of creation
 	 */
-	long getTimeCreated();
+	Instant getTimeCreated();
 
 	/**
 	 * If the appeal overrides the punishment duration, this will contain the new

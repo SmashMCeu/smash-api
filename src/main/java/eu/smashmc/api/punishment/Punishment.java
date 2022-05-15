@@ -1,5 +1,6 @@
 package eu.smashmc.api.punishment;
 
+import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,11 +23,11 @@ public interface Punishment {
 	UUID getUserUuid();
 
 	/**
-	 * Creation time of the punishment in Unix time in milliseconds.
+	 * Creation timestamp of the punishment.
 	 * 
 	 * @return time stamp of creation
 	 */
-	long getTimeCreated();
+	Instant getTimeCreated();
 
 	/**
 	 * The reason for the punishment. Can be either a template id or a custom reason
