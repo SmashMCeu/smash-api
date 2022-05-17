@@ -1,5 +1,6 @@
 package eu.smashmc.api.core.event;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.entity.Player;
@@ -21,7 +22,7 @@ public class PlayerGroupsUpdateEvent extends PlayerEvent {
 
 	public PlayerGroupsUpdateEvent(@NotNull Player who, @NotNull List<String> groups) {
 		super(who);
-		this.updatedGroups = groups;
+		this.updatedGroups = Collections.unmodifiableList(groups);
 	}
 
 	@Override
