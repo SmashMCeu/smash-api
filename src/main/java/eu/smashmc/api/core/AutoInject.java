@@ -13,6 +13,8 @@ import org.bukkit.help.HelpMap;
 import org.bukkit.inventory.ItemFactory;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.ServicesManager;
 import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.ScoreboardManager;
@@ -36,6 +38,8 @@ import eu.smashmc.api.SmashComponent;
  * - {@link CommandMap}<br>
  * - {@link ItemFactory}<br>
  * - {@link HelpMap}<br>
+ * - {@link ServicesManager}<br>
+ * - Bukkit services aswell as {@link RegisteredServiceProvider}<br>
  * 
  * And everything registered using {@link RegistryService#bind(Object)}.
  * 
