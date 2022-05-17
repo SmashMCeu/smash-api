@@ -11,7 +11,8 @@ import org.jetbrains.annotations.NotNull;
 import lombok.Getter;
 
 /**
- * Called when the groups of a player were updated.
+ * Similar to {@link PlayerGroupsUpdateEvent} but also called if target player
+ * is offline.
  */
 @Getter
 public class UserGroupsUpdateEvent extends Event {
