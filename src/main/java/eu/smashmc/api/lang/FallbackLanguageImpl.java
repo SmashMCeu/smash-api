@@ -60,6 +60,21 @@ class FallbackLanguageImpl extends Language {
 			public String getCountryCode(UUID uuid) {
 				return "??";
 			}
+
+			@Override
+			public String getChatPrefix(String countryCode) {
+				return Constants.PREFIX;
+			}
+
+			@Override
+			public String getChatPrefix(UUID uuid) {
+				return Constants.PREFIX;
+			}
+
+			@Override
+			public String getChatPrefix(Object player) {
+				return Constants.PREFIX;
+			}
 		};
 	}
 }

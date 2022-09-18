@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import eu.smashmc.api.identity.minecraft.property.TexturesProperty;
 import lombok.Data;
@@ -79,5 +80,10 @@ class FallbackMinecraftIdentityProviderImpl implements MinecraftIdentityProvider
 		public String getServer() {
 			return "";
 		}
+	}
+
+	@Override
+	public CompletableFuture<Long> count() {
+		return CompletableFuture.completedFuture(0L);
 	}
 }

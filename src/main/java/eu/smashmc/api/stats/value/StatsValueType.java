@@ -11,9 +11,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum StatsValueType {
 
-	TEXT(String.class, TextStatsValueAccumulation.class), INTEGER(Integer.class, IntStatsValueAccumulation.class), FLOAT(Float.class, FloatStatsValueAccumulation.class);
+	TEXT(TextStatsValue.class, TextStatsValueAccumulation.class), INTEGER(IntStatsValue.class, IntStatsValueAccumulation.class), FLOAT(FloatStatsValue.class, FloatStatsValueAccumulation.class);
 
-	private final Class<?> valueType;
-	private final Class<? extends StatsValueAccumulation> aggregationType;
+	private final Class<? extends StatsValue> valueType;
+	private final Class<? extends StatsValueAccumulation> accumulationType;
 
 }

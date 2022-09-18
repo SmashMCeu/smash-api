@@ -114,4 +114,11 @@ public interface IdentityProvider<ID, I extends Identity<ID>> {
 	default CompletableFuture<Map<String, List<I>>> findAllByNameAsync(String[] names) {
 		return AsyncExecutor.supply(() -> this.findAllByName(names));
 	}
+
+	/**
+	 * Counts all known identities.
+	 * 
+	 * @return count of all known identities
+	 */
+	CompletableFuture<Long> count();
 }

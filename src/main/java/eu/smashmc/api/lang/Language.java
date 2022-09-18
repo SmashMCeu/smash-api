@@ -23,9 +23,8 @@ public abstract class Language<T> {
 	 */
 	public LanguageProvider<T> getDefaultProvider() {
 		if (globalProvider == null) {
-			/* Return new language with global scope */
-			/* This operation is cheap */
-			return createLanguageProvider("global");
+			/* Create new language with global scope */
+			globalProvider = createLanguageProvider("global");
 		}
 		return (LanguageProvider<T>) globalProvider;
 	}
