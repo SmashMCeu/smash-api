@@ -8,6 +8,6 @@ import eu.smashmc.api.SmashComponent;
 @SmashComponent(Environment.BUKKIT)
 public interface PacketEventService {
 
-	void registerListener(Class<?> packetType, Consumer<PacketEvent> listener);
+	<T> void registerListener(Class<T> packetType, Consumer<PacketEvent<T>> listener);
 
 }

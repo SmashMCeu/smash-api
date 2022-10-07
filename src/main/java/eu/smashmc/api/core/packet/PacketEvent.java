@@ -5,10 +5,10 @@ import org.bukkit.entity.Player;
 import lombok.Data;
 
 @Data
-public class PacketEvent {
+public class PacketEvent<T> {
 
 	private final Player player;
-	private Object packet;
+	private T packet;
 	private boolean cancelled;
 
 }
