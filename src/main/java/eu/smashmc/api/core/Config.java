@@ -7,13 +7,13 @@ import java.lang.annotation.Target;
 
 /**
  * Classes instantiated by {@link Managed} can use this annotation to
- * automatically inject config properties into fields and parameters.
+ * automatically inject config properties into fields.
  * 
  * @author LiquidDev
  *
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.FIELD, ElementType.PARAMETER, ElementType.TYPE_PARAMETER })
+@Target({ ElementType.FIELD })
 public @interface Config {
 
 	/**
