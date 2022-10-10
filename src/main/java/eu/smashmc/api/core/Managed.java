@@ -18,11 +18,11 @@ import eu.smashmc.api.SmashComponent;
  * - Bukkit {@link Listener} <br>
  * - Commands using liquidcommands library <br>
  * - {@link SmashComponent} implementations <br>
- * - TODO: soon more <br>
+ * - Your own using {@link RegistryService#addRegistrar(Class, Registrar)} <br>
  * <br>
  * 
  * Instances of all instantiated classes can be retrieved using the
- * {@link Register} helper class. <br>
+ * {@link RegistryService} helper class. <br>
  * <br>
  *
  * Reasons for why a class might not automatically be registered: <br>

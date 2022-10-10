@@ -22,9 +22,6 @@ public class Lang {
 	 * The calling plugins name will be used as the scope.<br>
 	 * The chat prefix can be defined in the scopes language files with 'prefix' as
 	 * the key.
-	 * 
-	 * For BungeeCord use {@link BLang#initialize(String, String)} instead.
-	 * 
 	 */
 	public static void initialize() {
 		Language<CommandSender> api = SmashMc.getComponent(Language.class);

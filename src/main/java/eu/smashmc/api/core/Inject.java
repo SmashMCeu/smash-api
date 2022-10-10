@@ -26,6 +26,7 @@ import eu.smashmc.api.SmashComponent;
  * automatically inject dependencies into fields.
  * 
  * Currently supported dependencies are <br>
+ * - {@link Managed} type instances <br>
  * - {@link SmashComponent}<br>
  * - {@link Logger}<br>
  * - {@link Plugin}<br>
