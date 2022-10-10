@@ -38,13 +38,13 @@ The list of currently implemented SmashComponents:
 *For a more conveniente use, you can stick to the `Lang` wrapper in `eu.smashmc.api.lang.Lang`
 
 
-## @AutoRegister and @AutoInject
-If you are developing for a Bukkit environment, you can automatically register your listeners and commands with basic dependency injection using the `@AutoRegister` and `@AutoInject` annotations.
+## @Managed and @Inject
+If you are developing for a Bukkit environment, you can automatically register your listeners and commands with basic dependency injection using the `@Managed` and `@Inject` annotations.
 ```java
-@AutoRegister
+@Managed
 public class ExampleListener implements Listener {
 
-	@AutoInject
+	@Inject
 	private Economy economy;
 
 	@EventHandler
@@ -59,7 +59,7 @@ public class ExampleListener implements Listener {
 
 Injection also works for constructor parameters:
 ```java
-@AutoRegister
+@Managed
 public class ExampleCommand extends PlayerCommand {
 
 	public ExampleCommand(Logger logger, Plugin plugin) {
@@ -76,4 +76,4 @@ public class ExampleCommand extends PlayerCommand {
 }
 ```
 
-For more information, please refer to the javadoc of `@AutoRegister`.
+For more information, please refer to the javadoc of `@Managed`.

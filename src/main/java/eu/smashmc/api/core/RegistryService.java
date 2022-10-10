@@ -11,26 +11,26 @@ import java.util.NoSuchElementException;
 import javax.annotation.Nullable;
 
 /**
- * Static access to the @AutoInject dependency injection and @AutoRegister
- * registration mechanism.
+ * Static access to the @Inject dependency injection and @Managed registration
+ * mechanism.
  * 
  * @author LiquidDev
  */
 public class RegistryService {
 
-	private static Map<Class<?>, Object> REGISTERED_INSTANCES = new HashMap<>();
-	private static Collection<Object> INJECTIONS = new ArrayList<>();
+	private static Map<Class<?>, Object> MANAGED_INSTANCES = new HashMap<>(); // List of managed instanes
+	private static Collection<Object> DEPENDENCIES = new ArrayList<>(); // List of instances added with .bind()
 	private static Map<Class<?>, List<Registrar<?>>> REGISTRARS = new HashMap<>();
 
 	protected static <T> void register(Class<T> clazz, T instance) {
-		if (REGISTERED_INSTANCES.containsKey(clazz)) {
+		if (MANAGED_INSTANCES.containsKey(clazz)) {
 			throw new IllegalStateException("An instance of class " + clazz.getName() + " is already registered.");
 		}
-		REGISTERED_INSTANCES.put(clazz, instance);
+		MANAGED_INSTANCES.put(clazz, instance);
 	}
 
 	/**
-	 * Use this to access an instance of a class instantiated with @AutoRegister.
+	 * Use this to access an instance of a class instantiated with @Managed.
 	 * 
 	 * @param <T>   generic class type
 	 * @param clazz reference to the class type
@@ -38,10 +38,10 @@ public class RegistryService {
 	 * @throws NoSuchElementException If no instance was found for the given class
 	 *                                type
 	 */
-	public static <T> T getInstance(Class<T> clazz) throws NoSuchElementException {
-		Object object = REGISTERED_INSTANCES.get(clazz);
+	public static <T> T getManagedInstance(Class<T> clazz) throws NoSuchElementException {
+		Object object = MANAGED_INSTANCES.get(clazz);
 		if (object == null) {
-			throw new NoSuchElementException("No instance of class " + clazz.getName() + " was found. Missing @AutoInject or too early?");
+			throw new NoSuchElementException("No instance of class " + clazz.getName() + " was found. Missing @Managed or too early?");
 		}
 		return (T) object;
 	}
@@ -82,7 +82,7 @@ public class RegistryService {
 	 * @param object instance to be injected
 	 */
 	public static void bind(Object object) {
-		INJECTIONS.add(object);
+		DEPENDENCIES.add(object);
 	}
 
 	/**
@@ -94,7 +94,12 @@ public class RegistryService {
 	 */
 	@Nullable
 	public static <T> T resolveBind(Class<? super T> type) {
-		for (Object obj : INJECTIONS) {
+		for (Object obj : DEPENDENCIES) {
+			if (type.isInstance(obj)) {
+				return (T) obj;
+			}
+		}
+		for (Object obj : MANAGED_INSTANCES.values()) {
 			if (type.isInstance(obj)) {
 				return (T) obj;
 			}
