@@ -2,7 +2,6 @@ package eu.smashmc.api.lang;
 
 import java.util.UUID;
 
-import eu.smashmc.api.SmashMc;
 import net.md_5.bungee.api.CommandSender;
 
 /**
@@ -12,13 +11,6 @@ import net.md_5.bungee.api.CommandSender;
  * For Bukkit use {@link Lang} instead.
  */
 public class BLang {
-
-	@Deprecated
-	public static void initialize(String scope, String prefix) {
-		Language<CommandSender> api = SmashMc.getComponent(Language.class);
-		LanguageProvider<CommandSender> language = api.createLanguageProvider(scope, prefix);
-		api.setDefaultProvider(language);
-	}
 
 	public static void sendMessage(CommandSender player, String translationKey) {
 		sendMessage(player, translationKey, (Object[]) null);
