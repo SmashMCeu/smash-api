@@ -47,4 +47,14 @@ public @interface AutoRegister {
 	 */
 	NmsVersion[] nmsVersion() default {};
 
+	/**
+	 * Controls if the annotated type can be instantiated and dependet upon by
+	 * another plugin before the owning plugin does.
+	 * 
+	 * Default is <code>false</code>.
+	 * 
+	 * @return <code>true</code> if other plugins can instantiate this
+	 */
+	boolean allowForeignInitialization() default false;
+
 }
