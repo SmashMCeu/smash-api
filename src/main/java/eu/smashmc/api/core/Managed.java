@@ -11,7 +11,7 @@ import eu.smashmc.api.SmashComponent;
 
 /**
  * Allows you to automatically instantiate and register listeners, commands and
- * more. Also allows you to use {@link AutoInject} to automatically inject
+ * more. Also allows you to use {@link Inject} to automatically inject
  * dependencies into fields and constructors. <br>
  * <br>
  * List of supported registrations: <br>
@@ -36,7 +36,7 @@ import eu.smashmc.api.SmashComponent;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface AutoRegister {
+public @interface Managed {
 
 	/**
 	 * Use this to add an NMS version contraint, where the class will only be

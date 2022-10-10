@@ -7,14 +7,14 @@ import java.lang.annotation.Target;
 
 /**
  * Automatically schedules methods in classes annotated with
- * {@link AutoRegister}.
+ * {@link Managed}.
  * 
  * @author LiquidDev
  *
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface AutoSchedule {
+public @interface Schedule {
 
 	/**
 	 * The delay in ticks to execute the method first time.

@@ -22,7 +22,7 @@ import org.bukkit.scoreboard.ScoreboardManager;
 import eu.smashmc.api.SmashComponent;
 
 /**
- * Classes instantiated by {@link AutoRegister} can use this annotation to
+ * Classes instantiated by {@link Managed} can use this annotation to
  * automatically inject dependencies into fields.
  * 
  * Currently supported dependencies are <br>
@@ -48,6 +48,6 @@ import eu.smashmc.api.SmashComponent;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface AutoInject {
+public @interface Inject {
 
 }
