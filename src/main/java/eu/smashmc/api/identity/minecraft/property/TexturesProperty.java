@@ -15,12 +15,16 @@ public class TexturesProperty extends Property {
 		return "textures";
 	}
 
+	private TexturesPropertyValue decodedValue;
+
 	public TexturesPropertyValue decodeValue() {
-		byte[] data = Base64.getDecoder()
-				.decode(this.getValue());
-		String json = new String(data);
-		Gson gson = new Gson();
-		TexturesPropertyValue value = gson.fromJson(json, TexturesPropertyValue.class);
-		return value;
+		if (this.decodedValue == null) {
+			byte[] data = Base64.getDecoder()
+					.decode(this.getValue());
+			String json = new String(data);
+			Gson gson = new Gson();
+			decodedValue = gson.fromJson(json, TexturesPropertyValue.class);
+		}
+		return decodedValue;
 	}
 }
