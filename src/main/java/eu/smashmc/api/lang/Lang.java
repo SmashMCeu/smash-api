@@ -39,7 +39,7 @@ public class Lang {
 	}
 
 	public static void sendMessage(CommandSender player, String translationKey, Object... format) {
-		LanguageProvider<CommandSender> language = findProvider();
+		LanguageProvider<CommandSender> language = findProviderFromCallingClass();
 		language.sendMessage(player, translationKey, format);
 	}
 
@@ -48,7 +48,7 @@ public class Lang {
 	}
 
 	public static void sendUnprefixedMessage(CommandSender player, String translationKey, Object... format) {
-		LanguageProvider<CommandSender> language = findProvider();
+		LanguageProvider<CommandSender> language = findProviderFromCallingClass();
 		language.sendUnprefixedMessage(player, translationKey, format);
 	}
 
@@ -57,31 +57,31 @@ public class Lang {
 	}
 
 	public static void broadcast(String translationKey, Object... format) {
-		LanguageProvider<CommandSender> language = findProvider();
+		LanguageProvider<CommandSender> language = findProviderFromCallingClass();
 		language.broadcast(translationKey, format);
 	}
 
 	public static String get(CommandSender player, String translationKey) {
-		LanguageProvider<CommandSender> language = findProvider();
+		LanguageProvider<CommandSender> language = findProviderFromCallingClass();
 		return language.get(player, translationKey);
 	}
 
 	public static String get(CommandSender player, String translationKey, Object... format) {
-		LanguageProvider<CommandSender> language = findProvider();
+		LanguageProvider<CommandSender> language = findProviderFromCallingClass();
 		return language.get(player, translationKey, format);
 	}
 
 	public static String get(UUID playerUuid, String translationKey) {
-		LanguageProvider<CommandSender> language = findProvider();
+		LanguageProvider<CommandSender> language = findProviderFromCallingClass();
 		return language.get(playerUuid, translationKey);
 	}
 
 	public static String get(UUID playerUuid, String translationKey, Object... format) {
-		LanguageProvider<CommandSender> language = findProvider();
+		LanguageProvider<CommandSender> language = findProviderFromCallingClass();
 		return language.get(playerUuid, translationKey, format);
 	}
 
-	protected static LanguageProvider<CommandSender> findProvider() {
+	public static LanguageProvider<CommandSender> findProviderFromCallingClass() {
 		Language<CommandSender> api = SmashMc.getComponent(Language.class);
 		String scope = getScope();
 		if (api.existsLanguageProvider(scope)) {
