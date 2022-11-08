@@ -13,6 +13,8 @@ public class CommonTranslations {
 	/* Gameplay */
 	public static final String CHAT_PLAYER_JOIN = "chat.player_join";
 	public static final String CHAT_PLAYER_LEAVE = "chat.player_leave";
+	public static final String CHAT_COINS = "chat.coins";
+	public static final String CHAT_COINS_BOOSTED = "chat.coins.boosted";
 
 	/* Command feedback */
 	public static final String CHAT_COOLDOWN = "chat.cooldown";
