@@ -5,7 +5,7 @@ public class Constants {
 	/**
 	 * Global chat prefix for serverwide messages.
 	 */
-	public static final String PREFIX = "§8● §aSmashMC §8➥ §7";
+	public static final String PREFIX = "§8● §cDisguiseMC §8➥ §7";
 
 	/**
 	 * Chat Messages are constructed in the following pattern: <br>
