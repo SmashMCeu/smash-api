@@ -22,11 +22,6 @@ public class AsyncExecutor {
 		dispatcher = newDispatcher;
 	}
 
-	@Deprecated
-	public static AsyncDispatcher getDisptacher() {
-		return dispatcher;
-	}
-
 	public static AsyncDispatcher getDispatcher() {
 		return dispatcher;
 	}
