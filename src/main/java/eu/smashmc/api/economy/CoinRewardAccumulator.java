@@ -4,9 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import eu.smashmc.api.Constants;
+import eu.smashmc.api.lang.CommonTranslations;
+import eu.smashmc.api.lang.Lang;
+import eu.smashmc.api.lang.LanguageProvider;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -21,12 +24,27 @@ public class CoinRewardAccumulator {
 	public static final int KILL_REWARD = 20;
 	public static final int GAME_WIN_REWARD = 100;
 
-	private Map<Player, CoinReward> rewards = new HashMap<>();
+	/**
+	 * Language provider used for chat messages.
+	 */
+	private final LanguageProvider<CommandSender> language;
 
 	/**
 	 * Name of the game mode, e.g. "smash".
 	 */
 	private final String gameModeName;
+
+	private Map<Player, CoinReward> rewards = new HashMap<>();
+
+	/**
+	 * Use other constructor instead.
+	 * 
+	 * @param gameModeName name of gamemode
+	 */
+	@Deprecated
+	public CoinRewardAccumulator(String gameModeName) {
+		this(Lang.findProviderFromCallingClass(), gameModeName);
+	}
 
 	/**
 	 * Reward a {@link Player} with coins for a won game.
@@ -98,7 +116,11 @@ public class CoinRewardAccumulator {
 			boost += baseCoins / 2;
 		}
 
-		player.sendMessage(Constants.PREFIX + "§7+§a" + baseCoins + " Coins" + (boost > 0 ? " §7(§6+" + boost + " Coins§7)" : ""));
+		if (boost > 0) {
+			language.sendMessage(player, CommonTranslations.CHAT_COINS_BOOSTED, baseCoins, boost);
+		} else {
+			language.sendMessage(player, CommonTranslations.CHAT_COINS, baseCoins);
+		}
 
 		var reward = getReward(player);
 		reward.coins += baseCoins + boost;

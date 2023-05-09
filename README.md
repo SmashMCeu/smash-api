@@ -13,7 +13,7 @@ To get a component simply use the `SmashMc` class as the following:
 SmashMc.getComponent(<component-name>.class)
 ```
 Please note that some Components might not be present at runtime, depending on the enviroment you are developing for. 
-In this case, `SmashMc.getComponent()` will throw an `UnsupportedOperationException`. You can check the components `@SmashComponent` annotation to see supported environments.
+In this case, `SmashMc.getComponent()` will throw an `UnsupportedOperationException`. You can check a components `@SmashComponent` annotation for a list of supported environments.
 
 ### List of components
 The list of currently implemented SmashComponents:
@@ -32,17 +32,19 @@ The list of currently implemented SmashComponents:
 * ProxyService
 * PunishmentService
 * GroupsyncService
+* NickService
+* PacketEventService
 
 *For a more conveniente use, you can stick to the `Lang` wrapper in `eu.smashmc.api.lang.Lang`
 
 
-## @AutoRegister and @AutoInject
-If you are developing for a Bukkit environment, you can automatically register your listeners and commands with basic dependency injection using the `@AutoRegister` and `@AutoInject` annotations.
+## @Managed and @Inject
+If you are developing for a Bukkit environment, you can automatically register your listeners and commands with basic dependency injection using the `@Managed` and `@Inject` annotations.
 ```java
-@AutoRegister
+@Managed
 public class ExampleListener implements Listener {
 
-	@AutoInject
+	@Inject
 	private Economy economy;
 
 	@EventHandler
@@ -57,7 +59,7 @@ public class ExampleListener implements Listener {
 
 Injection also works for constructor parameters:
 ```java
-@AutoRegister
+@Managed
 public class ExampleCommand extends PlayerCommand {
 
 	public ExampleCommand(Logger logger, Plugin plugin) {
@@ -74,4 +76,4 @@ public class ExampleCommand extends PlayerCommand {
 }
 ```
 
-For more information, please refer to the javadoc of `@AutoRegister`.
+For more information, please refer to the javadoc of `@Managed`.

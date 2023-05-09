@@ -12,8 +12,23 @@ import org.bukkit.entity.Player;
  */
 public interface StatsHelper {
 
+	/**
+	 * Starts a new game. If a game is already in progress, it will discard the old
+	 * game and create a new one with new/empty stats instead.
+	 * 
+	 * @param mapName      Name of the map
+	 * @param participants list of all participating players
+	 */
 	void startGame(String mapName, Collection<? extends Player> participants);
 
+	/**
+	 * Ends the running game and optionally posts the statistics to the backend
+	 * asynchronously.
+	 * 
+	 * @param post <code>true</code> to post stats to backend
+	 * @return The ended game
+	 * @throws IllegalStateException If no game is running
+	 */
 	GameEntity endGame(boolean post) throws IllegalStateException;
 
 	void addWin(Player player) throws IllegalStateException;
