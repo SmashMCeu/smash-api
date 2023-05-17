@@ -1,9 +1,6 @@
 package eu.smashmc.api.punishment;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 class PunishmentServiceFallback implements PunishmentService {
@@ -25,6 +22,11 @@ class PunishmentServiceFallback implements PunishmentService {
 
 	@Override
 	public CompletableFuture<Collection<? extends Punishment>> getPermanentPunishments(PunishmentActionType type, String reason, int limit) {
+		return CompletableFuture.completedFuture(Collections.emptyList());
+	}
+
+	@Override
+	public CompletableFuture<List<String>> addIpToVpnWhitelist(String ip) {
 		return CompletableFuture.completedFuture(Collections.emptyList());
 	}
 }
