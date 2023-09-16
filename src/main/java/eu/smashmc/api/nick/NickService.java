@@ -1,22 +1,27 @@
 package eu.smashmc.api.nick;
 
-import javax.annotation.Nullable;
-
 import eu.smashmc.api.Environment;
 import eu.smashmc.api.SmashComponent;
 
+import javax.annotation.Nullable;
+import java.util.Optional;
+
 /**
  * Very basic api for nick plugin.
- * 
- * @author LiquidDev
  *
  * @param <T> type of Player
+ * @author LiquidDev
  */
-@SmashComponent(value = { Environment.BUKKIT }, fallbackImpl = NickServiceFallback.class)
+@SmashComponent(value = {Environment.BUKKIT}, fallbackImpl = NickServiceFallback.class)
 public interface NickService<T> {
 
 	boolean isNicked(T player);
 
+	Optional<NickInfo> getNick(T player);
+
 	@Nullable
-	NickInfo getNickInfo(T player);
+	@Deprecated
+	default NickInfo getNickInfo(T player) {
+		return getNick(player).orElse(null);
+	}
 }
