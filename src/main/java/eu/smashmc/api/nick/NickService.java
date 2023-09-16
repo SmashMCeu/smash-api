@@ -17,7 +17,7 @@ public interface NickService<T> {
 
 	boolean isNicked(T player);
 
-	Optional<NickInfo> getNick(T player);
+	Optional<? extends NickInfo> getNick(T player);
 
 	@Nullable
 	@Deprecated
