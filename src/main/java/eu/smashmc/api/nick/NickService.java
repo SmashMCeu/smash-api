@@ -12,7 +12,7 @@ import java.util.Optional;
  * @param <T> type of Player
  * @author LiquidDev
  */
-@SmashComponent(value = {Environment.BUKKIT}, fallbackImpl = NickServiceFallback.class)
+@SmashComponent(value = {Environment.BUKKIT, Environment.BUNGEECORD}, fallbackImpl = NickServiceFallback.class)
 public interface NickService<T> {
 
 	boolean isNicked(T player);
