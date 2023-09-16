@@ -2,7 +2,6 @@ package eu.smashmc.api.nick;
 
 import eu.smashmc.api.Environment;
 import eu.smashmc.api.SmashComponent;
-import eu.smashmc.api.identity.minecraft.MinecraftIdentity;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -21,7 +20,7 @@ public interface NickService<T> {
 
 	Optional<? extends NickInfo> getNick(T player);
 
-	Optional<MinecraftIdentity> getRealIdentity(UUID nick);
+	Optional<? extends NickInfo> getInfoAboutNickUuid(UUID nickUuid);
 
 	@Nullable
 	@Deprecated

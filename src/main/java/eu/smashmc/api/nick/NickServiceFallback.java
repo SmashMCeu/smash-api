@@ -1,6 +1,5 @@
 package eu.smashmc.api.nick;
 
-import eu.smashmc.api.identity.minecraft.MinecraftIdentity;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
@@ -19,7 +18,7 @@ class NickServiceFallback implements NickService<Player> {
 	}
 
 	@Override
-	public Optional<MinecraftIdentity> getRealIdentity(UUID nick) {
+	public Optional<? extends NickInfo> getInfoAboutNickUuid(UUID nick) {
 		return Optional.empty();
 	}
 }
