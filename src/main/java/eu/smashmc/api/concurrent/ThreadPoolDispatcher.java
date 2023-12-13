@@ -1,13 +1,9 @@
 package eu.smashmc.api.concurrent;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.function.Supplier;
-
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+
+import java.util.concurrent.*;
+import java.util.function.Supplier;
 
 public class ThreadPoolDispatcher implements AsyncDispatcher {
 	private static ExecutorService executor;

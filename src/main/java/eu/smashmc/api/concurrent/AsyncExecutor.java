@@ -2,6 +2,7 @@ package eu.smashmc.api.concurrent;
 
 import eu.smashmc.api.SmashMc;
 import lombok.Getter;
+import lombok.Synchronized;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
@@ -19,7 +20,12 @@ public class AsyncExecutor {
 	@Getter
 	private static AsyncDispatcher dispatcher;
 
+	@Synchronized
 	public static void setDispatcher(AsyncDispatcher newDispatcher) {
+		/* Shut down existing dispatcher */
+		if (dispatcher != null) {
+			dispatcher.shutdown();
+		}
 		SmashMc.registerComponent(AsyncDispatcher.class, newDispatcher);
 		dispatcher = newDispatcher;
 	}
@@ -43,10 +49,12 @@ public class AsyncExecutor {
 				});
 	}
 
+	@Synchronized
 	public static void shutdown() {
 		dispatcher.shutdown();
 	}
 
+	@Synchronized
 	private static void verifyDispatcher() {
 		if (dispatcher == null) {
 			dispatcher = new ThreadPoolDispatcher();
