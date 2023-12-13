@@ -1,20 +1,22 @@
 package eu.smashmc.api.concurrent;
 
+import eu.smashmc.api.SmashMc;
+import lombok.Getter;
+
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.util.function.Supplier;
 
-import eu.smashmc.api.SmashMc;
-
 /**
  * Executors that do NOT use the CommonThreadPool. They can be used for stuff
  * like blocking database operations.
- * 
+ *
  * @author LiquidDev
  */
 public class AsyncExecutor {
 
+	@Getter
 	private static AsyncDispatcher dispatcher;
 
 	public static void setDispatcher(AsyncDispatcher newDispatcher) {
@@ -22,22 +24,18 @@ public class AsyncExecutor {
 		dispatcher = newDispatcher;
 	}
 
-	public static AsyncDispatcher getDispatcher() {
-		return dispatcher;
-	}
-
 	public static void execute(Runnable runnable) {
-		verfiyDispatcher();
+		verifyDispatcher();
 		dispatcher.execute(runnable);
 	}
 
 	public static <T> Future<T> submit(Callable<T> task) {
-		verfiyDispatcher();
+		verifyDispatcher();
 		return dispatcher.submit(task);
 	}
 
 	public static <T> CompletableFuture<T> supply(Supplier<T> supplier) {
-		verfiyDispatcher();
+		verifyDispatcher();
 		return dispatcher.supply(supplier)
 				.exceptionally(ex -> {
 					ex.printStackTrace();
@@ -49,7 +47,7 @@ public class AsyncExecutor {
 		dispatcher.shutdown();
 	}
 
-	private static void verfiyDispatcher() {
+	private static void verifyDispatcher() {
 		if (dispatcher == null) {
 			dispatcher = new ThreadPoolDispatcher();
 		}
