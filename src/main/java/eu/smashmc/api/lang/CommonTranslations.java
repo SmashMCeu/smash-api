@@ -2,7 +2,6 @@ package eu.smashmc.api.lang;
 
 /**
  * List of common translation keys for easy access.
- * 
  */
 public class CommonTranslations {
 
@@ -29,7 +28,7 @@ public class CommonTranslations {
 
 	/* Chat buttons */
 	public static final String CHAT_BUTTON_ACCEPT = "chat.button.accept";
-	public static final String CHAT_BUTTON_DENY = "hat.button.deny";
+	public static final String CHAT_BUTTON_DENY = "chat.button.deny";
 	public static final String CHAT_BUTTON_CONFIRM = "chat.button.confirm";
 	public static final String CHAT_BUTTON_CLICK = "chat.button.click";
 
