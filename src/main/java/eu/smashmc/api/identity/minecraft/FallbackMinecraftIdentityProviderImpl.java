@@ -1,14 +1,10 @@
 package eu.smashmc.api.identity.minecraft;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-
 import eu.smashmc.api.identity.minecraft.property.TexturesProperty;
 import lombok.Data;
+
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 class FallbackMinecraftIdentityProviderImpl implements MinecraftIdentityProvider {
 
@@ -40,7 +36,7 @@ class FallbackMinecraftIdentityProviderImpl implements MinecraftIdentityProvider
 	}
 
 	@Override
-	public void update(MinecraftIdentity identity) {
+	public void updateIdentity(MinecraftIdentity identity, boolean forceUpdate) {
 		idMap.put(identity.getId(), identity);
 	}
 
