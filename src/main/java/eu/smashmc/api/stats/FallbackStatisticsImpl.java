@@ -1,15 +1,10 @@
 package eu.smashmc.api.stats;
 
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
+import eu.smashmc.api.stats.value.view.StatsValueAccumulation;
 import org.bukkit.entity.Player;
 
-import eu.smashmc.api.stats.value.view.StatsValueAccumulation;
+import java.time.LocalDateTime;
+import java.util.*;
 
 class FallbackStatisticsImpl implements Statistics {
 
@@ -19,6 +14,11 @@ class FallbackStatisticsImpl implements Statistics {
 
 			@Override
 			public void startGame(String mapName, Collection<? extends Player> participants) {
+			}
+
+			@Override
+			public GameEntity endGame(boolean postPlayerStats, boolean postMapStats) throws IllegalStateException {
+				return null;
 			}
 
 			@Override
