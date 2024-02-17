@@ -135,5 +135,21 @@ public interface PermissionsProvider {
 	 * @param expiry end of the effect
 	 * @return void
 	 */
-	public CompletableFuture<Void> addGroupTemporarly(UUID uuid, String group, boolean value, Duration expiry);
+	public CompletableFuture<Void> addGroupTemporarily(UUID uuid, String group, boolean value, Duration expiry);
+
+	@Deprecated
+	public default CompletableFuture<Void> addGroupTemporarly(UUID uuid, String group, boolean value, Duration expiry) {
+		return this.addGroupTemporarily(uuid, group, value, expiry);
+	};
+
+	/**
+	 * Set or extend a group temporally for a Player
+	 *
+	 * @param uuid   UUID of Player
+	 * @param group  Permission to set
+	 * @param value  If group should be added or removed
+	 * @param expiry end of the effect
+	 * @return void
+	 */
+	public CompletableFuture<Void> addOrExtendGroupTemporarily(UUID uuid, String group, boolean value, Duration expiry);
 }

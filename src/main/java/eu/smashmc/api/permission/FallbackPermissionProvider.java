@@ -73,7 +73,12 @@ class FallbackPermissionProvider implements PermissionsProvider {
 	}
 
 	@Override
-	public CompletableFuture<Void> addGroupTemporarly(UUID uuid, String group, boolean value, Duration expiry) {
+	public CompletableFuture<Void> addGroupTemporarily(UUID uuid, String group, boolean value, Duration expiry) {
+		return CompletableFuture.completedFuture(null);
+	}
+
+	@Override
+	public CompletableFuture<Void> addOrExtendGroupTemporarily(UUID uuid, String group, boolean value, Duration expiry) {
 		return CompletableFuture.completedFuture(null);
 	}
 }
