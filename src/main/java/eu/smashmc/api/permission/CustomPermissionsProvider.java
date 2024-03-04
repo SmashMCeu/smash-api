@@ -156,7 +156,12 @@ public class CustomPermissionsProvider implements PermissionsProvider {
 	}
 
 	@Override
-	public CompletableFuture<Void> addGroupTemporarly(UUID uuid, String group, boolean value, Duration expiry) {
+	public CompletableFuture<Void> addGroupTemporarily(UUID uuid, String group, boolean value, Duration expiry) {
+		return impl.addGroupTemporarly(uuid, group, value, expiry);
+	}
+
+	@Override
+	public CompletableFuture<Void> addOrExtendGroupTemporarily(UUID uuid, String group, boolean value, Duration expiry) {
 		return impl.addGroupTemporarly(uuid, group, value, expiry);
 	}
 }
