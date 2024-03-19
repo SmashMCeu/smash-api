@@ -13,6 +13,8 @@ import java.util.function.Supplier;
 /**
  * Executors that do NOT use the CommonThreadPool. They can be used for stuff
  * like blocking database operations.
+ * <p>
+ * 19-03-2024: They were now updated to use java 21 virtual threads.
  *
  * @author LiquidDev
  */
