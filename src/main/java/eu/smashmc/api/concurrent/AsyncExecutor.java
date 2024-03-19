@@ -6,6 +6,7 @@ import lombok.Synchronized;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 import java.util.function.Supplier;
 
@@ -19,6 +20,7 @@ public class AsyncExecutor {
 
 	@Getter
 	private static AsyncDispatcher dispatcher;
+
 
 	@Synchronized
 	public static void setDispatcher(AsyncDispatcher newDispatcher) {
@@ -47,6 +49,11 @@ public class AsyncExecutor {
 					ex.printStackTrace();
 					throw new RuntimeException(ex);
 				});
+	}
+
+	public static Executor getExecutor() {
+		verifyDispatcher();
+		return dispatcher.getExecutor();
 	}
 
 	@Synchronized
