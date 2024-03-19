@@ -26,6 +26,11 @@ public class ThreadPoolDispatcher implements AsyncDispatcher {
 	}
 
 	@Override
+	public Executor getExecutor() {
+		return executor;
+	}
+
+	@Override
 	public <T> CompletableFuture<T> supply(Supplier<T> supplier) {
 		return CompletableFuture.supplyAsync(supplier, executor);
 	}
