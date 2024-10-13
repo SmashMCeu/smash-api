@@ -1,5 +1,6 @@
 package eu.smashmc.api.profile;
 
+import eu.smashmc.api.PlayerOfflineException;
 import org.bukkit.entity.Player;
 
 import eu.smashmc.api.SmashMc;
@@ -20,6 +21,9 @@ public class ProfileUtil {
 	 * @return the players {@link PlayerProfile}
 	 */
 	public static PlayerProfile getProfile(Player player) {
+		if(!player.isOnline()){
+			throw new PlayerOfflineException(player);
+		}
 		return SmashMc.getComponent(PlayerProfileService.class)
 				.getProfile(player.getUniqueId());
 	}
