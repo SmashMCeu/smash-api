@@ -1,18 +1,18 @@
 package eu.smashmc.api.lang;
 
-import java.util.UUID;
-
+import eu.smashmc.api.SmashMc;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.PluginClassLoader;
 
-import eu.smashmc.api.SmashMc;
+import java.util.Locale;
+import java.util.UUID;
 
 /**
  * 'Smart' wrapper for {@link LanguageProvider}. <br>
  * Uses the name of the calling plugin as the scope. If no provider with the
  * plugins name as scope was found, it uses the global provider instead.
- * 
+ * <p>
  * For BungeeCord use {@link BLang} instead.
  */
 public class Lang {
@@ -79,6 +79,16 @@ public class Lang {
 	public static String get(UUID playerUuid, String translationKey, Object... format) {
 		LanguageProvider<CommandSender> language = findProviderFromCallingClass();
 		return language.get(playerUuid, translationKey, format);
+	}
+
+	public static Locale getLocale(CommandSender player) {
+		LanguageProvider<CommandSender> language = findProviderFromCallingClass();
+		return language.getLocale(player);
+	}
+
+	public static Locale getLocale(UUID playerUuid) {
+		LanguageProvider<CommandSender> language = findProviderFromCallingClass();
+		return language.getLocale(playerUuid);
 	}
 
 	public static LanguageProvider<CommandSender> findProviderFromCallingClass() {

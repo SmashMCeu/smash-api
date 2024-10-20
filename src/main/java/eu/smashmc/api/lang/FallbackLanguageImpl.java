@@ -1,11 +1,11 @@
 package eu.smashmc.api.lang;
 
-import java.util.UUID;
-
+import eu.smashmc.api.Constants;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import eu.smashmc.api.Constants;
+import java.util.Locale;
+import java.util.UUID;
 
 @SuppressWarnings("rawtypes")
 class FallbackLanguageImpl extends Language {
@@ -59,6 +59,21 @@ class FallbackLanguageImpl extends Language {
 			@Override
 			public String getCountryCode(UUID uuid) {
 				return "??";
+			}
+
+			@Override
+			public String getCountryCode(Object player) {
+				return getCountryCode(null);
+			}
+
+			@Override
+			public Locale getLocale(UUID uuid) {
+				return Locale.getDefault();
+			}
+
+			@Override
+			public Locale getLocale(Object player) {
+				return getLocale(null);
 			}
 
 			@Override
