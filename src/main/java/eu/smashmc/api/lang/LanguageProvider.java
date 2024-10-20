@@ -3,7 +3,7 @@ package eu.smashmc.api.lang;
 import java.util.Locale;
 import java.util.UUID;
 
-interface LanguageProvider<T> {
+public interface LanguageProvider<T> {
 
 	/**
 	 * Return the scope prefix of this languages instance.
