@@ -127,7 +127,7 @@
 	</build>
 	<distributionManagement>
 		<repository>
-			<id>smashmc</id>
+			<id>smashmc-public</id>
 			<url>https://repo.smashmc.eu/public</url>
 		</repository>
 	</distributionManagement>
