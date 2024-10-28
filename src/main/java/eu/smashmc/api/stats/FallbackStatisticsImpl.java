@@ -129,4 +129,74 @@ class FallbackStatisticsImpl implements Statistics {
 	public boolean isGlobalElite(UUID uuid) {
 		return false;
 	}
+
+	@Override
+	public GameMap likeMap(String mapName, String gameType) throws IllegalArgumentException {
+		return new GameMap() {
+			@Override
+			public String getName() {
+				return mapName;
+			}
+
+			@Override
+			public String getGameType() {
+				return gameType;
+			}
+
+			@Override
+			public int getGames() {
+				return 0;
+			}
+
+			@Override
+			public LocalDateTime getFirstSeen() {
+				return LocalDateTime.now();
+			}
+
+			@Override
+			public long getLikes() {
+				return 1;
+			}
+
+			@Override
+			public long getDislikes() {
+				return 0;
+			}
+		};
+	}
+
+	@Override
+	public GameMap dislikeMap(String mapName, String gameType) throws IllegalArgumentException {
+		return new GameMap() {
+			@Override
+			public String getName() {
+				return mapName;
+			}
+
+			@Override
+			public String getGameType() {
+				return gameType;
+			}
+
+			@Override
+			public int getGames() {
+				return 0;
+			}
+
+			@Override
+			public LocalDateTime getFirstSeen() {
+				return LocalDateTime.now();
+			}
+
+			@Override
+			public long getLikes() {
+				return 0;
+			}
+
+			@Override
+			public long getDislikes() {
+				return 1;
+			}
+		};
+	}
 }
