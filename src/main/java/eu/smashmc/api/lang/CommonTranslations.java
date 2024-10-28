@@ -32,5 +32,7 @@ public class CommonTranslations {
 	public static final String CHAT_BUTTON_DENY = "chat.button.deny";
 	public static final String CHAT_BUTTON_CONFIRM = "chat.button.confirm";
 	public static final String CHAT_BUTTON_CLICK = "chat.button.click";
+	public static final String CHAT_BUTTON_GOOD = "chat.button.good";
+	public static final String CHAT_BUTTON_BAD = "chat.button.bad";
 
 }
