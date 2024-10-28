@@ -113,17 +113,17 @@ public interface Statistics {
 	 *
 	 * @param mapName  Name of the map
 	 * @param gameType Game type of the map (e.g. smash)
-	 * @return The {@link GameMap} with the new like/dislike count
+	 * @return When a map for given gameType & name exists, {@link GameMap} with the new like/dislike count
 	 */
-	GameMap likeMap(String mapName, String gameType) throws IllegalArgumentException;
+	Optional<GameMap> likeMap(String mapName, String gameType) throws IllegalArgumentException;
 
 	/**
 	 * Add a new dislike to a given map.
 	 *
 	 * @param mapName  Name of the map
 	 * @param gameType Game type of the map (e.g. smash)
-	 * @return The {@link GameMap} with the new like/dislike count
+	 * @return When a map for given gameType & name exists, {@link GameMap} with the new like/dislike count
 	 */
-	GameMap dislikeMap(String mapName, String gameType) throws IllegalArgumentException;
+	Optional<GameMap> dislikeMap(String mapName, String gameType) throws IllegalArgumentException;
 
 }

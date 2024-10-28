@@ -131,8 +131,8 @@ class FallbackStatisticsImpl implements Statistics {
 	}
 
 	@Override
-	public GameMap likeMap(String mapName, String gameType) throws IllegalArgumentException {
-		return new GameMap() {
+	public Optional<GameMap> likeMap(String mapName, String gameType) throws IllegalArgumentException {
+		return Optional.of(new GameMap() {
 			@Override
 			public String getName() {
 				return mapName;
@@ -162,12 +162,12 @@ class FallbackStatisticsImpl implements Statistics {
 			public long getDislikes() {
 				return 0;
 			}
-		};
+		});
 	}
 
 	@Override
-	public GameMap dislikeMap(String mapName, String gameType) throws IllegalArgumentException {
-		return new GameMap() {
+	public Optional<GameMap> dislikeMap(String mapName, String gameType) throws IllegalArgumentException {
+		return Optional.of(new GameMap() {
 			@Override
 			public String getName() {
 				return mapName;
@@ -197,6 +197,6 @@ class FallbackStatisticsImpl implements Statistics {
 			public long getDislikes() {
 				return 1;
 			}
-		};
+		});
 	}
 }
