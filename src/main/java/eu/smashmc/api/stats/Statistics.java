@@ -107,23 +107,13 @@ public interface Statistics {
 	 */
 	boolean isGlobalElite(UUID uuid);
 
-
 	/**
-	 * Add a new like to a given map.
-	 *
-	 * @param mapName  Name of the map
-	 * @param gameType Game type of the map (e.g. smash)
+	 * @param playerUuid the player who is rating the map
+	 * @param mapName    name of the map
+	 * @param gameType   game type of the mpa
+	 * @param rating     the rating of the map (depending on the implementation 1 for like and -1 for dislike)
 	 * @return When a map for given gameType and name exists, {@link GameMap} with the new like/dislike count
 	 */
-	Optional<GameMap> likeMap(String mapName, String gameType) throws IllegalArgumentException;
-
-	/**
-	 * Add a new dislike to a given map.
-	 *
-	 * @param mapName  Name of the map
-	 * @param gameType Game type of the map (e.g. smash)
-	 * @return When a map for given gameType and name exists, {@link GameMap} with the new like/dislike count
-	 */
-	Optional<GameMap> dislikeMap(String mapName, String gameType) throws IllegalArgumentException;
+	Optional<GameMap> rateMap(UUID playerUuid, String mapName, String gameType, int rating);
 
 }
