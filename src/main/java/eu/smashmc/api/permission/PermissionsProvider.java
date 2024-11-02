@@ -1,47 +1,47 @@
 package eu.smashmc.api.permission;
 
+import eu.smashmc.api.Environment;
+import eu.smashmc.api.SmashComponent;
+
 import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-import eu.smashmc.api.Environment;
-import eu.smashmc.api.SmashComponent;
-
-@SmashComponent(value = { Environment.BUKKIT, Environment.BUNGEECORD }, fallbackImpl = FallbackPermissionProvider.class)
+@SmashComponent(value = {Environment.BUKKIT, Environment.BUNGEECORD}, fallbackImpl = FallbackPermissionProvider.class)
 public interface PermissionsProvider {
 
 	/**
 	 * Checks if a player that may be offline has a given permission.
-	 * 
+	 *
 	 * @param playerUuid UUID of the player that may be offline
 	 * @param permission the permission to check for
 	 * @return CompletableFuture true if player has permission
 	 */
-	public CompletableFuture<Boolean> hasPermission(UUID playerUuid, String permission);
+	CompletableFuture<Boolean> hasPermission(UUID playerUuid, String permission);
 
 	/**
 	 * Gets the primary group of an online player.
-	 * 
+	 *
 	 * @param onlinePlayerUuid UUID of the player
 	 * @return the name of the players primary group
 	 */
-	public String getPrimaryGroup(UUID onlinePlayerUuid);
+	String getPrimaryGroup(UUID onlinePlayerUuid);
 
 	/**
 	 * Gets the primary group of a player, that may be offline.
-	 * 
+	 *
 	 * @param offlinePlayerUuid UUID of the player
 	 * @return CompletableFuture of the name of the players primary group
 	 */
-	public CompletableFuture<String> getPrimaryGroupOffline(UUID offlinePlayerUuid);
+	CompletableFuture<String> getPrimaryGroupOffline(UUID offlinePlayerUuid);
 
 	/**
 	 * Retrieves the groups name list.
-	 * 
+	 *
 	 * @return CompletableFuture list of group names
 	 */
-	public CompletableFuture<List<String>> getGroups();
+	CompletableFuture<List<String>> getGroups();
 
 	/**
 	 * Retrieves the groups name list of a player that might be offline.
@@ -49,82 +49,80 @@ public interface PermissionsProvider {
 	 * @param playerUuid UUID of a Player
 	 * @return CompletableFuture list of group names
 	 */
-	public CompletableFuture<List<String>> getGroups(UUID playerUuid);
+	CompletableFuture<List<String>> getGroups(UUID playerUuid);
 
 	/**
 	 * Returns the groups chat display name.
-	 * 
+	 *
 	 * @param groupName Name of the group
 	 * @return the group chat prefix
 	 * @throws IllegalArgumentException when no group with the given name exists
 	 */
-	public String getGroupChatPrefix(String groupName) throws IllegalArgumentException;
+	String getGroupChatPrefix(String groupName) throws IllegalArgumentException;
 
 	/**
 	 * Returns the groups tab display name.
-	 * 
+	 *
 	 * @param groupName Name of the group
 	 * @return the groups tab prefix
 	 * @throws IllegalArgumentException when no group with the given name exists
 	 */
-	public String getGroupTabPrefix(String groupName) throws IllegalArgumentException;
+	String getGroupTabPrefix(String groupName) throws IllegalArgumentException;
 
 	/**
 	 * Returns the groups sort key.
-	 * 
+	 *
 	 * @param groupName Name of the group
 	 * @return the groups sort key
 	 * @throws IllegalArgumentException when no group with the given name exists
 	 */
-	public String getGroupSortKey(String groupName) throws IllegalArgumentException;
+	String getGroupSortKey(String groupName) throws IllegalArgumentException;
 
 	/**
-	 * Returns the groups chat display name.
-	 * 
+	 * Returns the chat display name of an online player.
+	 *
 	 * @param playerUuid UUID of a Player
-	 * @return the players chat prefix
+	 * @return the players chat prefix or empty if the player is offline
 	 * @throws IllegalArgumentException when no group with the given name exists
 	 */
-	public String getPlayerChatPrefix(UUID playerUuid) throws IllegalArgumentException;
+	String getPlayerChatPrefix(UUID playerUuid);
 
 	/**
-	 * Returns the groups tab display name.
-	 * 
+	 * Returns the tab display name of an online player.
+	 *
 	 * @param playerUuid UUID of a Player
-	 * @return the players tab prefix
-	 * @throws IllegalArgumentException when no group with the given name exists
+	 * @return the players tab prefix or empty if the player is offline
 	 */
-	public String getPlayerTabPrefix(UUID playerUuid) throws IllegalArgumentException;
+	String getPlayerTabPrefix(UUID playerUuid);
 
 	/**
-	 * Returns the groups sort key.
-	 * 
+	 * Returns the sort key of an online player.
+	 *
 	 * @param playerUuid UUID of a Player
-	 * @return the players sort key
-	 * @throws IllegalArgumentException when no group with the given name exists
+	 * @return the players sort key or empty if the player is offline
 	 */
-	public String getPlayerSortKey(UUID playerUuid) throws IllegalArgumentException;
+	String getPlayerSortKey(UUID playerUuid);
 
 	/**
 	 * Set a Players permission
-	 * 
+	 *
 	 * @param uuid       UUID of Player
 	 * @param permission Permission to set
 	 * @param value      permission node value
 	 * @return void
 	 */
-	public CompletableFuture<Void> setPermission(UUID uuid, String permission, boolean value);
+	CompletableFuture<Void> setPermission(UUID uuid, String permission, boolean value);
 
 	/**
 	 * Set a Players permission
-	 * 
+	 *
 	 * @param uuid       UUID of Player
 	 * @param permission Permission to set
 	 * @param value      permission node value
 	 * @param server     the target server for the permission
 	 * @return void
 	 */
-	public CompletableFuture<Void> setPermission(UUID uuid, String permission, boolean value, String server);
+	CompletableFuture<Void> setPermission(UUID uuid, String permission, boolean value, String server);
 
 	/**
 	 * Set a group temporally for a Player
@@ -135,12 +133,12 @@ public interface PermissionsProvider {
 	 * @param expiry end of the effect
 	 * @return void
 	 */
-	public CompletableFuture<Void> addGroupTemporarily(UUID uuid, String group, boolean value, Duration expiry);
+	CompletableFuture<Void> addGroupTemporarily(UUID uuid, String group, boolean value, Duration expiry);
 
 	@Deprecated
-	public default CompletableFuture<Void> addGroupTemporarly(UUID uuid, String group, boolean value, Duration expiry) {
+	default CompletableFuture<Void> addGroupTemporarly(UUID uuid, String group, boolean value, Duration expiry) {
 		return this.addGroupTemporarily(uuid, group, value, expiry);
-	};
+	}
 
 	/**
 	 * Set or extend a group temporally for a Player
@@ -151,5 +149,5 @@ public interface PermissionsProvider {
 	 * @param expiry end of the effect
 	 * @return void
 	 */
-	public CompletableFuture<Void> addOrExtendGroupTemporarily(UUID uuid, String group, boolean value, Duration expiry);
+	CompletableFuture<Void> addOrExtendGroupTemporarily(UUID uuid, String group, boolean value, Duration expiry);
 }
