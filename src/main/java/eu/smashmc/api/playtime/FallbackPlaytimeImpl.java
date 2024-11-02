@@ -1,11 +1,12 @@
 package eu.smashmc.api.playtime;
 
+import lombok.AllArgsConstructor;
+
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
-
-import lombok.AllArgsConstructor;
 
 class FallbackPlaytimeImpl implements Playtime {
 
@@ -26,7 +27,7 @@ class FallbackPlaytimeImpl implements Playtime {
 
 		@Override
 		public long getPlaytime(TimeUnit unit) {
-			return 0;
+			return unit.convert(Duration.ofDays(1));
 		}
 
 		@Override
