@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface LanguageScope {
 	/**
-	 * The language scope
+	 * The language scope. If empty, use the Plugins name.
 	 */
-	String value();
+	String value() default "";
 }
