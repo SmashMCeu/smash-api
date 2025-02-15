@@ -8,6 +8,8 @@ import java.util.*;
 
 class FallbackStatisticsImpl implements Statistics {
 
+	private static final UUID DUMMY_UUID = UUID.fromString("bd346dd5-ac1c-427d-87e8-73bdd4bf3e13");
+
 	@Override
 	public StatsHelper createHelper(String gameType) throws UnsupportedOperationException {
 		return new StatsHelper() {
@@ -107,7 +109,7 @@ class FallbackStatisticsImpl implements Statistics {
 
 	@Override
 	public List<UUID> getTop(int limit, StatsPeriod period) {
-		return Collections.emptyList();
+		return Collections.nCopies(limit, DUMMY_UUID);
 	}
 
 	@Override
