@@ -1,13 +1,13 @@
 package eu.smashmc.api.lang;
 
+import eu.smashmc.api.Environment;
+import eu.smashmc.api.SmashComponent;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import eu.smashmc.api.Environment;
-import eu.smashmc.api.SmashComponent;
-
-@SmashComponent(value = { Environment.BUKKIT, Environment.BUNGEECORD }, fallbackImpl = FallbackLanguageImpl.class)
+@SmashComponent(value = {Environment.BUKKIT, Environment.BUNGEECORD}, fallbackImpl = FallbackLanguageImpl.class)
 public abstract class Language<T> {
 
 	static Logger LOGGER = Logger.getLogger(LanguageProvider.class.getName());
@@ -18,7 +18,7 @@ public abstract class Language<T> {
 
 	/**
 	 * Get the default scope {@link LanguageProvider}.
-	 * 
+	 *
 	 * @return default language
 	 */
 	public LanguageProvider<T> getDefaultProvider() {
@@ -31,7 +31,7 @@ public abstract class Language<T> {
 
 	/**
 	 * Set the default scope {@link LanguageProvider}.
-	 * 
+	 *
 	 * @param language default scope language
 	 */
 	@Deprecated
@@ -41,11 +41,11 @@ public abstract class Language<T> {
 
 	/**
 	 * Create a new language object with a different scope
-	 * 
+	 *
 	 * @param scope language key prefix
+	 * @return new {@link LanguageProvider} instance
 	 * @throws IllegalStateException if a language provider with the given scope
 	 *                               already exists.
-	 * @return new {@link LanguageProvider} instance
 	 */
 	public LanguageProvider<T> createLanguageProvider(String scope) throws IllegalStateException {
 		if (existsLanguageProvider(scope)) {
@@ -55,6 +55,13 @@ public abstract class Language<T> {
 		var provider = this.constructProvider(lowerScope);
 		providers.put(lowerScope, provider);
 		return provider;
+	}
+
+	public void removeLanguageProvider(String scope) {
+		if (!existsLanguageProvider(scope)) {
+			throw new IllegalStateException("Language provider with scope '" + scope + "' does not exists.");
+		}
+		providers.remove(scope.toLowerCase());
 	}
 
 	public LanguageProvider<T> getLanguageProvider(String scope) throws IllegalStateException {
