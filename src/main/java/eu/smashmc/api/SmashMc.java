@@ -64,6 +64,22 @@ public final class SmashMc {
 	}
 
 	/**
+	 * Unregister an initialized or pending (lazy) component.
+	 * This won't however destroy already referenced instanced hold by other plugins.
+	 * s
+	 * @param type           class type of the Components interface
+	 */
+	public static void unregisterComponent(Class<?> type){
+		if (!type.isAnnotationPresent(SmashComponent.class)) {
+			throw new IllegalArgumentException(type.getName() + " is not a SmashComponent.");
+		}
+		verifyCompatibility(type);
+		LAZY_COMPONENTS.remove(type);
+		INITIALIZED_COMPONENTS.remove(type);
+		LOGGER.info("Unregistered component " + type.getSimpleName());
+	}
+
+	/**
 	 * Registers a component that is later created when needed using the given
 	 * {@link Supplier}. The created component instance will then be cached and
 	 * reused. A component must have the {@link SmashComponent} annotation.
