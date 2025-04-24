@@ -2,7 +2,6 @@ package eu.smashmc.api.vanish;
 
 import eu.smashmc.api.Environment;
 import eu.smashmc.api.SmashComponent;
-import lombok.Getter;
 
 import java.util.UUID;
 import java.util.function.BiPredicate;
@@ -15,10 +14,16 @@ import java.util.function.BiPredicate;
 @SmashComponent({Environment.BUKKIT, Environment.BUNGEECORD})
 public interface Vanish<T> {
 
-	@Getter
 	String defaultMessageChannel = "smashlib:vanish";
-	@Getter
 	String commandPermission = "proxy.vanish";
+
+	static String getDefaultMessageChannel() {
+		return defaultMessageChannel;
+	}
+
+	static String getCommandPermission() {
+		return commandPermission;
+	}
 
 	default boolean isVanished(UUID uuid) {
 		return getVanishMode(uuid) == VanishMode.INVISIBLE;
