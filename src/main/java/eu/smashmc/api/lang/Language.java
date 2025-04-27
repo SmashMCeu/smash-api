@@ -57,7 +57,7 @@ public abstract class Language<T> {
 		return provider;
 	}
 
-	public void removeLanguageProvider(String scope) {
+	public void removeLanguageProvider(String scope) throws IllegalStateException {
 		if (!existsLanguageProvider(scope)) {
 			throw new IllegalStateException("Language provider with scope '" + scope + "' does not exists.");
 		}

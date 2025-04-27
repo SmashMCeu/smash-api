@@ -28,6 +28,17 @@ public class Lang {
 		api.createLanguageProvider(getScope());
 	}
 
+	/**
+	 * Removes the language provider for the given scope. Might also unload all relates keys from the language registry.
+	 *
+	 * @param scope the scope to be terminated.
+	 * @throws IllegalStateException when there was no provider to the given scope
+	 */
+	public void terminate(String scope) throws IllegalStateException {
+		Language<CommandSender> api = SmashMc.getComponent(Language.class);
+		api.removeLanguageProvider(getScope());
+	}
+
 	@Deprecated
 	public static void initialize(String scope, String prefix) {
 		Language<CommandSender> api = SmashMc.getComponent(Language.class);
@@ -105,7 +116,7 @@ public class Lang {
 		ClassLoader classLoader = caller.getClassLoader();
 		if (classLoader instanceof PluginClassLoader pluginClassLoader) {
 			Plugin plugin = pluginClassLoader.getPlugin();
-			String scope = plugin.getName();
+			String scope = plugin.getName().toLowerCase().trim();
 			return scope;
 		}
 		return null;
