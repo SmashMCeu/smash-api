@@ -7,7 +7,7 @@ public enum VanishMode {
 		return this == INVISIBLE;
 	}
 
-	public boolean isSpectator() {
+	public boolean shouldExcludeFromGameplay() {
 		return this == UNDERCOVER || this == SPECTATE;
 	}
 }

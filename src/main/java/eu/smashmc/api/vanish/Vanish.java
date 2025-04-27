@@ -49,11 +49,23 @@ public interface Vanish<T> {
 		return getVanishMode(player) == VanishMode.SPECTATE;
 	}
 
+	/**
+	 * Returns true when the player is either in "vanish" or in "spectate" mode.
+	 */
+	default boolean shouldExcludeFromGameplay(T player) {
+		return getVanishMode(player).shouldExcludeFromGameplay();
+	}
+
 	VanishMode getVanishMode(T player);
 
 	VanishMode getVanishMode(UUID uuid);
 
-	int getVanishedPlayerCount();
+	/**
+	 * Returns the amount of players that are EITHER in "vanish" or in "spectator" mode.
+	 */
+	int getExcludedFromGameplayPlayerCount();
+
+	int getInvisiblePlayerCount();
 
 	void registerListener(VanishListener<T> listener);
 
