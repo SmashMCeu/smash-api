@@ -8,6 +8,6 @@ public enum VanishMode {
 	}
 
 	public boolean shouldExcludeFromGameplay() {
-		return this == UNDERCOVER || this == SPECTATE;
+		return this == INVISIBLE || this == SPECTATE;
 	}
 }
