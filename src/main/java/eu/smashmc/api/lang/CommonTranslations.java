@@ -26,6 +26,7 @@ public class CommonTranslations {
 	public static final String CHAT_PLAYER_UNKNOWN = "chat.player_unknown";
 	public static final String CHAT_ONLY_FOR_PLAYERS = "chat.command.players_only";
 	public static final String CHAT_CANNOT_PLAY_WITH_YOURSELF = "chat.no_self_play";
+	public static final String CHAT_NOT_FOR_SPECTATORS = "chat.not_for_spectators";
 
 	/* Chat buttons */
 	public static final String CHAT_BUTTON_ACCEPT = "chat.button.accept";
