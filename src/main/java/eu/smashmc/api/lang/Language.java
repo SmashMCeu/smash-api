@@ -77,7 +77,7 @@ public abstract class Language<T> {
 		if (scope == null) {
 			return false;
 		}
-		return this.providers.get(scope.toLowerCase()) != null;
+		return this.providers.containsKey(scope.toLowerCase());
 	}
 
 	@Deprecated
