@@ -7,6 +7,7 @@ public class CommonTranslations {
 
 	/* General */
 	public static final String CHAT_PRO_ONLY_FEATURE = "chat.pro";
+	public static final String CHAT_PROPLUS_ONLY_FEATURE = "chat.proplus";
 	public static final String CHAT_TOO_EXPENSIVE = "chat.too_expensive";
 	public static final String CHAT_PLEASE_REJOIN = "chat.rejoin_to_apply";
 
