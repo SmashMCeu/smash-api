@@ -112,6 +112,34 @@ public class Lang {
 	}
 
 	protected static String getScope() {
+		Language<CommandSender> api = SmashMc.getComponent(Language.class);
+
+		// first, try to find via package name (faster)
+		String packageName = getCallingPackageName();
+		if (packageName.startsWith("eu.smashmc")) {
+			String scopeName = packageName.split("\\.")[2];
+			if (api.existsLanguageProvider(scopeName)) {
+				return scopeName;
+			}
+		}
+
+		// falling back to calling class plugin name
+		return getScopeViaCallingPlugin();
+	}
+
+	protected static String getCallingPackageName() {
+		final StackTraceElement[] stElements = Thread.currentThread().getStackTrace();
+		for (int i = 1; i < stElements.length; i++) {
+			StackTraceElement ste = stElements[i];
+			String className = ste.getClassName();
+			if (!className.equals(Lang.class.getName()) && className.indexOf("java.lang.Thread") != 0) {
+				return className;
+			}
+		}
+		return "";
+	}
+
+	protected static String getScopeViaCallingPlugin() {
 		Class<?> caller = getCallingClass();
 		ClassLoader classLoader = caller.getClassLoader();
 		if (classLoader instanceof PluginClassLoader pluginClassLoader) {
