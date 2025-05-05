@@ -58,10 +58,12 @@ public abstract class Language<T> {
 	}
 
 	public void removeLanguageProvider(String scope) throws IllegalStateException {
-		if (!existsLanguageProvider(scope)) {
-			throw new IllegalStateException("Language provider with scope '" + scope + "' does not exists.");
+		var provider = getLanguageProvider(scope);
+		if (provider.equals(getDefaultProvider())) {
+			setDefaultProvider(getLanguageProvider("global"));
 		}
 		providers.remove(scope.toLowerCase());
+
 	}
 
 	public LanguageProvider<T> getLanguageProvider(String scope) throws IllegalStateException {
