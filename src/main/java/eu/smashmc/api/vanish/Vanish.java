@@ -69,6 +69,8 @@ public interface Vanish<T> {
 
 	void registerListener(VanishListener<T> listener);
 
+	void removeListener(VanishListener<T> listener);
+
 	/**
 	 * Can be used so unvanishing does not cause problems with spectators being
 	 * visible. The function should return false if player 1 cannot see player 2.
