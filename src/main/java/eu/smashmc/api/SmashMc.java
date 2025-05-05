@@ -1,5 +1,9 @@
 package eu.smashmc.api;
 
+import lombok.NonNull;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -9,14 +13,9 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import lombok.NonNull;
-
 /**
  * A global (static use only) component registry for {@link SmashComponent}.
- * 
+ *
  * @author LiquidDev
  */
 public final class SmashMc {
@@ -41,9 +40,14 @@ public final class SmashMc {
 	private static final Map<Class<?>, Object> INITIALIZED_COMPONENTS = new HashMap<>();
 
 	/**
+	 * List of initialized fallback components. Used to track if a fallback component has been accessed.
+	 */
+	private static final Map<Class<?>, Object> FALLBACK_COMPONENTS = new HashMap<>();
+
+	/**
 	 * Registers a new component with it's implementation. A component must have the
 	 * {@link SmashComponent} annotation.
-	 * 
+	 *
 	 * @param <T>            generic type of the Components interface
 	 * @param type           class type of the Components interface
 	 * @param implementation the implementing instance
@@ -57,6 +61,10 @@ public final class SmashMc {
 		if (!type.isAnnotationPresent(SmashComponent.class)) {
 			throw new IllegalArgumentException(type.getName() + " is missing the SmashComponent annotation");
 		}
+		if (FALLBACK_COMPONENTS.containsKey(type)) {
+			LOGGER.severe("Component " + type.getSimpleName() + " is being registered AFTER it's fallback implementation has been accessed.");
+			LOGGER.severe("This is most likely a bug due to a missing dependency declaration (or early access through init block) and can lead to unexpected behavior.");
+		}
 		verifyCompatibility(type);
 		validateFallbackImplementation(type);
 		INITIALIZED_COMPONENTS.put(type, implementation);
@@ -67,9 +75,10 @@ public final class SmashMc {
 	 * Unregister an initialized or pending (lazy) component.
 	 * This won't however destroy already referenced instanced hold by other plugins.
 	 * s
-	 * @param type           class type of the Components interface
+	 *
+	 * @param type class type of the Components interface
 	 */
-	public static void unregisterComponent(Class<?> type){
+	public static void unregisterComponent(Class<?> type) {
 		if (!type.isAnnotationPresent(SmashComponent.class)) {
 			throw new IllegalArgumentException(type.getName() + " is not a SmashComponent.");
 		}
@@ -83,7 +92,7 @@ public final class SmashMc {
 	 * Registers a component that is later created when needed using the given
 	 * {@link Supplier}. The created component instance will then be cached and
 	 * reused. A component must have the {@link SmashComponent} annotation.
-	 * 
+	 *
 	 * @param <T>                    generic type of the Components interface
 	 * @param type                   class type of the Components interface
 	 * @param implementationSupplier {@link Supplier} suppling the components
@@ -107,7 +116,7 @@ public final class SmashMc {
 	 * Retrieve an component instance by their interface class. Note that there is
 	 * no guarantee that the requested component is implemented or even present at
 	 * runtime.
-	 * 
+	 *
 	 * @param <T>       generic type of the Components interface
 	 * @param component class type of the Components interface used to lookup
 	 * @return an instance of the component
@@ -133,7 +142,7 @@ public final class SmashMc {
 			if (component.isAnnotationPresent(SmashComponent.class)) {
 				verifyCompatibility(component);
 
-				T fallback = validateFallbackImplementation(component);
+				T fallback = (T) FALLBACK_COMPONENTS.computeIfAbsent(component, c -> validateFallbackImplementation(component));
 
 				if (fallback != null) {
 					LOGGER.warning("Using fallback implementation for " + component.getSimpleName() + ". DO NOT USE IN PRODUCTION!");
@@ -150,7 +159,7 @@ public final class SmashMc {
 	 * Retrieve an component instance by their interface class, or <code>null</code>
 	 * in case it is not present. Note that there is no guarantee that the requested
 	 * component is implemented or even present at runtime.
-	 * 
+	 *
 	 * @param <T>       generic type of the Components interface
 	 * @param component class type of the Components interface used to lookup
 	 * @return an instance of the component or <code>null</code>
@@ -168,7 +177,7 @@ public final class SmashMc {
 
 	/**
 	 * Checks if a given component is registered and ready to use.
-	 * 
+	 *
 	 * @param component type of the component to check
 	 * @return <code>true</code> if component is registered
 	 */
@@ -238,7 +247,8 @@ public final class SmashMc {
 		try {
 			constructor.setAccessible(true);
 			instance = constructor.newInstance();
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException |
+				 InvocationTargetException e) {
 			throw new InvalidImplementationException("Exception initializing fallback implementation " + fallbackImpl.getName(), e);
 		}
 
