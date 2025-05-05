@@ -116,8 +116,9 @@ public class Lang {
 		ClassLoader classLoader = caller.getClassLoader();
 		if (classLoader instanceof PluginClassLoader pluginClassLoader) {
 			Plugin plugin = pluginClassLoader.getPlugin();
-			String scope = plugin.getName().toLowerCase().trim();
-			return scope;
+			if (plugin != null) {
+				return plugin.getName().toLowerCase().trim();
+			}
 		}
 		return null;
 	}
