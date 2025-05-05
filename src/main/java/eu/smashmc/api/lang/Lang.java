@@ -125,13 +125,13 @@ public class Lang {
 
 	protected static Class<?> getCallingClass() {
 		try {
-			final StackTraceElement[] stElements = Thread.currentThread()
-					.getStackTrace();
+			ClassLoader classLoader = Lang.class.getClassLoader();
+			final StackTraceElement[] stElements = Thread.currentThread().getStackTrace();
 			for (int i = 1; i < stElements.length; i++) {
 				StackTraceElement ste = stElements[i];
 				String className = ste.getClassName();
 				if (!className.equals(Lang.class.getName()) && className.indexOf("java.lang.Thread") != 0) {
-					return Class.forName(className);
+					return Class.forName(className, false, classLoader);
 				}
 			}
 		} catch (ClassNotFoundException e) {
