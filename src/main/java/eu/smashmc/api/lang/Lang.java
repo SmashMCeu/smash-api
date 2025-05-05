@@ -34,7 +34,7 @@ public class Lang {
 	 * @param scope the scope to be terminated.
 	 * @throws IllegalStateException when there was no provider to the given scope
 	 */
-	public void terminate(String scope) throws IllegalStateException {
+	public static void remove(String scope) throws IllegalStateException {
 		Language<CommandSender> api = SmashMc.getComponent(Language.class);
 		api.removeLanguageProvider(getScope());
 	}
