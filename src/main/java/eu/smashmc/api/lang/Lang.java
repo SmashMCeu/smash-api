@@ -102,6 +102,16 @@ public class Lang {
 		return language.getLocale(playerUuid);
 	}
 
+	public static String getChatPrefix(CommandSender player) {
+		LanguageProvider<CommandSender> language = findProviderFromCallingClass();
+		return language.getChatPrefix(player);
+	}
+
+	public static String getChatPrefix(UUID playerUuid) {
+		LanguageProvider<CommandSender> language = findProviderFromCallingClass();
+		return language.getChatPrefix(playerUuid);
+	}
+
 	public static LanguageProvider<CommandSender> findProviderFromCallingClass() {
 		Language<CommandSender> api = SmashMc.getComponent(Language.class);
 		String scope = getScope();
