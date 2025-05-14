@@ -9,6 +9,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Executors that do NOT use the CommonThreadPool. They can be used for stuff
@@ -47,9 +49,10 @@ public class AsyncExecutor {
 	public static <T> CompletableFuture<T> supply(Supplier<T> supplier) {
 		verifyDispatcher();
 		return dispatcher.supply(supplier)
-				.exceptionally(ex -> {
-					ex.printStackTrace();
-					throw new RuntimeException(ex);
+				.whenComplete((v, ex) -> {
+					if (ex != null) {
+						Logger.getLogger(AsyncExecutor.class.getName()).log(Level.SEVERE, "Exception occurred executing task asynchronously", ex);
+					}
 				});
 	}
 
