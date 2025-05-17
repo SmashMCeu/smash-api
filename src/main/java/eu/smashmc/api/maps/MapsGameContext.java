@@ -4,7 +4,7 @@ import eu.smashmc.api.lang.LanguageProvider;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 
 import javax.annotation.Nullable;
 import java.util.Set;
@@ -18,7 +18,7 @@ public class MapsGameContext {
 	private final String gameType;
 
 	@NonNull
-	private final LanguageProvider<Player> languageProvider;
+	private final LanguageProvider<CommandSender> languageProvider;
 
 	/* Optional parameters */
 	@Nullable

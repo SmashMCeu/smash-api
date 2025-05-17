@@ -24,6 +24,8 @@ public interface MinecraftMap extends MinecraftMapOverview {
 
 	CompletableFuture<World> loadWorld();
 
+	void unloadWorld();
+
 	Set<String> getTags();
 
 	List<MinecraftIdentity> getContributors();
