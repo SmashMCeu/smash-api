@@ -17,6 +17,10 @@
 			<id>papermc</id>
 			<url>https://repo.papermc.io/repository/maven-public/</url>
 		</repository>
+		<repository>
+			<id>smashmc-public</id>
+			<url>https://repo.smashmc.eu/public</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
