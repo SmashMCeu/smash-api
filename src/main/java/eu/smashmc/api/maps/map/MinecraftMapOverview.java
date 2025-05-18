@@ -38,4 +38,6 @@ public interface MinecraftMapOverview {
 
 	CompletableFuture<MinecraftMap> fetch();
 
+	int getContributorCount();
+
 }
