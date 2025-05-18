@@ -25,4 +25,5 @@ public interface MapVotingIntegration {
 
 	boolean isVotingActive();
 
+	void removePlayer(Player player);
 }
