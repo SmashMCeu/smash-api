@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
 
 public interface MapVotingIntegration {
 	CompletableFuture<List<MinecraftMapOverview>> startVoting();
@@ -28,4 +29,6 @@ public interface MapVotingIntegration {
 	boolean isVotingActive();
 
 	void removePlayer(Player player);
+
+	void addVotedListener(BiConsumer<Player, MinecraftMapOverview> votedConsumer);
 }
