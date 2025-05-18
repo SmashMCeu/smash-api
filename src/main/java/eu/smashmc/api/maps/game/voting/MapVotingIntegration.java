@@ -13,6 +13,8 @@ public interface MapVotingIntegration {
 
 	MinecraftMapOverview endVoting();
 
+	void cancelVoting();
+
 	void openVotingInventory(Player player);
 
 	ItemStack getVotingItem();
