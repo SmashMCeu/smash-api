@@ -28,6 +28,8 @@ public interface MinecraftMap extends MinecraftMapOverview {
 
 	Set<String> getTags();
 
+	MapGameData getGameData();
+
 	List<MinecraftIdentity> getContributors();
 
 	List<MinecraftIdentity> getMembers();
