@@ -15,8 +15,6 @@ public interface MapGameData {
 
 	Optional<MapBlockPosition> getLowestBlock();
 
-	List<String> getPositionTypeIds();
-
 	List<MapPosition> getPositionsOfType(String typeId);
 
 	List<Location> getPositionsAsLocationsOfType(String typeId);
