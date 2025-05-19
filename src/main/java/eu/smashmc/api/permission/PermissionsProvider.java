@@ -104,6 +104,19 @@ public interface PermissionsProvider {
 	String getPlayerSortKey(UUID playerUuid);
 
 	/**
+	 * Retrieves the highest numeric permission a player has for a given permission prefix.
+	 * <p>
+	 * For example, if a player has permissions like {@code build.maps.limit.3} and {@code build.maps.limit.5},
+	 * calling this method with prefix {@code build.maps.limit.} will return {@code 5}.
+	 * </p>
+	 *
+	 * @param playerUuid the UUID of the player to check permissions for
+	 * @param nodePrefix the prefix of the permission node to search, ending with a dot (e.g. {@code "build.maps.limit."})
+	 * @return the highest integer value found in the permission nodes with the given prefix, or {@code 0} if none found
+	 */
+	int getLimitPermission(UUID playerUuid, String nodePrefix);
+
+	/**
 	 * Set a Players permission
 	 *
 	 * @param uuid       UUID of Player

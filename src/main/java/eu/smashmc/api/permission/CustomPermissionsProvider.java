@@ -1,13 +1,13 @@
 package eu.smashmc.api.permission;
 
+import lombok.NoArgsConstructor;
+
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-
-import lombok.NoArgsConstructor;
 
 /**
  * Used to override chat and tab prefixes in NickSystem.
@@ -137,6 +137,11 @@ public class CustomPermissionsProvider implements PermissionsProvider {
 			}
 		}
 		return impl.getPlayerSortKey(playerUuid);
+	}
+
+	@Override
+	public int getLimitPermission(UUID playerUuid, String nodePrefix) {
+		return impl.getLimitPermission(playerUuid, nodePrefix);
 	}
 
 	public CompletableFuture<Void> setPermission(UUID uuid, String permission, boolean value) {
