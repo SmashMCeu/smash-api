@@ -15,6 +15,6 @@ public interface MapsComponent {
 
 	MapsGameIntegrations getIntegrations() throws IllegalStateException;
 
-	void openMapBrowser(Player player, Consumer<MinecraftMapOverview> mapClickedConsumer);
+	void openMapBrowser(Player player, Consumer<MinecraftMapOverview> mapClickedConsumer, String clickAction);
 
 }
