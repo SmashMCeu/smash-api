@@ -15,4 +15,9 @@ public interface MapsGameIntegrations {
 
 	Autocompleter<Player> autocompletePlayableMaps();
 
+	/**
+	 * Increases the map play count by 1.
+	 */
+	void playMap(MinecraftMapOverview map);
+
 }
