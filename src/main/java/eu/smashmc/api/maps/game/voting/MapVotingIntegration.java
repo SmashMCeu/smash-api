@@ -26,6 +26,8 @@ public interface MapVotingIntegration {
 
 	void vote(Player player, MinecraftMapOverview map);
 
+	void forceWinner(MinecraftMapOverview map);
+
 	boolean isVotingActive();
 
 	void removePlayer(Player player);
