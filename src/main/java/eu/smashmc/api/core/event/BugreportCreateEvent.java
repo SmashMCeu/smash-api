@@ -53,8 +53,8 @@ public class BugreportCreateEvent extends PlayerEvent {
 	 * @param key   the metadata key (e.g., "GameState")
 	 * @param value the metadata value (e.g., "Ingame")
 	 */
-	public void addMetadata(@NotNull String key, @NotNull String value) {
-		this.metadata.add(new BugReportMetadata(key, value));
+	public void addMetadata(@NotNull String key, @NotNull Object value) {
+		this.metadata.add(new BugReportMetadata(key, String.valueOf(value)));
 	}
 
 	public List<BugReportMetadata> getMetadata() {
