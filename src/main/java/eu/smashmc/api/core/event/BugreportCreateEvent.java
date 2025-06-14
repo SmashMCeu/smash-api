@@ -43,11 +43,7 @@ public class BugreportCreateEvent extends PlayerEvent {
 		this.additionalInfo.add(info);
 	}
 
-	public void addAdditionalInfo(@NotNull String... info) {
-		Collections.addAll(this.additionalInfo, info);
-	}
-
-	public List<String> exportAdditionalInfo() {
+	public List<String> getAdditionalInfo() {
 		return Collections.unmodifiableList(additionalInfo);
 	}
 
@@ -61,11 +57,7 @@ public class BugreportCreateEvent extends PlayerEvent {
 		this.metadata.add(new BugReportMetadata(key, value));
 	}
 
-	public void addMetadata(@NotNull BugReportMetadata entry) {
-		this.metadata.add(entry);
-	}
-
-	public List<BugReportMetadata> exportMetadata() {
+	public List<BugReportMetadata> getMetadata() {
 		return Collections.unmodifiableList(metadata);
 	}
 
