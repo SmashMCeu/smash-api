@@ -19,6 +19,12 @@ public interface QuestStatus {
     int getRequiredAmount();
 
     boolean isFinished();
+	
+	RewardType getRewardType();
+	
+	String getRewardValue();
+
+	LocalDateTime getRewardClaimedAt();
 
     int getXpReward();
 	

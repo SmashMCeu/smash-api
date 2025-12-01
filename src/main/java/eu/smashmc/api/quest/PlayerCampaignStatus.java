@@ -14,6 +14,6 @@ public interface PlayerCampaignStatus {
 
     float getPercentDone();
 
-    List<QuestStatus> getQuests();
+    List<QuestStatus> getQuestStatusList();
 
 }
