@@ -3,6 +3,7 @@ package eu.smashmc.api.quest;
 import java.util.UUID;
 
 public interface QuestUpdate {
+    Long getQuestId();
     String getSlug();
     String getDisplayName();
 	String getDescription();

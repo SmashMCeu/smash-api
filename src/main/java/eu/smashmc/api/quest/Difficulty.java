@@ -6,9 +6,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Difficulty {
-	EASY("Einfach"),
-	NORMAL("Normal"),
-	HARD("Schwer");
+	EASY("lore.quest.difficulty.easy"),
+	NORMAL("lore.quest.difficulty.normal"),
+	HARD("lore.quest.difficulty.hard"),;
 
 	private final String displayName;
 }

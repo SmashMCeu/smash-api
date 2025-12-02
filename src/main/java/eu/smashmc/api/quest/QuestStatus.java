@@ -23,6 +23,8 @@ public interface QuestStatus {
 	RewardType getRewardType();
 	
 	String getRewardValue();
+	
+	String getRewardDescription();
 
 	LocalDateTime getRewardClaimedAt();
 
