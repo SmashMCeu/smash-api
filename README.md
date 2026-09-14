@@ -1,6 +1,8 @@
 # Smash API
 Smash-API is the collection of our Java APIs that allow plugins to communicate without depending on each others implementation. The API is designed for Spigot and Bungeecord plugins, but can also be used in standalone applications (with some limitations).
 
+> **Not the `smash` gamemode's API.** Despite the name, this is the network-wide shared API for *all* SmashMC plugins and services. It defines contracts only; implementations are provided by plugins such as `smash-core` and the backend `*-service` modules. The `smash` gamemode contributes nothing to this artifact.
+
 ## Components
 The Smash-API is split into multiple Components. Each component is independent from another and usually implemented in it's own plugin.
 All components annotated with `@SmashComponent` can be retrieved using the `SmashMc` class.
