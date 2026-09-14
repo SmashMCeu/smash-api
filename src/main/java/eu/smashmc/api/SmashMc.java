@@ -141,7 +141,11 @@ public final class SmashMc {
 		} else {
 			verifyCompatibility(component);
 
-			T fallback = (T) FALLBACK_COMPONENTS.computeIfAbsent(component, c -> validateFallbackImplementation(component));
+			T fallback = (T) FALLBACK_COMPONENTS.get(component);
+			if (fallback == null && !FALLBACK_COMPONENTS.containsKey(component)) {
+				fallback = validateFallbackImplementation(component);
+				FALLBACK_COMPONENTS.put(component, fallback);
+			}
 
 			if (fallback != null) {
 				LOGGER.warning("Using fallback implementation for " + component.getSimpleName() + ". DO NOT USE IN PRODUCTION!");
@@ -259,5 +263,6 @@ public final class SmashMc {
 	protected static void clearComponents() {
 		INITIALIZED_COMPONENTS.clear();
 		LAZY_COMPONENTS.clear();
+		FALLBACK_COMPONENTS.clear();
 	}
 }

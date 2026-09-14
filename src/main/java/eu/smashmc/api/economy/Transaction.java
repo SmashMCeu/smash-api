@@ -34,6 +34,9 @@ public class Transaction {
 	}
 
 	public CompletableFuture<Void> commit() {
+		if (isEmpty()) {
+			return CompletableFuture.completedFuture(null);
+		}
 		return SmashMc.getComponent(Economy.class)
 				.submitTransaction(this);
 	}
@@ -43,7 +46,7 @@ public class Transaction {
 			throw new IllegalArgumentException("Amount to deposit must not be negative: " + amount);
 		}
 		if (amount == 0) {
-			Logger.getLogger(Transaction.class.getName()).log(Level.WARNING, "Suppressed trade with value of " + amount);
+			Logger.getLogger(Transaction.class.getName()).log(Level.FINE, "Suppressed trade with value of " + amount);
 			return;
 		}
 		var trade = new Trade(accountHolder, currency, amount, reason, description);
@@ -55,7 +58,7 @@ public class Transaction {
 			throw new IllegalArgumentException("Amount to withdraw must not be negative: " + amount);
 		}
 		if (amount == 0) {
-			Logger.getLogger(Transaction.class.getName()).log(Level.WARNING, "Suppressed trade with value of " + amount);
+			Logger.getLogger(Transaction.class.getName()).log(Level.FINE, "Suppressed trade with value of " + amount);
 			return;
 		}
 		var trade = new Trade(accountHolder, currency, -amount, reason, description);
