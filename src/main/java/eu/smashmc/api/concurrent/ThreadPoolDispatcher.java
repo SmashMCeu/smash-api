@@ -6,7 +6,7 @@ import java.util.concurrent.*;
 import java.util.function.Supplier;
 
 public class ThreadPoolDispatcher implements AsyncDispatcher {
-	private static ExecutorService executor;
+	private final ExecutorService executor;
 
 	public ThreadPoolDispatcher() {
 		executor = Executors.newCachedThreadPool((new ThreadFactoryBuilder()).setNameFormat("smash-api-thread-%d")

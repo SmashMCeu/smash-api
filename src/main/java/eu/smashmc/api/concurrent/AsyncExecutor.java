@@ -28,9 +28,14 @@ public class AsyncExecutor {
 
 	@Synchronized
 	public static void setDispatcher(AsyncDispatcher newDispatcher) {
-		/* Shut down existing dispatcher */
-		if (dispatcher != null) {
-			dispatcher.shutdown();
+		/* Shut down the existing dispatcher if it supports being shut down manually */
+		if (dispatcher != null && dispatcher != newDispatcher) {
+			try {
+				dispatcher.shutdown();
+			} catch (UnsupportedOperationException e) {
+				Logger.getLogger(AsyncExecutor.class.getName())
+						.log(Level.FINE, "Existing dispatcher cannot be shut down manually, skipping", e);
+			}
 		}
 		SmashMc.registerComponent(AsyncDispatcher.class, newDispatcher);
 		dispatcher = newDispatcher;

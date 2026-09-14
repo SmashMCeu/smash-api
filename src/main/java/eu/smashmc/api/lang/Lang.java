@@ -36,7 +36,7 @@ public class Lang {
 	 */
 	public static void remove(String scope) throws IllegalStateException {
 		Language<CommandSender> api = SmashMc.getComponent(Language.class);
-		api.removeLanguageProvider(getScope());
+		api.removeLanguageProvider(scope);
 	}
 
 	@Deprecated
