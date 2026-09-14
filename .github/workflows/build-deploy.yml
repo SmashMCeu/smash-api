@@ -16,10 +16,10 @@ jobs:
       uses: stCarolas/setup-maven@v4.5
     
     
-    - name: Install JDK 21
+    - name: Install JDK 25
       uses: actions/setup-java@v2
       with:
-        java-version: '21'
+        java-version: '25'
         distribution: 'temurin'
         server-id: smashmc-public
         server-username: MAVEN_USERNAME
