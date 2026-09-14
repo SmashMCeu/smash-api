@@ -141,6 +141,11 @@ public final class SmashMc {
 		} else {
 			verifyCompatibility(component);
 
+			/*
+			 * Explicit containsKey check instead of computeIfAbsent: computeIfAbsent
+			 * does not cache a null value, so a component without a fallback would
+			 * never be recorded as accessed.
+			 */
 			T fallback = (T) FALLBACK_COMPONENTS.get(component);
 			if (fallback == null && !FALLBACK_COMPONENTS.containsKey(component)) {
 				fallback = validateFallbackImplementation(component);
