@@ -1,18 +1,18 @@
 package eu.smashmc.api.lang;
 
-import java.util.UUID;
-
+import eu.smashmc.api.SmashMc;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.PluginClassLoader;
 
-import eu.smashmc.api.SmashMc;
+import java.util.Locale;
+import java.util.UUID;
 
 /**
  * 'Smart' wrapper for {@link LanguageProvider}. <br>
  * Uses the name of the calling plugin as the scope. If no provider with the
  * plugins name as scope was found, it uses the global provider instead.
- * 
+ * <p>
  * For BungeeCord use {@link BLang} instead.
  */
 public class Lang {
@@ -26,6 +26,17 @@ public class Lang {
 	public static void initialize() {
 		Language<CommandSender> api = SmashMc.getComponent(Language.class);
 		api.createLanguageProvider(getScope());
+	}
+
+	/**
+	 * Removes the language provider for the given scope. Might also unload all relates keys from the language registry.
+	 *
+	 * @param scope the scope to be terminated.
+	 * @throws IllegalStateException when there was no provider to the given scope
+	 */
+	public static void remove(String scope) throws IllegalStateException {
+		Language<CommandSender> api = SmashMc.getComponent(Language.class);
+		api.removeLanguageProvider(scope);
 	}
 
 	@Deprecated
@@ -81,6 +92,26 @@ public class Lang {
 		return language.get(playerUuid, translationKey, format);
 	}
 
+	public static Locale getLocale(CommandSender player) {
+		LanguageProvider<CommandSender> language = findProviderFromCallingClass();
+		return language.getLocale(player);
+	}
+
+	public static Locale getLocale(UUID playerUuid) {
+		LanguageProvider<CommandSender> language = findProviderFromCallingClass();
+		return language.getLocale(playerUuid);
+	}
+
+	public static String getChatPrefix(CommandSender player) {
+		LanguageProvider<CommandSender> language = findProviderFromCallingClass();
+		return language.getChatPrefix(player);
+	}
+
+	public static String getChatPrefix(UUID playerUuid) {
+		LanguageProvider<CommandSender> language = findProviderFromCallingClass();
+		return language.getChatPrefix(playerUuid);
+	}
+
 	public static LanguageProvider<CommandSender> findProviderFromCallingClass() {
 		Language<CommandSender> api = SmashMc.getComponent(Language.class);
 		String scope = getScope();
@@ -91,25 +122,54 @@ public class Lang {
 	}
 
 	protected static String getScope() {
+		Language<CommandSender> api = SmashMc.getComponent(Language.class);
+
+		// first, try to find via package name (faster)
+		String packageName = getCallingPackageName();
+		if (packageName.startsWith("eu.smashmc")) {
+			String scopeName = packageName.split("\\.")[2];
+			if (api.existsLanguageProvider(scopeName)) {
+				return scopeName;
+			}
+		}
+
+		// falling back to calling class plugin name
+		return getScopeViaCallingPlugin();
+	}
+
+	protected static String getCallingPackageName() {
+		final StackTraceElement[] stElements = Thread.currentThread().getStackTrace();
+		for (int i = 1; i < stElements.length; i++) {
+			StackTraceElement ste = stElements[i];
+			String className = ste.getClassName();
+			if (!className.equals(Lang.class.getName()) && className.indexOf("java.lang.Thread") != 0) {
+				return className;
+			}
+		}
+		return "";
+	}
+
+	protected static String getScopeViaCallingPlugin() {
 		Class<?> caller = getCallingClass();
 		ClassLoader classLoader = caller.getClassLoader();
 		if (classLoader instanceof PluginClassLoader pluginClassLoader) {
 			Plugin plugin = pluginClassLoader.getPlugin();
-			String scope = plugin.getName();
-			return scope;
+			if (plugin != null) {
+				return plugin.getName().toLowerCase().trim();
+			}
 		}
 		return null;
 	}
 
 	protected static Class<?> getCallingClass() {
 		try {
-			final StackTraceElement[] stElements = Thread.currentThread()
-					.getStackTrace();
+			ClassLoader classLoader = Lang.class.getClassLoader();
+			final StackTraceElement[] stElements = Thread.currentThread().getStackTrace();
 			for (int i = 1; i < stElements.length; i++) {
 				StackTraceElement ste = stElements[i];
 				String className = ste.getClassName();
 				if (!className.equals(Lang.class.getName()) && className.indexOf("java.lang.Thread") != 0) {
-					return Class.forName(className);
+					return Class.forName(className, false, classLoader);
 				}
 			}
 		} catch (ClassNotFoundException e) {

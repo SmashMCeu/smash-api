@@ -1,20 +1,17 @@
 package eu.smashmc.api.economy;
 
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
-import lombok.Getter;
-import net.md_5.bungee.api.ServerPing.Players;
-
 /**
- * {@link Bukkit} event fired when a {@link Players} balance of any currency
+ * {@link Bukkit} event fired when a {@link Player}s balance of any currency
  * type changes for any reason.
- * 
- * @author LiquidDev
  *
+ * @author LiquidDev
  */
 @Getter
 public class PlayerBalanceUpdateEvent extends PlayerEvent {

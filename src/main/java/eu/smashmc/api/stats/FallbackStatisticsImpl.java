@@ -1,17 +1,14 @@
 package eu.smashmc.api.stats;
 
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
+import eu.smashmc.api.stats.value.view.StatsValueAccumulation;
 import org.bukkit.entity.Player;
 
-import eu.smashmc.api.stats.value.view.StatsValueAccumulation;
+import java.time.LocalDateTime;
+import java.util.*;
 
 class FallbackStatisticsImpl implements Statistics {
+
+	private static final UUID DUMMY_UUID = UUID.fromString("bd346dd5-ac1c-427d-87e8-73bdd4bf3e13");
 
 	@Override
 	public StatsHelper createHelper(String gameType) throws UnsupportedOperationException {
@@ -19,6 +16,11 @@ class FallbackStatisticsImpl implements Statistics {
 
 			@Override
 			public void startGame(String mapName, Collection<? extends Player> participants) {
+			}
+
+			@Override
+			public GameEntity endGame(boolean postPlayerStats, boolean postMapStats) throws IllegalStateException {
+				return null;
 			}
 
 			@Override
@@ -107,7 +109,7 @@ class FallbackStatisticsImpl implements Statistics {
 
 	@Override
 	public List<UUID> getTop(int limit, StatsPeriod period) {
-		return Collections.emptyList();
+		return Collections.nCopies(limit, DUMMY_UUID);
 	}
 
 	@Override
@@ -128,5 +130,40 @@ class FallbackStatisticsImpl implements Statistics {
 	@Override
 	public boolean isGlobalElite(UUID uuid) {
 		return false;
+	}
+
+	@Override
+	public Optional<GameMap> rateMap(UUID playerUuid, String mapName, String gameType, int rating) {
+		return Optional.of(new GameMap() {
+			@Override
+			public String getName() {
+				return mapName;
+			}
+
+			@Override
+			public String getGameType() {
+				return gameType;
+			}
+
+			@Override
+			public int getGames() {
+				return 0;
+			}
+
+			@Override
+			public LocalDateTime getFirstSeen() {
+				return LocalDateTime.now();
+			}
+
+			@Override
+			public long getLikes() {
+				return rating > 0 ? 1 : 0;
+			}
+
+			@Override
+			public long getDislikes() {
+				return rating < 0 ? 1 : 0;
+			}
+		});
 	}
 }

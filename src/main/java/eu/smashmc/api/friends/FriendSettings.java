@@ -2,12 +2,18 @@ package eu.smashmc.api.friends;
 
 public interface FriendSettings {
 
-    public boolean isAllowingJump();
+	boolean isAllowingJump();
 
-    public FriendAllowType getPrivateMessageType();
+	FriendAllowType getPrivateMessageType();
 
-    public boolean isAllowingFriendRequests();
+	boolean isAllowingFriendRequests();
 
-    public FriendAllowType getPartyRequestType();
+	FriendAllowType getPartyRequestType();
 
+	/**
+	 * Controls whether the user should see join and quit messages of their friends.
+	 *
+	 * @return true if player should see join and quit messages of friends.
+	 */
+	boolean hasJoinQuitMessagesEnabled();
 }

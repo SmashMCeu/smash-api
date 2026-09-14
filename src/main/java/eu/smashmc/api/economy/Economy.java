@@ -1,12 +1,12 @@
 package eu.smashmc.api.economy;
 
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-
 import eu.smashmc.api.Environment;
 import eu.smashmc.api.SmashComponent;
 
-@SmashComponent(value = Environment.BUKKIT, fallbackImpl = FallbackEconomyImpl.class)
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+
+@SmashComponent(value = {Environment.BUKKIT, Environment.BUNGEECORD}, fallbackImpl = FallbackEconomyImpl.class)
 public interface Economy {
 
 	/**
@@ -22,7 +22,7 @@ public interface Economy {
 	/**
 	 * Submit a transaction to the database. Will complete with a
 	 * {@link TransactionFailException} if the transaction failed.
-	 * 
+	 * <p>
 	 * Be aware that if a single trade fails, the entire transaction is reverted in
 	 * the database.
 	 *

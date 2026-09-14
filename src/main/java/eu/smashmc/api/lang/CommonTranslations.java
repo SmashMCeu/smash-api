@@ -2,13 +2,14 @@ package eu.smashmc.api.lang;
 
 /**
  * List of common translation keys for easy access.
- * 
  */
 public class CommonTranslations {
 
 	/* General */
 	public static final String CHAT_PRO_ONLY_FEATURE = "chat.pro";
+	public static final String CHAT_PROPLUS_ONLY_FEATURE = "chat.proplus";
 	public static final String CHAT_TOO_EXPENSIVE = "chat.too_expensive";
+	public static final String CHAT_PLEASE_REJOIN = "chat.rejoin_to_apply";
 
 	/* Gameplay */
 	public static final String CHAT_PLAYER_JOIN = "chat.player_join";
@@ -26,11 +27,14 @@ public class CommonTranslations {
 	public static final String CHAT_PLAYER_UNKNOWN = "chat.player_unknown";
 	public static final String CHAT_ONLY_FOR_PLAYERS = "chat.command.players_only";
 	public static final String CHAT_CANNOT_PLAY_WITH_YOURSELF = "chat.no_self_play";
+	public static final String CHAT_NOT_FOR_SPECTATORS = "chat.not_for_spectators";
 
 	/* Chat buttons */
 	public static final String CHAT_BUTTON_ACCEPT = "chat.button.accept";
-	public static final String CHAT_BUTTON_DENY = "hat.button.deny";
+	public static final String CHAT_BUTTON_DENY = "chat.button.deny";
 	public static final String CHAT_BUTTON_CONFIRM = "chat.button.confirm";
 	public static final String CHAT_BUTTON_CLICK = "chat.button.click";
+	public static final String CHAT_BUTTON_LIKE = "chat.button.like";
+	public static final String CHAT_BUTTON_DISLIKE = "chat.button.dislike";
 
 }

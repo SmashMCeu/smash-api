@@ -28,6 +28,10 @@ public class RegistryService {
 		}
 		MANAGED_INSTANCES.put(clazz, instance);
 	}
+	
+	protected static void unregister(Class<?> clazz) {
+		MANAGED_INSTANCES.remove(clazz);
+	}
 
 	/**
 	 * Use this to access an instance of a class instantiated with @Managed.
@@ -54,11 +58,7 @@ public class RegistryService {
 	 * @param registrar The {@link Registrar} used to register instances
 	 */
 	public static <T> void addRegistrar(Class<T> superType, Registrar<? extends T> registrar) {
-		List<Registrar<?>> registrars = REGISTRARS.get(superType);
-		if (registrars == null) {
-			registrars = new ArrayList<>(1);
-			REGISTRARS.put(superType, registrars);
-		}
+		List<Registrar<?>> registrars = REGISTRARS.computeIfAbsent(superType, k -> new ArrayList<>(1));
 		registrars.add(registrar);
 	}
 
@@ -83,6 +83,10 @@ public class RegistryService {
 	 */
 	public static void bind(Object object) {
 		DEPENDENCIES.add(object);
+	}
+	
+	public static boolean unbind(Object object) {
+		return DEPENDENCIES.remove(object);
 	}
 
 	/**

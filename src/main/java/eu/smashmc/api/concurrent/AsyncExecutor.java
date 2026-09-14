@@ -1,55 +1,78 @@
 package eu.smashmc.api.concurrent;
 
+import eu.smashmc.api.SmashMc;
+import lombok.Getter;
+import lombok.Synchronized;
+
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 import java.util.function.Supplier;
-
-import eu.smashmc.api.SmashMc;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Executors that do NOT use the CommonThreadPool. They can be used for stuff
  * like blocking database operations.
- * 
+ * <p>
+ * 19-03-2024: They were now updated to use java 21 virtual threads.
+ *
  * @author LiquidDev
  */
 public class AsyncExecutor {
 
+	@Getter
 	private static AsyncDispatcher dispatcher;
 
+
+	@Synchronized
 	public static void setDispatcher(AsyncDispatcher newDispatcher) {
+		/* Shut down the existing dispatcher if it supports being shut down manually */
+		if (dispatcher != null && dispatcher != newDispatcher) {
+			try {
+				dispatcher.shutdown();
+			} catch (UnsupportedOperationException e) {
+				Logger.getLogger(AsyncExecutor.class.getName())
+						.log(Level.FINE, "Existing dispatcher cannot be shut down manually, skipping", e);
+			}
+		}
 		SmashMc.registerComponent(AsyncDispatcher.class, newDispatcher);
 		dispatcher = newDispatcher;
 	}
 
-	public static AsyncDispatcher getDispatcher() {
-		return dispatcher;
-	}
-
 	public static void execute(Runnable runnable) {
-		verfiyDispatcher();
+		verifyDispatcher();
 		dispatcher.execute(runnable);
 	}
 
 	public static <T> Future<T> submit(Callable<T> task) {
-		verfiyDispatcher();
+		verifyDispatcher();
 		return dispatcher.submit(task);
 	}
 
 	public static <T> CompletableFuture<T> supply(Supplier<T> supplier) {
-		verfiyDispatcher();
+		verifyDispatcher();
 		return dispatcher.supply(supplier)
-				.exceptionally(ex -> {
-					ex.printStackTrace();
-					throw new RuntimeException(ex);
+				.whenComplete((v, ex) -> {
+					if (ex != null) {
+						Logger.getLogger(AsyncExecutor.class.getName()).log(Level.SEVERE, "Exception occurred executing task asynchronously", ex);
+					}
 				});
 	}
 
+	public static Executor getExecutor() {
+		verifyDispatcher();
+		return dispatcher.getExecutor();
+	}
+
+	@Synchronized
 	public static void shutdown() {
 		dispatcher.shutdown();
 	}
 
-	private static void verfiyDispatcher() {
+	@Synchronized
+	private static void verifyDispatcher() {
 		if (dispatcher == null) {
 			dispatcher = new ThreadPoolDispatcher();
 		}

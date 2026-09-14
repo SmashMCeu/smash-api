@@ -1,16 +1,12 @@
 package eu.smashmc.api.concurrent;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.function.Supplier;
-
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
+import java.util.concurrent.*;
+import java.util.function.Supplier;
+
 public class ThreadPoolDispatcher implements AsyncDispatcher {
-	private static ExecutorService executor;
+	private final ExecutorService executor;
 
 	public ThreadPoolDispatcher() {
 		executor = Executors.newCachedThreadPool((new ThreadFactoryBuilder()).setNameFormat("smash-api-thread-%d")
@@ -27,6 +23,11 @@ public class ThreadPoolDispatcher implements AsyncDispatcher {
 
 	public void shutdown() {
 		executor.shutdown();
+	}
+
+	@Override
+	public Executor getExecutor() {
+		return executor;
 	}
 
 	@Override
