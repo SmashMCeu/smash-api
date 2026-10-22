@@ -2,20 +2,31 @@ package eu.smashmc.api.replay;
 
 import eu.smashmc.api.Environment;
 import eu.smashmc.api.SmashComponent;
+import org.bukkit.World;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.lang.reflect.RecordComponent;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 
 class ReplayApiTest {
+
+	private static final String[] FORBIDDEN_TYPE_PREFIXES = {
+			"org.bukkit",
+			"eu.smashmc.replay.codec",
+			"net.minecraft"
+	};
 
 	@Test
 	void replayIsAnnotatedForBukkitWithFallback() {
@@ -53,19 +64,46 @@ class ReplayApiTest {
 		ReplayConfig config = new ReplayConfig("smash", Map.of("k", "v"));
 		assertEquals("smash", config.gamemodeId());
 		assertEquals("v", config.extra().get("k"));
+		assertNull(config.world(), "the two-argument constructor delegates with a null capture world");
 		assertThrows(UnsupportedOperationException.class, () -> config.extra().put("x", "y"));
 		assertTrue(new ReplayConfig("smash", null).extra().isEmpty());
+		assertNull(new ReplayConfig("smash", null).world());
+
+		World world = mock(World.class);
+		ReplayConfig scoped = new ReplayConfig("smash", Map.of("k", "v"), world);
+		assertEquals("smash", scoped.gamemodeId());
+		assertEquals("v", scoped.extra().get("k"));
+		assertSame(world, scoped.world());
+		assertThrows(UnsupportedOperationException.class, () -> scoped.extra().put("x", "y"));
+		assertTrue(new ReplayConfig("smash", null, world).extra().isEmpty());
 	}
 
 	@Test
-	void apiTypesUseNoBukkitTypes() {
+	void configAllowsExactlyOneBukkitTypeForTheCaptureWorld() throws Exception {
+		Class<?> worldType = null;
+		for (RecordComponent component : ReplayConfig.class.getRecordComponents()) {
+			if ("world".equals(component.getName())) {
+				worldType = component.getType();
+			}
+		}
+		assertEquals(World.class, worldType);
+		assertEquals(World.class, ReplayConfig.class.getMethod("world").getReturnType());
+		assertNotNull(ReplayConfig.class.getConstructor(String.class, Map.class, World.class));
+	}
+
+	@Test
+	void apiTypesUseNoCodecOrNmsTypesAndOnlyWorldFromBukkit() {
 		for (Class<?> type : new Class<?>[]{Replay.class, ReplayConfig.class, ReplaySession.class}) {
 			for (Method method : type.getDeclaredMethods()) {
-				assertNoBukkit(method.getParameterTypes());
-				assertNoBukkit(new Class<?>[]{method.getReturnType()});
+				for (Class<?> parameter : method.getParameterTypes()) {
+					assertAllowedApiType(type, parameter);
+				}
+				assertAllowedApiType(type, method.getReturnType());
 			}
 			for (Constructor<?> constructor : type.getDeclaredConstructors()) {
-				assertNoBukkit(constructor.getParameterTypes());
+				for (Class<?> parameter : constructor.getParameterTypes()) {
+					assertAllowedApiType(type, parameter);
+				}
 			}
 		}
 	}
@@ -76,9 +114,13 @@ class ReplayApiTest {
 		return constructor.newInstance();
 	}
 
-	private static void assertNoBukkit(Class<?>[] types) {
-		for (Class<?> type : types) {
-			assertFalse(type.getName().startsWith("org.bukkit"), "unexpected Bukkit type " + type.getName());
+	private static void assertAllowedApiType(Class<?> owner, Class<?> type) {
+		if (type == World.class && owner == ReplayConfig.class) {
+			return;
+		}
+		for (String prefix : FORBIDDEN_TYPE_PREFIXES) {
+			assertFalse(type.getName().startsWith(prefix),
+					"unexpected " + prefix + " type " + type.getName() + " on " + owner.getName());
 		}
 	}
 }

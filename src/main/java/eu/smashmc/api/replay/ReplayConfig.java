@@ -1,5 +1,8 @@
 package eu.smashmc.api.replay;
 
+import org.bukkit.World;
+
+import javax.annotation.Nullable;
 import java.util.Map;
 
 /**
@@ -22,10 +25,28 @@ import java.util.Map;
  *                   {@code Map<String,String>}; the mapping between them is
  *                   intentionally left undefined until a future format version
  *                   defines it.
+ * @param world      the runtime capture scope chosen by the gamemode, i.e. the
+ *                   world the players are actually playing in; the recorder
+ *                   limits snapshots, roster, packets, chat and broadcast
+ *                   capture to it. This is <em>not</em> header or file data and
+ *                   is never serialized — playback resolves the map by version
+ *                   id. May be {@code null} for callers that do not care; the
+ *                   recorder then falls back to the server default world
  */
-public record ReplayConfig(String gamemodeId, Map<String, String> extra) {
+public record ReplayConfig(String gamemodeId, Map<String, String> extra, @Nullable World world) {
 
 	public ReplayConfig {
 		extra = extra == null ? Map.of() : Map.copyOf(extra);
+	}
+
+	/**
+	 * Creates a configuration without an explicit capture world.
+	 *
+	 * @param gamemodeId stable gamemode identifier recorded in the replay header
+	 * @param extra      reserved for future gamemode-specific, non-network header
+	 *                   data; never {@code null}
+	 */
+	public ReplayConfig(String gamemodeId, Map<String, String> extra) {
+		this(gamemodeId, extra, null);
 	}
 }
