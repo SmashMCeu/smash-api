@@ -1,5 +1,8 @@
 package eu.smashmc.api.replay;
 
+import eu.smashmc.api.identity.minecraft.property.TexturesProperty;
+
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 /**
@@ -22,5 +25,9 @@ class FallbackReplay implements Replay {
 	@Override
 	public boolean isRecording() {
 		return false;
+	}
+
+	@Override
+	public void recordPlayerSkin(UUID uuid, @Nullable TexturesProperty skin) {
 	}
 }
