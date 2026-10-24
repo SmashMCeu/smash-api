@@ -2,6 +2,10 @@ package eu.smashmc.api.replay;
 
 import eu.smashmc.api.Environment;
 import eu.smashmc.api.SmashComponent;
+import eu.smashmc.api.identity.minecraft.property.TexturesProperty;
+
+import javax.annotation.Nullable;
+import java.util.UUID;
 
 /**
  * Control surface for recording a game replay, obtained via
@@ -9,8 +13,9 @@ import eu.smashmc.api.SmashComponent;
  * registered, {@code SmashMc} returns the no-op {@link FallbackReplay}.
  * <p>
  * This is the only replay surface in {@code smash-api}: start/stop plus "is one
- * running". No protocol, event IDs, snapshots, framing, or codec types cross
- * this boundary (ADR-0007/0009).
+ * running" and the canonical character skin of a recorded player. No protocol,
+ * event IDs, snapshots, framing, or codec types cross this boundary
+ * (ADR-0007/0009).
  */
 @SmashComponent(value = Environment.BUKKIT, fallbackImpl = FallbackReplay.class)
 public interface Replay {
@@ -38,4 +43,16 @@ public interface Replay {
 	 * @return {@code true} while a recording is active
 	 */
 	boolean isRecording();
+
+	/**
+	 * Record the canonical character skin the gamemode applied to a player,
+	 * called whenever that skin is applied (including a mid-game character
+	 * change). Playback reproduces the changes from these values instead of
+	 * resolving the player's live identity skin (ADR-0039).
+	 *
+	 * @param uuid the recorded player's UUID
+	 * @param skin the signed character texture, or {@code null} to clear it so
+	 *             the player falls back to its default/live skin
+	 */
+	void recordPlayerSkin(UUID uuid, @Nullable TexturesProperty skin);
 }
