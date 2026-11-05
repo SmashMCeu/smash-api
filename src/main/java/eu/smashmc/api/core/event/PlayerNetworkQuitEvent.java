@@ -5,7 +5,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
-import com.sun.jdi.event.Event;
+import org.bukkit.event.Event;
 
 import lombok.Getter;
 
