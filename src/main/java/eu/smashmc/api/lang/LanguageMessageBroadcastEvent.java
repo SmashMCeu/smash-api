@@ -12,9 +12,6 @@ import lombok.Getter;
  * through {@link LanguageProvider#broadcast(String, Object...)}.
  * <p>
  * The event is fired once per broadcast, not once per recipient.
- * {@code translatedMessage} is the default-locale ({@code en},
- * {@code AbstractLanguageProvider.DEFAULT_COUNTRY_CODE}) fallback without the
- * prefix.
  */
 @Getter
 public class LanguageMessageBroadcastEvent extends Event {
@@ -26,10 +23,6 @@ public class LanguageMessageBroadcastEvent extends Event {
 	/**
 	 * The message translated with the server default country code ({@code en},
 	 * {@code AbstractLanguageProvider.DEFAULT_COUNTRY_CODE}), without any prefix.
-	 * <p>
-	 * A broadcast has no per-recipient locale, so this is only a fallback for
-	 * consumers that cannot re-resolve {@code translationKey} and
-	 * {@code parameters} for a specific viewer.
 	 */
 	private String translatedMessage;
 	/**
