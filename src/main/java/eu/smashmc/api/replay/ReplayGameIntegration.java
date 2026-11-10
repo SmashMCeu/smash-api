@@ -12,6 +12,12 @@ import java.util.UUID;
  * surface: start/stop plus "is one running", the canonical character skin of a
  * recorded player, and a live snapshot of the active session.
  * <p>
+ * The game modes use {@link #recordPlayerSkin(UUID, java.util.Optional)} with
+ * their optional {@code getSkin(player)} result. Because both skin overloads
+ * exist, a bare {@code recordPlayerSkin(uuid, null)} is ambiguous at the call
+ * site: pass a typed variable or cast (e.g. {@code (TexturesProperty) null}), or
+ * omit the call. A null or empty skin is a no-op and never clears.
+ * <p>
  * The recorder keeps this state on the server main thread, so the methods are
  * synchronous; remote queries belong to {@link ReplayDirectory} and
  * {@link ReplayPlayback}. No protocol, event ID, snapshot, framing or codec
@@ -71,11 +77,16 @@ public interface ReplayGameIntegration {
 	void recordPlayerSkin(UUID uuid, @Nullable TexturesProperty skin);
 
 	/**
-	 * Ergonomic gamemode form of {@link #recordPlayerSkin(UUID, TexturesProperty)},
-	 * e.g. for an optional {@code getSkin(player)} result: an empty or
-	 * {@code null} optional records nothing and never calls the value overload,
-	 * so an absent skin cannot become an implicit clear. A present value
-	 * delegates as-is and inherits the value overload's no-op checks.
+	 * The intended gamemode form of
+	 * {@link #recordPlayerSkin(UUID, TexturesProperty)}, e.g. for an optional
+	 * {@code getSkin(player)} result: an empty or {@code null} optional records
+	 * nothing and never calls the value overload, so an absent skin cannot become
+	 * an implicit clear. A present value delegates as-is and inherits the value
+	 * overload's no-op checks.
+	 * <p>
+	 * For a literal null, use a typed variable or cast
+	 * (e.g. {@code (TexturesProperty) null}) or omit the call:
+	 * {@code recordPlayerSkin(uuid, null)} is ambiguous between the two overloads.
 	 *
 	 * @param uuid the recorded player's UUID, or {@code null} to ignore
 	 * @param skin the optional signed character texture; empty or {@code null}
