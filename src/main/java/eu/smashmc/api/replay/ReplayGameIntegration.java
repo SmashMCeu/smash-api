@@ -22,6 +22,12 @@ public interface ReplayGameIntegration {
 	/**
 	 * Begin capture for a game. Called once per game from the server main thread
 	 * at game start.
+	 * <p>
+	 * Never throws: a recorder failure is absorbed and the call returns a
+	 * non-null inactive session whose status is {@link ReplayStatus#FAILED}
+	 * (the no-op fallback reports {@link ReplayStatus#UNAVAILABLE}). Callers
+	 * therefore need no try/catch and may always pass the result to
+	 * {@link #stopRecording(ReplaySession)}.
 	 *
 	 * @param config the gamemode id, game id and reserved header data for this
 	 *               recording
@@ -49,12 +55,37 @@ public interface ReplayGameIntegration {
 	 * called whenever that skin is applied (including a mid-game character
 	 * change). Playback reproduces the changes from these values instead of
 	 * resolving the player's live identity skin (ADR-0039).
+	 * <p>
+	 * The contract absorbs the defensive checks so the gamemode never has to
+	 * branch: a {@code null} player id, a {@code null} texture, a blank texture
+	 * value or a blank (unsigned) signature is a <strong>no-op</strong> and
+	 * never an implicit clear. A gamemode may pass whatever
+	 * {@code getSkin(player)} returned; only a complete signed texture is
+	 * recorded. Clearing remains a codec capability; an explicit
+	 * {@code clearPlayerSkin} can be added later if a gamemode needs it.
 	 *
-	 * @param uuid the recorded player's UUID
-	 * @param skin the signed character texture, or {@code null} to clear it so
-	 *             the player falls back to its default/live skin
+	 * @param uuid the recorded player's UUID, or {@code null} to ignore
+	 * @param skin the signed character texture, or {@code null}/blank/unsigned
+	 *             to record nothing
 	 */
 	void recordPlayerSkin(UUID uuid, @Nullable TexturesProperty skin);
+
+	/**
+	 * Ergonomic gamemode form of {@link #recordPlayerSkin(UUID, TexturesProperty)},
+	 * e.g. for an optional {@code getSkin(player)} result: an empty or
+	 * {@code null} optional records nothing and never calls the value overload,
+	 * so an absent skin cannot become an implicit clear. A present value
+	 * delegates as-is and inherits the value overload's no-op checks.
+	 *
+	 * @param uuid the recorded player's UUID, or {@code null} to ignore
+	 * @param skin the optional signed character texture; empty or {@code null}
+	 *             records nothing
+	 */
+	default void recordPlayerSkin(UUID uuid, @Nullable Optional<TexturesProperty> skin) {
+		if (skin != null) {
+			skin.ifPresent(value -> recordPlayerSkin(uuid, value));
+		}
+	}
 
 	/**
 	 * Read a live snapshot of a recording session, including the backend handle

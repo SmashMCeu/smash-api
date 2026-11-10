@@ -122,12 +122,54 @@ class ReplayApiTest {
 	}
 
 	@Test
-	void fallbackAcceptsRecordedSkinsAndClearsAsANoOp() throws Exception {
+	void fallbackAcceptsRecordedSkinsAndNullAsANoOp() throws Exception {
 		ReplayGameIntegration game = newFallback(FallbackReplay.class).game();
 
 		assertDoesNotThrow(() -> game.recordPlayerSkin(UUID.randomUUID(),
 				new TexturesProperty("value", "signature")));
-		assertDoesNotThrow(() -> game.recordPlayerSkin(UUID.randomUUID(), null));
+		assertDoesNotThrow(() -> game.recordPlayerSkin(UUID.randomUUID(), (TexturesProperty) null));
+	}
+
+	@Test
+	void centralSubApisAreNeverNull() throws Exception {
+		Replay replay = newFallback(FallbackReplay.class);
+
+		assertNotNull(replay.game());
+		assertNotNull(replay.directory());
+		assertNotNull(replay.playback());
+	}
+
+	@Test
+	void optionalSkinOverloadOnlyDelegatesAPresentValue() {
+		ContractSkinRecorder game = new ContractSkinRecorder();
+		UUID id = UUID.randomUUID();
+		TexturesProperty skin = new TexturesProperty("value", "signature");
+		Optional<TexturesProperty> absent = null;
+
+		game.recordPlayerSkin(id, Optional.empty());
+		game.recordPlayerSkin(id, absent);
+		assertTrue(game.recorded.isEmpty());
+
+		game.recordPlayerSkin(id, Optional.of(skin));
+		assertEquals(List.of(skin), game.recorded);
+	}
+
+	@Test
+	void skinRecordingContractTreatsAbsentOrIncompleteTexturesAsANoOp() {
+		ContractSkinRecorder game = new ContractSkinRecorder();
+		UUID id = UUID.randomUUID();
+		TexturesProperty signed = new TexturesProperty("value", "signature");
+
+		game.recordPlayerSkin(id, (TexturesProperty) null);
+		game.recordPlayerSkin(null, signed);
+		game.recordPlayerSkin(id, new TexturesProperty("", "signature"));
+		game.recordPlayerSkin(id, new TexturesProperty("   ", "signature"));
+		game.recordPlayerSkin(id, new TexturesProperty("value", ""));
+		game.recordPlayerSkin(id, new TexturesProperty("value", "   "));
+		assertTrue(game.recorded.isEmpty());
+
+		game.recordPlayerSkin(id, signed);
+		assertEquals(List.of(signed), game.recorded);
 	}
 
 	@Test
@@ -373,6 +415,42 @@ class ReplayApiTest {
 				NestedGenericTypes.class.getRecordComponents()[0].getGenericType()));
 		assertThrows(AssertionError.class, () -> assertAllowedApiType(ReplaySession.class,
 				NestedGenericTypes.class.getRecordComponents()[1].getGenericType()));
+	}
+
+	/**
+	 * Reference implementation of the documented defensive skin contract: only a
+	 * complete signed texture is recorded, absent/incomplete values are no-ops
+	 * and never clears. Stands in for a gamemode/recorder, not the plugin.
+	 */
+	private static final class ContractSkinRecorder implements ReplayGameIntegration {
+
+		private final List<TexturesProperty> recorded = new ArrayList<>();
+
+		@Override
+		public ReplaySession startRecording(ReplayConfig config) {
+			return new ReplaySession(UUID.randomUUID(), "");
+		}
+
+		@Override
+		public void stopRecording(ReplaySession session) {
+		}
+
+		@Override
+		public boolean isRecording() {
+			return false;
+		}
+
+		@Override
+		public void recordPlayerSkin(UUID uuid, TexturesProperty skin) {
+			if (uuid == null || skin == null || blank(skin.getValue()) || blank(skin.getSignature())) {
+				return;
+			}
+			recorded.add(skin);
+		}
+
+		private static boolean blank(String value) {
+			return value == null || value.isBlank();
+		}
 	}
 
 	private record NestedGenericTypes(List<World> worlds, CompletableFuture<World> worldFuture) {

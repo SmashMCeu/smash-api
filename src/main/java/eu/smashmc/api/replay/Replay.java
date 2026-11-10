@@ -18,6 +18,10 @@ import eu.smashmc.api.SmashComponent;
  * platform/role provider exposes the sub-APIs it supports and leaves the
  * others as no-ops.
  * <p>
+ * {@link #game()}, {@link #directory()} and {@link #playback()} never return
+ * {@code null}, including through the fallback, so consumers can dereference a
+ * sub-API directly.
+ * <p>
  * No protocol, event IDs, snapshots, framing or codec types cross this
  * boundary (ADR-0007/0009).
  */
