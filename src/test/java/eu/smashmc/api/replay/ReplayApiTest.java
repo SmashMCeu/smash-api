@@ -3,7 +3,6 @@ package eu.smashmc.api.replay;
 import eu.smashmc.api.Environment;
 import eu.smashmc.api.SmashComponent;
 import eu.smashmc.api.identity.minecraft.property.TexturesProperty;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bukkit.World;
 import org.junit.jupiter.api.Test;
 
@@ -34,7 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verifyNoInteractions;
 
 class ReplayApiTest {
 
@@ -147,14 +145,13 @@ class ReplayApiTest {
 	@Test
 	void fallbackPlaybackIsAlwaysUnavailable() throws Exception {
 		ReplayPlayback playback = newFallback(FallbackReplay.class).playback();
-		ProxiedPlayer staff = mock(ProxiedPlayer.class);
+		Object staff = new Object();
 
 		CompletableFuture<ReplayOpenResult> future =
 				playback.open(staff, new ReplayHandle(7, "#7"), 120);
 		assertTrue(future.isDone());
 		assertEquals(ReplayOpenResult.ReplayOpenStatus.UNAVAILABLE, future.join().status());
 		assertNull(future.join().reference());
-		verifyNoInteractions(staff);
 
 		assertEquals(ReplayOpenResult.ReplayOpenStatus.UNAVAILABLE,
 				playback.open(null, null, 0).join().status());
@@ -378,7 +375,7 @@ class ReplayApiTest {
 				NestedGenericTypes.class.getRecordComponents()[1].getGenericType()));
 	}
 
-	private record NestedGenericTypes(List<World> worlds, CompletableFuture<ProxiedPlayer> staff) {
+	private record NestedGenericTypes(List<World> worlds, CompletableFuture<World> worldFuture) {
 	}
 
 	private static void assertEmpty(CompletableFuture<Optional<ReplayReference>> lookup) {
@@ -428,9 +425,6 @@ class ReplayApiTest {
 			type = type.getComponentType();
 		}
 		if (type == World.class && apiType == ReplayConfig.class) {
-			return;
-		}
-		if (type == ProxiedPlayer.class && apiType == ReplayPlayback.class) {
 			return;
 		}
 		for (String prefix : FORBIDDEN_TYPE_PREFIXES) {

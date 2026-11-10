@@ -1,7 +1,5 @@
 package eu.smashmc.api.replay;
 
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -13,7 +11,7 @@ import java.util.concurrent.CompletableFuture;
 class FallbackReplayPlayback implements ReplayPlayback {
 
 	@Override
-	public CompletableFuture<ReplayOpenResult> open(ProxiedPlayer staff, ReplayHandle handle, int tick) {
+	public CompletableFuture<ReplayOpenResult> open(Object staff, ReplayHandle handle, int tick) {
 		return CompletableFuture.completedFuture(
 				new ReplayOpenResult(ReplayOpenResult.ReplayOpenStatus.UNAVAILABLE, null));
 	}

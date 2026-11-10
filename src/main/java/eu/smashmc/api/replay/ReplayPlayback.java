@@ -1,7 +1,5 @@
 package eu.smashmc.api.replay;
 
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -26,11 +24,13 @@ public interface ReplayPlayback {
 	 * unexpected provider failures, not for the expected
 	 * {@link ReplayOpenResult.ReplayOpenStatus} outcomes.
 	 *
-	 * @param staff  the staff member to transfer
+	 * @param staff  the platform player object to transfer: a Bungee
+	 *               {@code ProxiedPlayer} when the proxy provider runs, which
+	 *               casts it; the reports plugin passes the {@code ProxiedPlayer}
 	 * @param handle the replay to open
 	 * @param tick   the tick to start at; {@code 0} is the first tick of the
 	 *               replay
 	 * @return a future with the outcome of the open request
 	 */
-	CompletableFuture<ReplayOpenResult> open(ProxiedPlayer staff, ReplayHandle handle, int tick);
+	CompletableFuture<ReplayOpenResult> open(Object staff, ReplayHandle handle, int tick);
 }

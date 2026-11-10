@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 /**
  * Outcome of
- * {@link ReplayPlayback#open(net.md_5.bungee.api.connection.ProxiedPlayer, ReplayHandle, int)}.
+ * {@link ReplayPlayback#open(Object, ReplayHandle, int)}.
  *
  * @param status    what happened to the open request
  * @param reference the resolved replay reference when the provider could
