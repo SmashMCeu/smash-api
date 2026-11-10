@@ -32,21 +32,40 @@ import java.util.Map;
  *                   is never serialized — playback resolves the map by version
  *                   id. May be {@code null} for callers that do not care; the
  *                   recorder then falls back to the server default world
+ * @param gameId     a nullable game/round identifier chosen by the gamemode,
+ *                   used to correlate a replay with the game it recorded (e.g.
+ *                   the match or round key the gamemode already uses). It is
+ *                   informational and never serialized by the recorder; the
+ *                   recording window itself is defined by the replay session
  */
-public record ReplayConfig(String gamemodeId, Map<String, String> extra, @Nullable World world) {
+public record ReplayConfig(String gamemodeId, Map<String, String> extra, @Nullable World world,
+						   @Nullable String gameId) {
 
 	public ReplayConfig {
 		extra = extra == null ? Map.of() : Map.copyOf(extra);
 	}
 
 	/**
-	 * Creates a configuration without an explicit capture world.
+	 * Creates a configuration without an explicit capture world or game id.
 	 *
 	 * @param gamemodeId stable gamemode identifier recorded in the replay header
 	 * @param extra      reserved for future gamemode-specific, non-network header
 	 *                   data; never {@code null}
 	 */
 	public ReplayConfig(String gamemodeId, Map<String, String> extra) {
-		this(gamemodeId, extra, null);
+		this(gamemodeId, extra, null, null);
+	}
+
+	/**
+	 * Creates a configuration with a capture world but no game id.
+	 *
+	 * @param gamemodeId stable gamemode identifier recorded in the replay header
+	 * @param extra      reserved for future gamemode-specific, non-network header
+	 *                   data; never {@code null}
+	 * @param world      the runtime capture scope, or {@code null} for the
+	 *                   recorder's default world
+	 */
+	public ReplayConfig(String gamemodeId, Map<String, String> extra, @Nullable World world) {
+		this(gamemodeId, extra, world, null);
 	}
 }
