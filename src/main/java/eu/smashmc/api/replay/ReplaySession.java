@@ -6,15 +6,16 @@ import java.util.UUID;
 
 /**
  * Opaque handle for one recording session, returned by
- * {@link Replay#startRecording(ReplayConfig)} and passed back to
- * {@link Replay#stopRecording(ReplaySession)}.
+ * {@link ReplayGameIntegration#startRecording(ReplayConfig)} and passed back to
+ * {@link ReplayGameIntegration#stopRecording(ReplaySession)}.
  * <p>
  * The first two components are the original session identity. The remaining
  * components are a live view of the recording that consumers can read without
  * talking to the recorder: the backend handle (once assigned), the lifecycle
  * status and the recording start. A recorder that does not track live handles
- * may leave {@link #handle()} {@code null}; {@link Replay#info(ReplaySession)}
- * is the authoritative snapshot.
+ * may leave {@link #handle()} {@code null};
+ * {@link ReplayGameIntegration#info(ReplaySession)} is the authoritative
+ * snapshot.
  *
  * @param id         unique identifier of this recording session; the recorder
  *                   keys its active session by it. This is not the

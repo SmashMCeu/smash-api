@@ -1,42 +1,31 @@
 package eu.smashmc.api.replay;
 
-import eu.smashmc.api.identity.minecraft.property.TexturesProperty;
-
-import javax.annotation.Nullable;
-import java.time.Instant;
-import java.util.Optional;
-import java.util.UUID;
-
 /**
  * Package-private no-op {@link Replay} installed by
- * {@link eu.smashmc.api.SmashMc} when no recorder is registered. Returns
- * dummy/idle values, never throws or NPEs, and never reports a real-looking
- * state (ADR-0009): the returned session is {@link ReplayStatus#UNAVAILABLE},
- * {@link #isRecording()} stays {@code false} and {@link #info(ReplaySession)}
- * stays empty, so those two remain the authority on whether capture is running.
+ * {@link eu.smashmc.api.SmashMc} when no provider is registered. It returns the
+ * three no-op sub-implementations and never throws or NPEs, so consumers can
+ * always dereference the sub-APIs (ADR-0009/0064): the game integration is
+ * idle, the directory always completes empty and playback always answers
+ * {@link ReplayOpenResult.ReplayOpenStatus#UNAVAILABLE}.
  */
 class FallbackReplay implements Replay {
 
+	private final ReplayGameIntegration game = new FallbackReplayGameIntegration();
+	private final ReplayDirectory directory = new FallbackReplayDirectory();
+	private final ReplayPlayback playback = new FallbackReplayPlayback();
+
 	@Override
-	public ReplaySession startRecording(ReplayConfig config) {
-		return new ReplaySession(UUID.randomUUID(), "", null, ReplayStatus.UNAVAILABLE, Instant.now());
+	public ReplayGameIntegration game() {
+		return game;
 	}
 
 	@Override
-	public void stopRecording(ReplaySession session) {
+	public ReplayDirectory directory() {
+		return directory;
 	}
 
 	@Override
-	public boolean isRecording() {
-		return false;
-	}
-
-	@Override
-	public void recordPlayerSkin(UUID uuid, @Nullable TexturesProperty skin) {
-	}
-
-	@Override
-	public Optional<ReplayInfo> info(@Nullable ReplaySession session) {
-		return Optional.empty();
+	public ReplayPlayback playback() {
+		return playback;
 	}
 }

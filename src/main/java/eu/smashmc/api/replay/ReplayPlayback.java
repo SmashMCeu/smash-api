@@ -1,24 +1,20 @@
 package eu.smashmc.api.replay;
 
-import eu.smashmc.api.Environment;
-import eu.smashmc.api.SmashComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Proxy-side request to open a stored replay for a staff member. Obtained via
- * {@link eu.smashmc.api.SmashMc#getComponent(Class)} on the proxy; when no
- * provider is registered, {@code SmashMc} returns the no-op
- * {@link FallbackReplayPlayback}, which always answers
+ * Proxy-side request to open a stored replay for a staff member, obtained from
+ * {@link Replay#playback()}. The provider resolves the replay, checks the staff
+ * member's replay permission and transfers them to a server able to play it;
+ * the player role re-checks the permission before showing the replay. The no-op
+ * fallback always answers
  * {@link ReplayOpenResult.ReplayOpenStatus#UNAVAILABLE}.
  * <p>
- * The provider resolves the replay, checks the staff member's replay
- * permission and transfers them to a server able to play it; the player role
- * re-checks the permission before showing the replay. No protocol, event ID,
- * snapshot, framing or codec type crosses this boundary (ADR-0007/0009).
+ * No protocol, event ID, snapshot, framing or codec type crosses this boundary
+ * (ADR-0007/0009).
  */
-@SmashComponent(value = Environment.BUNGEECORD, fallbackImpl = FallbackReplayPlayback.class)
 public interface ReplayPlayback {
 
 	/**

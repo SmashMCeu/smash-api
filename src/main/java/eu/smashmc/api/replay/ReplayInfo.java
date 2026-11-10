@@ -6,7 +6,7 @@ import java.util.UUID;
 
 /**
  * Point-in-time snapshot of one recording, returned by
- * {@link Replay#info(ReplaySession)}. It is a value object: later changes to
+ * {@link ReplayGameIntegration#info(ReplaySession)}. It is a value object: later changes to
  * the recording do not update it.
  *
  * @param sessionId   the id of the recording session this snapshot describes

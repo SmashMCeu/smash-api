@@ -7,7 +7,7 @@ import java.util.Map;
 
 /**
  * Immutable configuration for a recording started via
- * {@link Replay#startRecording(ReplayConfig)}.
+ * {@link ReplayGameIntegration#startRecording(ReplayConfig)}.
  *
  * @param gamemodeId stable gamemode identifier recorded in the replay header
  *                   (e.g. {@code "smash"}); informational in v1, capture is

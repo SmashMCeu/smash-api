@@ -5,9 +5,8 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Package-private no-op {@link ReplayPlayback} installed by
- * {@link eu.smashmc.api.SmashMc} when no proxy provider is registered. Every
- * open request is answered with
+ * Package-private no-op {@link ReplayPlayback} returned by
+ * {@link FallbackReplay}. Every open request is answered with
  * {@link ReplayOpenResult.ReplayOpenStatus#UNAVAILABLE} without touching the
  * player; it never throws or blocks.
  */

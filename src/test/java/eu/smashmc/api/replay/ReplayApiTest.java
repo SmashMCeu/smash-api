@@ -20,6 +20,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -39,6 +40,9 @@ class ReplayApiTest {
 
 	private static final Class<?>[] API_TYPES = {
 			Replay.class,
+			ReplayGameIntegration.class,
+			ReplayDirectory.class,
+			ReplayPlayback.class,
 			ReplayConfig.class,
 			ReplaySession.class,
 			ReplayInfo.class,
@@ -46,8 +50,6 @@ class ReplayApiTest {
 			ReplayStatus.class,
 			ReplayPlayer.class,
 			ReplayReference.class,
-			ReplayDirectory.class,
-			ReplayPlayback.class,
 			ReplayOpenResult.class,
 			ReplayOpenResult.ReplayOpenStatus.class
 	};
@@ -60,81 +62,91 @@ class ReplayApiTest {
 	};
 
 	@Test
-	void replayIsAnnotatedForBukkitWithFallback() {
+	void replayIsTheSingleComponentForBothEnvironments() {
 		SmashComponent annotation = Replay.class.getAnnotation(SmashComponent.class);
 		assertNotNull(annotation);
-		assertArrayEquals(new Environment[]{Environment.BUKKIT}, annotation.value());
+		assertArrayEquals(new Environment[]{Environment.BUKKIT, Environment.BUNGEECORD}, annotation.value());
 		assertEquals(FallbackReplay.class, annotation.fallbackImpl());
 	}
 
 	@Test
-	void replayDirectoryIsAnnotatedForBungeeWithFallback() {
-		SmashComponent annotation = ReplayDirectory.class.getAnnotation(SmashComponent.class);
-		assertNotNull(annotation);
-		assertArrayEquals(new Environment[]{Environment.BUNGEECORD}, annotation.value());
-		assertEquals(FallbackReplayDirectory.class, annotation.fallbackImpl());
-	}
+	void subApisArePlainInterfacesObtainedFromTheComponent() throws Exception {
+		for (Class<?> subApi : List.of(ReplayGameIntegration.class, ReplayDirectory.class, ReplayPlayback.class)) {
+			assertTrue(subApi.isInterface(), subApi.getName() + " must stay an interface");
+			assertNull(subApi.getAnnotation(SmashComponent.class),
+					subApi.getName() + " must not be a separate @SmashComponent");
+		}
 
-	@Test
-	void replayPlaybackIsAnnotatedForBungeeWithFallback() {
-		SmashComponent annotation = ReplayPlayback.class.getAnnotation(SmashComponent.class);
-		assertNotNull(annotation);
-		assertArrayEquals(new Environment[]{Environment.BUNGEECORD}, annotation.value());
-		assertEquals(FallbackReplayPlayback.class, annotation.fallbackImpl());
+		assertEquals(ReplayGameIntegration.class, Replay.class.getMethod("game").getReturnType());
+		assertEquals(ReplayDirectory.class, Replay.class.getMethod("directory").getReturnType());
+		assertEquals(ReplayPlayback.class, Replay.class.getMethod("playback").getReturnType());
 	}
 
 	@Test
 	void fallbacksArePackagePrivateWithDefaultConstructors() throws Exception {
 		assertPackagePrivateDefaultConstructor(FallbackReplay.class);
+		assertPackagePrivateDefaultConstructor(FallbackReplayGameIntegration.class);
 		assertPackagePrivateDefaultConstructor(FallbackReplayDirectory.class);
 		assertPackagePrivateDefaultConstructor(FallbackReplayPlayback.class);
 	}
 
 	@Test
-	void fallbackIsAlwaysIdleAndNeverThrows() throws Exception {
+	void fallbackExposesTheThreeNoOpSubApis() throws Exception {
 		Replay replay = newFallback(FallbackReplay.class);
-		assertFalse(replay.isRecording());
 
-		ReplaySession session = replay.startRecording(new ReplayConfig("smash", Map.of("k", "v")));
+		assertEquals(FallbackReplayGameIntegration.class, replay.game().getClass());
+		assertEquals(FallbackReplayDirectory.class, replay.directory().getClass());
+		assertEquals(FallbackReplayPlayback.class, replay.playback().getClass());
+		assertSame(replay.game(), replay.game());
+		assertSame(replay.directory(), replay.directory());
+		assertSame(replay.playback(), replay.playback());
+	}
+
+	@Test
+	void fallbackGameIntegrationIsAlwaysIdleAndNeverThrows() throws Exception {
+		ReplayGameIntegration game = newFallback(FallbackReplay.class).game();
+		assertFalse(game.isRecording());
+
+		ReplaySession session = game.startRecording(new ReplayConfig("smash", Map.of("k", "v")));
 		assertNotNull(session);
 		assertNotNull(session.id());
 		assertEquals("", session.gamemodeId());
 		assertNull(session.handle());
 		assertEquals(ReplayStatus.UNAVAILABLE, session.status());
 		assertNotNull(session.startedAt());
-		assertFalse(replay.isRecording());
+		assertFalse(game.isRecording());
 
-		replay.stopRecording(session);
-		replay.stopRecording(null);
-		assertNotNull(replay.startRecording(null));
-		assertTrue(replay.info(session).isEmpty());
-		assertTrue(replay.info(null).isEmpty());
+		game.stopRecording(session);
+		game.stopRecording(null);
+		assertNotNull(game.startRecording(null));
+		assertTrue(game.info(session).isEmpty());
+		assertTrue(game.info(null).isEmpty());
 	}
 
 	@Test
 	void fallbackAcceptsRecordedSkinsAndClearsAsANoOp() throws Exception {
-		Replay replay = newFallback(FallbackReplay.class);
+		ReplayGameIntegration game = newFallback(FallbackReplay.class).game();
 
-		assertDoesNotThrow(() -> replay.recordPlayerSkin(UUID.randomUUID(),
+		assertDoesNotThrow(() -> game.recordPlayerSkin(UUID.randomUUID(),
 				new TexturesProperty("value", "signature")));
-		assertDoesNotThrow(() -> replay.recordPlayerSkin(UUID.randomUUID(), null));
+		assertDoesNotThrow(() -> game.recordPlayerSkin(UUID.randomUUID(), null));
 	}
 
 	@Test
-	void fallbackDirectoryIsAlwaysEmpty() throws Exception {
-		ReplayDirectory directory = newFallback(FallbackReplayDirectory.class);
+	void fallbackDirectoryCompletesEveryLookupEmpty() throws Exception {
+		ReplayDirectory directory = newFallback(FallbackReplay.class).directory();
 
-		assertTrue(directory.findByHandle(new ReplayHandle(7, "#7")).isEmpty());
-		assertTrue(directory.findLive(UUID.randomUUID()).isEmpty());
-		assertTrue(directory.findAt(UUID.randomUUID(), Instant.EPOCH).isEmpty());
-		assertTrue(directory.findByHandle(null).isEmpty());
-		assertTrue(directory.findLive(null).isEmpty());
-		assertTrue(directory.findAt(null, null).isEmpty());
+		assertEmpty(directory.findByHandle(new ReplayHandle(7, "#7")));
+		assertEmpty(directory.findLive(UUID.randomUUID()));
+		assertEmpty(directory.findAt(UUID.randomUUID(), Instant.EPOCH));
+		assertEmpty(directory.findByHandle(null));
+		assertEmpty(directory.findLive(null));
+		assertEmpty(directory.findAt(null, null));
 	}
 
 	@Test
 	void fallbackPlaybackIsAlwaysUnavailable() throws Exception {
-		ReplayPlayback playback = newFallback(FallbackReplayPlayback.class);
+		ReplayPlayback playback = newFallback(FallbackReplay.class).playback();
 		ProxiedPlayer staff = mock(ProxiedPlayer.class);
 
 		CompletableFuture<ReplayOpenResult> future =
@@ -149,8 +161,22 @@ class ReplayApiTest {
 	}
 
 	@Test
+	void directoryLookupsAreAsynchronousOptionalReferences() {
+		assertEquals(3, ReplayDirectory.class.getDeclaredMethods().length);
+		for (Method method : ReplayDirectory.class.getDeclaredMethods()) {
+			assertEquals(CompletableFuture.class, method.getReturnType(), method.getName());
+
+			ParameterizedType future = (ParameterizedType) method.getGenericReturnType();
+			assertEquals(CompletableFuture.class, future.getRawType(), method.getName());
+			ParameterizedType optional = (ParameterizedType) future.getActualTypeArguments()[0];
+			assertEquals(Optional.class, optional.getRawType(), method.getName());
+			assertEquals(ReplayReference.class, optional.getActualTypeArguments()[0], method.getName());
+		}
+	}
+
+	@Test
 	void infoDefaultsToEmptyForARecorderWithTheOriginalMethods() {
-		Replay replay = new Replay() {
+		ReplayGameIntegration game = new ReplayGameIntegration() {
 			@Override
 			public ReplaySession startRecording(ReplayConfig config) {
 				return new ReplaySession(UUID.randomUUID(), "");
@@ -170,8 +196,8 @@ class ReplayApiTest {
 			}
 		};
 
-		assertTrue(replay.info(new ReplaySession(UUID.randomUUID(), "smash")).isEmpty());
-		assertTrue(replay.info(null).isEmpty());
+		assertTrue(game.info(new ReplaySession(UUID.randomUUID(), "smash")).isEmpty());
+		assertTrue(game.info(null).isEmpty());
 	}
 
 	@Test
@@ -353,6 +379,11 @@ class ReplayApiTest {
 	}
 
 	private record NestedGenericTypes(List<World> worlds, CompletableFuture<ProxiedPlayer> staff) {
+	}
+
+	private static void assertEmpty(CompletableFuture<Optional<ReplayReference>> lookup) {
+		assertTrue(lookup.isDone());
+		assertTrue(lookup.join().isEmpty());
 	}
 
 	private static void assertPackagePrivateDefaultConstructor(Class<?> type) throws Exception {
