@@ -52,7 +52,7 @@ public interface Replay {
 	 *
 	 * @param uuid the recorded player's UUID
 	 * @param skin the signed character texture, or {@code null} to clear it so
-	 *             the player falls back to its default/live skin
+	 *             the player falls back to its default skin
 	 */
 	void recordPlayerSkin(UUID uuid, @Nullable TexturesProperty skin);
 }

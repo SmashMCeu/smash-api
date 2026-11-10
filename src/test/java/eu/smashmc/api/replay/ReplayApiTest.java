@@ -2,6 +2,7 @@ package eu.smashmc.api.replay;
 
 import eu.smashmc.api.Environment;
 import eu.smashmc.api.SmashComponent;
+import eu.smashmc.api.identity.minecraft.property.TexturesProperty;
 import org.bukkit.World;
 import org.junit.jupiter.api.Test;
 
@@ -9,8 +10,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.RecordComponent;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -57,6 +60,15 @@ class ReplayApiTest {
 		replay.stopRecording(session);
 		replay.stopRecording(null);
 		assertNotNull(replay.startRecording(null));
+	}
+
+	@Test
+	void fallbackAcceptsRecordedSkinsAndClearsAsANoOp() throws Exception {
+		Replay replay = newFallback();
+
+		assertDoesNotThrow(() -> replay.recordPlayerSkin(UUID.randomUUID(),
+				new TexturesProperty("value", "signature")));
+		assertDoesNotThrow(() -> replay.recordPlayerSkin(UUID.randomUUID(), null));
 	}
 
 	@Test
