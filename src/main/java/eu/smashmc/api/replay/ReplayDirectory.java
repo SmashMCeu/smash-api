@@ -6,9 +6,10 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Asynchronous replay lookup, obtained from {@link Replay#directory()}. Every
- * future never blocks; each completes empty when nothing matches and
- * exceptionally when the backend cannot be answered.
+ * Asynchronous replay lookup, obtained from {@link Replay#directory()}. The
+ * futures never block the caller: each completes empty when nothing matches, and
+ * exceptionally when the backend cannot be reached or its response cannot be
+ * read.
  */
 public interface ReplayDirectory {
 
@@ -17,7 +18,8 @@ public interface ReplayDirectory {
 	 *
 	 * @param handle the replay handle
 	 * @return a future with the reference; empty when nothing matches, and
-	 *         completed exceptionally when the backend cannot be answered
+	 *         completed exceptionally when the backend cannot be reached or its
+	 *         response cannot be read
 	 */
 	CompletableFuture<Optional<ReplayReference>> findByHandle(ReplayHandle handle);
 
@@ -30,7 +32,7 @@ public interface ReplayDirectory {
 	 * @param at     the instant to resolve
 	 * @return a future with the newest matching replay; empty when nothing
 	 *         matches, and completed exceptionally when the backend cannot be
-	 *         answered
+	 *         reached or its response cannot be read
 	 */
 	CompletableFuture<Optional<ReplayReference>> findAt(UUID player, Instant at);
 }
