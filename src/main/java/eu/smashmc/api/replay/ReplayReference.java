@@ -9,7 +9,8 @@ import java.util.UUID;
  * Snapshot of a stored replay.
  *
  * @param handle        the replay handle
- * @param sessionId     the recording session id
+ * @param sessionId     the recording session id, or {@code null} when the
+ *                      backend does not persist it
  * @param server        the recording server; empty when unknown
  * @param gamemodeId    the gamemode; empty when unknown
  * @param mapName       the map display name; empty when unknown
@@ -21,7 +22,7 @@ import java.util.UUID;
  * @param durationTicks total or current length; {@code 0} when unknown
  * @param status        the replay status
  */
-public record ReplayReference(ReplayHandle handle, UUID sessionId, String server, String gamemodeId,
+public record ReplayReference(ReplayHandle handle, @Nullable UUID sessionId, String server, String gamemodeId,
 							  String mapName, @Nullable String gameId, List<ReplayPlayer> players,
 							  Instant startedAt, int currentTick, int durationTicks, ReplayStatus status) {
 
