@@ -8,12 +8,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Package-private no-op {@link ReplayGameIntegration} returned by
- * {@link FallbackReplay}. It reports dummy/idle values, never throws or NPEs,
- * and never reports a real-looking state (ADR-0009): the returned session is
- * {@link ReplayStatus#UNAVAILABLE}, {@link #isRecording()} stays {@code false}
- * and {@link #info(ReplaySession)} stays empty, so those two remain the
- * authority on whether capture is running.
+ * No-op {@link ReplayGameIntegration} returned by {@link FallbackReplay}: an
+ * inactive session, no recorded skins and no live snapshot.
  */
 class FallbackReplayGameIntegration implements ReplayGameIntegration {
 

@@ -1,12 +1,8 @@
 package eu.smashmc.api.replay;
 
 /**
- * Package-private no-op {@link Replay} installed by
- * {@link eu.smashmc.api.SmashMc} when no provider is registered. It returns the
- * three no-op sub-implementations and never throws or NPEs, so consumers can
- * always dereference the sub-APIs (ADR-0009/0064): the game integration is
- * idle, the directory always completes empty and playback always answers
- * {@link ReplayOpenResult.ReplayOpenStatus#UNAVAILABLE}.
+ * No-op {@link Replay} used when no provider is registered. Returns the three
+ * no-op sub-implementations.
  */
 class FallbackReplay implements Replay {
 

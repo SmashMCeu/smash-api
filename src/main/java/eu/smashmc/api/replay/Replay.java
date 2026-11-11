@@ -4,44 +4,34 @@ import eu.smashmc.api.Environment;
 import eu.smashmc.api.SmashComponent;
 
 /**
- * Single entry point to the replay domain, obtained via
- * {@link eu.smashmc.api.SmashMc#getComponent(Class)}. It exposes the three
- * sub-APIs of one domain instead of separate components (ADR-0064):
- * {@link ReplayGameIntegration} for the local recorder/gamemode integration,
- * {@link ReplayDirectory} for the asynchronous proxy-side lookup and
- * {@link ReplayPlayback} for the asynchronous proxy-side staff-open request.
+ * Entry point to the replay API, obtained through
+ * {@link eu.smashmc.api.SmashMc#getComponent(Class)}.
  * <p>
- * When no provider is registered, {@code SmashMc} returns the no-op
- * {@link FallbackReplay}, whose sub-APIs are no-ops too: the game integration
- * is idle, the directory always completes empty and playback always answers
- * {@link ReplayOpenResult.ReplayOpenStatus#UNAVAILABLE}. Each
- * platform/role provider exposes the sub-APIs it supports and leaves the
- * others as no-ops.
+ * {@link ReplayGameIntegration} records games, {@link ReplayDirectory} looks up
+ * stored and live replays, and {@link ReplayPlayback} opens a replay for a staff
+ * member. A provider may support only some of them; the others are no-ops.
  * <p>
  * {@link #game()}, {@link #directory()} and {@link #playback()} never return
- * {@code null}, including through the fallback, so consumers can dereference a
- * sub-API directly.
- * <p>
- * No protocol, event IDs, snapshots, framing or codec types cross this
- * boundary (ADR-0007/0009).
+ * {@code null}. When no provider is registered, the game integration reports an
+ * inactive recording, directory lookups complete with an empty result, and open
+ * requests answer {@link ReplayOpenResult.ReplayOpenStatus#UNAVAILABLE}.
  */
 @SmashComponent(value = {Environment.BUKKIT, Environment.BUNGEECORD},
 		fallbackImpl = FallbackReplay.class)
 public interface Replay {
 
 	/**
-	 * @return the local, synchronous recorder/gamemode integration; never
-	 *         {@code null}
+	 * @return the recording API; never {@code null}
 	 */
 	ReplayGameIntegration game();
 
 	/**
-	 * @return the asynchronous proxy-side replay lookup; never {@code null}
+	 * @return the replay lookup API; never {@code null}
 	 */
 	ReplayDirectory directory();
 
 	/**
-	 * @return the asynchronous proxy-side staff-open surface; never {@code null}
+	 * @return the replay opening API; never {@code null}
 	 */
 	ReplayPlayback playback();
 }

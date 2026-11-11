@@ -1,16 +1,14 @@
 package eu.smashmc.api.replay;
 
 /**
- * Stable, user-facing identifier of one stored replay.
+ * Identifier of one stored replay.
  * <p>
- * The handle is assigned by the {@code replay-service} and is independent of
- * the local {@link ReplaySession#id()}: it survives upload, playback and the
- * lobby hand-off, so consumers (e.g. the reports and punishments plugins) can
- * store it as a durable reference. The numeric part is the backend id; the
- * display form is the canonical {@code "#<id>"} shown to staff.
+ * A handle stays valid after the recording is uploaded and can be stored by
+ * callers. It is not the same as {@link ReplaySession#id()}.
  *
- * @param id      the backend replay id
- * @param display the canonical short display form, i.e. {@code "#<id>"}
+ * @param id      the numeric replay id
+ * @param display the short display form shown to staff, e.g. {@code "#7"};
+ *                never {@code null}
  */
 public record ReplayHandle(long id, String display) {
 }

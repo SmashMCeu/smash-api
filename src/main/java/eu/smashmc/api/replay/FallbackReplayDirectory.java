@@ -6,10 +6,8 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Package-private no-op {@link ReplayDirectory} returned by
- * {@link FallbackReplay}. Every lookup completes with an empty optional, so
- * consumers never mistake a missing provider for a replay, and no lookup can
- * block or fail.
+ * No-op {@link ReplayDirectory} returned by {@link FallbackReplay}: every lookup
+ * completes with an empty result.
  */
 class FallbackReplayDirectory implements ReplayDirectory {
 

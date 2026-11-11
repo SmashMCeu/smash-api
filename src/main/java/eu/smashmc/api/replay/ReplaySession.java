@@ -5,39 +5,31 @@ import java.time.Instant;
 import java.util.UUID;
 
 /**
- * Opaque handle for one recording session, returned by
+ * Identifies one recording session, returned by
  * {@link ReplayGameIntegration#startRecording(ReplayConfig)} and passed back to
  * {@link ReplayGameIntegration#stopRecording(ReplaySession)}.
  * <p>
- * The first two components are the original session identity. The remaining
- * components are a live view of the recording that consumers can read without
- * talking to the recorder: the backend handle (once assigned), the lifecycle
- * status and the recording start. A recorder that does not track live handles
- * may leave {@link #handle()} {@code null};
- * {@link ReplayGameIntegration#info(ReplaySession)} is the authoritative
- * snapshot.
+ * A session is a value: later changes to the recording do not update it. Use
+ * {@link ReplayGameIntegration#info(ReplaySession)} for a current snapshot.
  *
- * @param id         unique identifier of this recording session; the recorder
- *                   keys its active session by it. This is not the
- *                   backend-assigned replay id — {@code replay-service} assigns
- *                   the replay id on upload, and the API must not couple to it
- * @param gamemodeId the gamemode id this recording used (resolved and
- *                   normalized by the recorder)
- * @param handle     the backend replay handle when it is already known, or
- *                   {@code null} while the recorder has not published one
- * @param status     the recording status at the time this session value was
- *                   created
+ * @param id         unique identifier of this recording session; it is not the
+ *                   replay handle and is not stable across sessions
+ * @param gamemodeId the gamemode that was recorded, or an empty string when
+ *                   unavailable
+ * @param handle     the replay handle once one is assigned, or {@code null}
+ *                   before that
+ * @param status     the session status at the time this value was created
  * @param startedAt  when the recording started
  */
 public record ReplaySession(UUID id, String gamemodeId, @Nullable ReplayHandle handle,
 							ReplayStatus status, Instant startedAt) {
 
 	/**
-	 * Creates a session value for a recording that just started and has no
-	 * backend handle yet. Source-compatible with the pre-v2 API.
+	 * Creates a session with no replay handle, status
+	 * {@link ReplayStatus#RECORDING} and the current time as start.
 	 *
 	 * @param id         unique identifier of this recording session
-	 * @param gamemodeId the gamemode id this recording used
+	 * @param gamemodeId the gamemode that is being recorded
 	 */
 	public ReplaySession(UUID id, String gamemodeId) {
 		this(id, gamemodeId, null, ReplayStatus.RECORDING, Instant.now());

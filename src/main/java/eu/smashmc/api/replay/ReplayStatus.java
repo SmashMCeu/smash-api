@@ -3,12 +3,15 @@ package eu.smashmc.api.replay;
 /**
  * Lifecycle state of one replay.
  * <ul>
- * <li>{@link #RECORDING} — capture is running; the handle may not be known yet</li>
- * <li>{@link #UPLOADING} — capture finished and the file is being uploaded</li>
- * <li>{@link #READY} — the stored replay can be opened</li>
- * <li>{@link #FAILED} — recording or upload failed; the replay is not playable</li>
- * <li>{@link #UNAVAILABLE} — no recorder/provider is available; the fallback
- * value, never a real lifecycle state</li>
+ * <li>{@link #RECORDING} — capture is running; a replay handle may not be
+ * available yet</li>
+ * <li>{@link #UPLOADING} — capture finished and the replay is being uploaded;
+ * it cannot be opened yet</li>
+ * <li>{@link #READY} — the replay is stored and can be opened</li>
+ * <li>{@link #FAILED} — recording or upload failed; the replay cannot be
+ * opened</li>
+ * <li>{@link #UNAVAILABLE} — no recording implementation is available; returned
+ * when the API runs without one</li>
  * </ul>
  */
 public enum ReplayStatus {

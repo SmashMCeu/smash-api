@@ -3,10 +3,9 @@ package eu.smashmc.api.replay;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Package-private no-op {@link ReplayPlayback} returned by
- * {@link FallbackReplay}. Every open request is answered with
- * {@link ReplayOpenResult.ReplayOpenStatus#UNAVAILABLE} without touching the
- * player; it never throws or blocks.
+ * No-op {@link ReplayPlayback} returned by {@link FallbackReplay}: every request
+ * answers {@link ReplayOpenResult.ReplayOpenStatus#UNAVAILABLE} without touching
+ * the player.
  */
 class FallbackReplayPlayback implements ReplayPlayback {
 
