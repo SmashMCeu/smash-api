@@ -140,21 +140,6 @@ class ReplayApiTest {
 	}
 
 	@Test
-	void optionalSkinOverloadOnlyDelegatesAPresentValue() {
-		ContractSkinRecorder game = new ContractSkinRecorder();
-		UUID id = UUID.randomUUID();
-		TexturesProperty skin = new TexturesProperty("value", "signature");
-		Optional<TexturesProperty> absent = null;
-
-		game.recordPlayerSkin(id, Optional.empty());
-		game.recordPlayerSkin(id, absent);
-		assertTrue(game.recorded.isEmpty());
-
-		game.recordPlayerSkin(id, Optional.of(skin));
-		assertEquals(List.of(skin), game.recorded);
-	}
-
-	@Test
 	void skinRecordingContractTreatsAbsentOrIncompleteTexturesAsANoOp() {
 		ContractSkinRecorder game = new ContractSkinRecorder();
 		UUID id = UUID.randomUUID();
