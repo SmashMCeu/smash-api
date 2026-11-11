@@ -5,16 +5,19 @@ import javax.annotation.Nullable;
 /**
  * Outcome of {@link ReplayPlayback#open(java.util.UUID, ReplayHandle, int)}.
  *
- * @param status    the outcome
+ * @param status    the outcome of the open request
  * @param reference the resolved replay, or {@code null} when unresolved
  */
 public record ReplayOpenResult(ReplayOpenStatus status, @Nullable ReplayReference reference) {
 
 	/**
-	 * Result of an open request.
+	 * Result of an open request. Treat the value as open-ended: handle values you
+	 * do not know with a default branch, since further values may be added.
 	 */
 	public enum ReplayOpenStatus {
-		/** The request was accepted; transfer and open are in progress. */
+		/**
+		 * The open request was accepted; the viewer is not necessarily watching yet.
+		 */
 		ACCEPTED,
 		/** No replay with the given handle exists. */
 		NO_REPLAY,

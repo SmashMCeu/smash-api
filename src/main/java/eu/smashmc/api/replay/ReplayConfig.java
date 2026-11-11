@@ -1,7 +1,5 @@
 package eu.smashmc.api.replay;
 
-import org.bukkit.World;
-
 import javax.annotation.Nullable;
 import java.util.Map;
 
@@ -12,11 +10,11 @@ import java.util.Map;
  * @param gamemodeId the gamemode being recorded
  * @param extra      reserved; never {@code null}, defensively copied and
  *                   read-only
- * @param world      the world to record; {@code null} uses the server's default
- *                   world
+ * @param worldName  the name of the world to record; {@code null} uses the
+ *                   server's default world
  * @param gameId     a game or round id, or {@code null}/empty when none
  */
-public record ReplayConfig(String gamemodeId, Map<String, String> extra, @Nullable World world,
+public record ReplayConfig(String gamemodeId, Map<String, String> extra, @Nullable String worldName,
 						   @Nullable String gameId) {
 
 	public ReplayConfig {
@@ -33,7 +31,7 @@ public record ReplayConfig(String gamemodeId, Map<String, String> extra, @Nullab
 	/**
 	 * Creates a configuration with a capture world and no game id.
 	 */
-	public ReplayConfig(String gamemodeId, Map<String, String> extra, @Nullable World world) {
-		this(gamemodeId, extra, world, null);
+	public ReplayConfig(String gamemodeId, Map<String, String> extra, @Nullable String worldName) {
+		this(gamemodeId, extra, worldName, null);
 	}
 }

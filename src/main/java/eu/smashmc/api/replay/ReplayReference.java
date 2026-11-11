@@ -18,13 +18,12 @@ import java.util.UUID;
  * @param players       the roster; never {@code null}, read-only, empty when
  *                      unavailable
  * @param startedAt     when the recording started
- * @param currentTick   the tick reached
- * @param durationTicks total or current length; {@code 0} when unknown
+ * @param durationTicks the recorded length; {@code 0} when unknown
  * @param status        the replay status
  */
 public record ReplayReference(ReplayHandle handle, @Nullable UUID sessionId, String server, String gamemodeId,
 							  String mapName, @Nullable String gameId, List<ReplayPlayer> players,
-							  Instant startedAt, int currentTick, int durationTicks, ReplayStatus status) {
+							  Instant startedAt, int durationTicks, ReplayStatus status) {
 
 	public ReplayReference {
 		players = players == null ? List.of() : List.copyOf(players);

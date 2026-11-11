@@ -21,12 +21,14 @@ public interface ReplayDirectory {
 	CompletableFuture<Optional<ReplayReference>> findByHandle(ReplayHandle handle);
 
 	/**
-	 * Looks up the replay recording at an instant.
+	 * Looks up the newest stored replay whose recording window covers an instant.
+	 * Only replays that are ready to be opened are returned, and a player is
+	 * recorded by one replay at a time.
 	 *
 	 * @param player the player the replay must contain
 	 * @param at     the instant to resolve
-	 * @return a future with the reference, or empty when no replay covers that
-	 *         player and instant
+	 * @return a future with the newest matching replay, or empty when no stored
+	 *         replay covers that player and instant
 	 */
 	CompletableFuture<Optional<ReplayReference>> findAt(UUID player, Instant at);
 }

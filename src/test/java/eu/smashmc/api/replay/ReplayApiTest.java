@@ -3,7 +3,6 @@ package eu.smashmc.api.replay;
 import eu.smashmc.api.Environment;
 import eu.smashmc.api.SmashComponent;
 import eu.smashmc.api.identity.minecraft.property.TexturesProperty;
-import org.bukkit.World;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
@@ -22,6 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -32,7 +32,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
 
 class ReplayApiTest {
 
@@ -227,39 +226,40 @@ class ReplayApiTest {
 		ReplayConfig config = new ReplayConfig("smash", Map.of("k", "v"));
 		assertEquals("smash", config.gamemodeId());
 		assertEquals("v", config.extra().get("k"));
-		assertNull(config.world(), "the two-argument constructor delegates with a null capture world");
+		assertNull(config.worldName(), "the two-argument constructor delegates with a null capture world");
 		assertNull(config.gameId(), "the two-argument constructor delegates with a null game id");
 		assertThrows(UnsupportedOperationException.class, () -> config.extra().put("x", "y"));
 		assertTrue(new ReplayConfig("smash", null).extra().isEmpty());
-		assertNull(new ReplayConfig("smash", null).world());
+		assertNull(new ReplayConfig("smash", null).worldName());
 
-		World world = mock(World.class);
-		ReplayConfig scoped = new ReplayConfig("smash", Map.of("k", "v"), world);
+		ReplayConfig scoped = new ReplayConfig("smash", Map.of("k", "v"), "world_nether");
 		assertEquals("smash", scoped.gamemodeId());
 		assertEquals("v", scoped.extra().get("k"));
-		assertSame(world, scoped.world());
+		assertEquals("world_nether", scoped.worldName());
 		assertNull(scoped.gameId(), "the three-argument constructor delegates with a null game id");
 		assertThrows(UnsupportedOperationException.class, () -> scoped.extra().put("x", "y"));
-		assertTrue(new ReplayConfig("smash", null, world).extra().isEmpty());
+		assertTrue(new ReplayConfig("smash", null, "world_nether").extra().isEmpty());
 
-		ReplayConfig withGame = new ReplayConfig("smash", Map.of("k", "v"), world, "round-42");
+		ReplayConfig withGame = new ReplayConfig("smash", Map.of("k", "v"), "world_nether", "round-42");
 		assertEquals("round-42", withGame.gameId());
-		assertSame(world, withGame.world());
+		assertEquals("world_nether", withGame.worldName());
 		assertEquals("v", withGame.extra().get("k"));
 	}
 
 	@Test
-	void configAllowsExactlyOneBukkitTypeForTheCaptureWorld() throws Exception {
+	void configScopesCaptureByWorldNameOnly() throws Exception {
 		Class<?> worldType = null;
 		for (RecordComponent component : ReplayConfig.class.getRecordComponents()) {
-			if ("world".equals(component.getName())) {
+			if ("worldName".equals(component.getName())) {
 				worldType = component.getType();
 			}
 		}
-		assertEquals(World.class, worldType);
-		assertEquals(World.class, ReplayConfig.class.getMethod("world").getReturnType());
-		assertNotNull(ReplayConfig.class.getConstructor(String.class, Map.class, World.class));
-		assertNotNull(ReplayConfig.class.getConstructor(String.class, Map.class, World.class, String.class));
+		assertEquals(String.class, worldType);
+		assertEquals(String.class, ReplayConfig.class.getMethod("worldName").getReturnType());
+		assertNotNull(ReplayConfig.class.getConstructor(String.class, Map.class, String.class));
+		assertNotNull(ReplayConfig.class.getConstructor(String.class, Map.class, String.class, String.class));
+		assertArrayEquals(new String[]{"gamemodeId", "extra", "worldName", "gameId"},
+				componentNames(ReplayConfig.class));
 	}
 
 	@Test
@@ -314,7 +314,7 @@ class ReplayApiTest {
 		List<ReplayPlayer> roster = new ArrayList<>(List.of(new ReplayPlayer(playerId, "Steve")));
 
 		ReplayReference reference = new ReplayReference(handle, sessionId, "Smash-1", "smash", "Mushroom",
-				"round-42", roster, startedAt, 320, 400, ReplayStatus.READY);
+				"round-42", roster, startedAt, 400, ReplayStatus.READY);
 		roster.add(new ReplayPlayer(UUID.randomUUID(), "Alex"));
 
 		assertSame(handle, reference.handle());
@@ -325,15 +325,23 @@ class ReplayApiTest {
 		assertEquals("round-42", reference.gameId());
 		assertEquals(List.of(new ReplayPlayer(playerId, "Steve")), reference.players());
 		assertEquals(startedAt, reference.startedAt());
-		assertEquals(320, reference.currentTick());
 		assertEquals(400, reference.durationTicks());
 		assertEquals(ReplayStatus.READY, reference.status());
 		assertThrows(UnsupportedOperationException.class,
 				() -> reference.players().add(new ReplayPlayer(UUID.randomUUID(), "Alex")));
 
 		ReplayReference emptyRoster = new ReplayReference(handle, sessionId, "Smash-1", "smash", "Mushroom",
-				null, null, startedAt, 0, 0, ReplayStatus.READY);
+				null, null, startedAt, 0, ReplayStatus.READY);
 		assertTrue(emptyRoster.players().isEmpty());
+	}
+
+	@Test
+	void replayReferenceDeclaresTheDocumentedComponentsInOrder() {
+		assertArrayEquals(new String[]{"handle", "sessionId", "server", "gamemodeId", "mapName", "gameId",
+				"players", "startedAt", "durationTicks", "status"}, componentNames(ReplayReference.class));
+		assertArrayEquals(new Class<?>[]{ReplayHandle.class, UUID.class, String.class, String.class, String.class,
+				String.class, List.class, Instant.class, int.class, ReplayStatus.class},
+				componentTypes(ReplayReference.class));
 	}
 
 	@Test
@@ -342,7 +350,7 @@ class ReplayApiTest {
 		Instant startedAt = Instant.parse("2026-11-10T12:00:00Z");
 
 		ReplayReference reference = new ReplayReference(handle, null, "Smash-1", "smash", "Mushroom",
-				null, List.of(), startedAt, 320, 400, ReplayStatus.READY);
+				null, List.of(), startedAt, 400, ReplayStatus.READY);
 
 		assertNull(reference.sessionId(), "a backend that does not persist the session id passes null");
 		assertSame(handle, reference.handle());
@@ -369,7 +377,7 @@ class ReplayApiTest {
 	@Test
 	void replayOpenResultAllowsAMissingReference() {
 		ReplayReference reference = new ReplayReference(new ReplayHandle(7, "#7"), UUID.randomUUID(),
-				"Smash-1", "smash", "Mushroom", null, List.of(), Instant.EPOCH, 0, 0, ReplayStatus.READY);
+				"Smash-1", "smash", "Mushroom", null, List.of(), Instant.EPOCH, 0, ReplayStatus.READY);
 
 		ReplayOpenResult accepted = new ReplayOpenResult(
 				ReplayOpenResult.ReplayOpenStatus.ACCEPTED, reference);
@@ -390,7 +398,7 @@ class ReplayApiTest {
 	}
 
 	@Test
-	void apiTypesUseNoCodecOrNmsTypesAndOnlyAllowedPlatformTypes() {
+	void apiTypesUseNoCodecPlatformOrNmsTypes() {
 		for (Class<?> apiType : API_TYPES) {
 			for (Method method : apiType.getDeclaredMethods()) {
 				for (Type parameter : method.getGenericParameterTypes()) {
@@ -408,10 +416,13 @@ class ReplayApiTest {
 
 	@Test
 	void allowedTypeGuardRecursesIntoGenericArguments() {
-		assertThrows(AssertionError.class, () -> assertAllowedApiType(ReplaySession.class,
-				NestedGenericTypes.class.getRecordComponents()[0].getGenericType()));
-		assertThrows(AssertionError.class, () -> assertAllowedApiType(ReplaySession.class,
-				NestedGenericTypes.class.getRecordComponents()[1].getGenericType()));
+		Type players = NestedGenericTypes.class.getRecordComponents()[0].getGenericType();
+		Type nestedPlayers = NestedGenericTypes.class.getRecordComponents()[1].getGenericType();
+		String[] argumentOnly = {"eu.smashmc.api.replay.ReplayPlayer"};
+
+		assertThrows(AssertionError.class, () -> assertAllowedApiType(ReplaySession.class, players, argumentOnly));
+		assertThrows(AssertionError.class,
+				() -> assertAllowedApiType(ReplaySession.class, nestedPlayers, argumentOnly));
 	}
 
 	/**
@@ -450,7 +461,8 @@ class ReplayApiTest {
 		}
 	}
 
-	private record NestedGenericTypes(List<World> worlds, CompletableFuture<World> worldFuture) {
+	private record NestedGenericTypes(List<ReplayPlayer> players,
+									  CompletableFuture<List<ReplayPlayer>> nestedPlayers) {
 	}
 
 	private static void assertEmpty(CompletableFuture<Optional<ReplayReference>> lookup) {
@@ -472,39 +484,48 @@ class ReplayApiTest {
 	}
 
 	private static void assertAllowedApiType(Class<?> apiType, Type type) {
+		assertAllowedApiType(apiType, type, FORBIDDEN_TYPE_PREFIXES);
+	}
+
+	private static void assertAllowedApiType(Class<?> apiType, Type type, String[] forbiddenPrefixes) {
 		if (type instanceof Class<?> clazz) {
-			assertAllowedApiClass(apiType, clazz);
+			assertAllowedApiClass(apiType, clazz, forbiddenPrefixes);
 		} else if (type instanceof ParameterizedType parameterized) {
-			assertAllowedApiType(apiType, parameterized.getRawType());
+			assertAllowedApiType(apiType, parameterized.getRawType(), forbiddenPrefixes);
 			for (Type argument : parameterized.getActualTypeArguments()) {
-				assertAllowedApiType(apiType, argument);
+				assertAllowedApiType(apiType, argument, forbiddenPrefixes);
 			}
 		} else if (type instanceof GenericArrayType array) {
-			assertAllowedApiType(apiType, array.getGenericComponentType());
+			assertAllowedApiType(apiType, array.getGenericComponentType(), forbiddenPrefixes);
 		} else if (type instanceof WildcardType wildcard) {
 			for (Type bound : wildcard.getUpperBounds()) {
-				assertAllowedApiType(apiType, bound);
+				assertAllowedApiType(apiType, bound, forbiddenPrefixes);
 			}
 			for (Type bound : wildcard.getLowerBounds()) {
-				assertAllowedApiType(apiType, bound);
+				assertAllowedApiType(apiType, bound, forbiddenPrefixes);
 			}
 		} else if (type instanceof TypeVariable<?> variable) {
 			for (Type bound : variable.getBounds()) {
-				assertAllowedApiType(apiType, bound);
+				assertAllowedApiType(apiType, bound, forbiddenPrefixes);
 			}
 		}
 	}
 
-	private static void assertAllowedApiClass(Class<?> apiType, Class<?> type) {
+	private static void assertAllowedApiClass(Class<?> apiType, Class<?> type, String[] forbiddenPrefixes) {
 		while (type.isArray()) {
 			type = type.getComponentType();
 		}
-		if (type == World.class && apiType == ReplayConfig.class) {
-			return;
-		}
-		for (String prefix : FORBIDDEN_TYPE_PREFIXES) {
+		for (String prefix : forbiddenPrefixes) {
 			assertFalse(type.getName().startsWith(prefix),
 					"unexpected " + prefix + " type " + type.getName() + " on " + apiType.getName());
 		}
+	}
+
+	private static String[] componentNames(Class<?> type) {
+		return Stream.of(type.getRecordComponents()).map(RecordComponent::getName).toArray(String[]::new);
+	}
+
+	private static Class<?>[] componentTypes(Class<?> type) {
+		return Stream.of(type.getRecordComponents()).map(RecordComponent::getType).toArray(Class<?>[]::new);
 	}
 }
