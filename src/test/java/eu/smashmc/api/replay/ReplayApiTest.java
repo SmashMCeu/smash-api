@@ -172,10 +172,10 @@ class ReplayApiTest {
 	@Test
 	void fallbackPlaybackIsAlwaysUnavailable() throws Exception {
 		ReplayPlayback playback = newFallback(FallbackReplay.class).playback();
-		Object staff = new Object();
+		UUID viewer = UUID.randomUUID();
 
 		CompletableFuture<ReplayOpenResult> future =
-				playback.open(staff, new ReplayHandle(7, "#7"), 120);
+				playback.open(viewer, new ReplayHandle(7, "#7"), 120);
 		assertTrue(future.isDone());
 		assertEquals(ReplayOpenResult.ReplayOpenStatus.UNAVAILABLE, future.join().status());
 		assertNull(future.join().reference());

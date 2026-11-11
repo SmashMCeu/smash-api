@@ -5,18 +5,15 @@ import java.time.Instant;
 import java.util.UUID;
 
 /**
- * Point-in-time snapshot of one recording, returned by
- * {@link ReplayGameIntegration#info(ReplaySession)}. Later changes to the
- * recording do not update this value.
+ * Point-in-time snapshot of a recording, returned by
+ * {@link ReplayGameIntegration#info(ReplaySession)}.
  *
- * @param sessionId   the id of the recording session this snapshot describes
- * @param handle      the replay handle once one is assigned, or {@code null}
- *                    before that
- * @param gamemodeId  the gamemode that was recorded, or an empty string when
- *                    unavailable
+ * @param sessionId   the recording session id
+ * @param handle      the replay handle once assigned; {@code null} before
+ * @param gamemodeId  the gamemode recorded; may be empty
  * @param startedAt   when the recording started
- * @param currentTick the tick the recording has reached; {@code 0} at the start
- * @param status      the recording status at snapshot time
+ * @param currentTick the tick reached; {@code 0} at the start
+ * @param status      the status at snapshot time
  */
 public record ReplayInfo(UUID sessionId, @Nullable ReplayHandle handle, String gamemodeId,
 						 Instant startedAt, int currentTick, ReplayStatus status) {
