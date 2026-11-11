@@ -20,9 +20,9 @@ public interface ReplayPlayback {
 	 * {@link ReplayOpenResult.ReplayOpenStatus#UNAVAILABLE}; no exception is thrown
 	 * and nothing is logged.
 	 * <p>
-	 * The future never blocks and completes exceptionally only for unexpected
-	 * failures, not for the expected {@link ReplayOpenResult.ReplayOpenStatus}
-	 * outcomes.
+	 * The future never blocks. It completes exceptionally only for unexpected
+	 * failures, including a backend that cannot be answered, and never for the
+	 * expected {@link ReplayOpenResult.ReplayOpenStatus} outcomes.
 	 *
 	 * @param viewer the viewer's UUID
 	 * @param handle the replay to open; must not be {@code null}

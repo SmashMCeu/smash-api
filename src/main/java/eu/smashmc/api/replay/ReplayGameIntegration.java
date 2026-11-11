@@ -8,10 +8,11 @@ import java.util.UUID;
 
 /**
  * Synchronous recording API, obtained from {@link Replay#game()} and called from
- * the server main thread. Only a Bukkit server can record: elsewhere no capture
- * runs, {@link #startRecording(ReplayConfig)} returns a session in
- * {@link ReplayStatus#UNAVAILABLE} and {@link #isRecording()} is always
- * {@code false}.
+ * the server main thread. Recording is a capability of the host, not of the
+ * platform it runs on: only a server that hosts a recorder captures anything. A
+ * host without one captures nothing, {@link #startRecording(ReplayConfig)}
+ * returns an inactive session in {@link ReplayStatus#UNAVAILABLE} and
+ * {@link #isRecording()} is always {@code false}.
  */
 public interface ReplayGameIntegration {
 
