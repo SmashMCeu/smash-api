@@ -17,11 +17,6 @@ class FallbackReplayDirectory implements ReplayDirectory {
 	}
 
 	@Override
-	public CompletableFuture<Optional<ReplayReference>> findLive(UUID player) {
-		return CompletableFuture.completedFuture(Optional.empty());
-	}
-
-	@Override
 	public CompletableFuture<Optional<ReplayReference>> findAt(UUID player, Instant at) {
 		return CompletableFuture.completedFuture(Optional.empty());
 	}

@@ -162,10 +162,8 @@ class ReplayApiTest {
 		ReplayDirectory directory = newFallback(FallbackReplay.class).directory();
 
 		assertEmpty(directory.findByHandle(new ReplayHandle(7, "#7")));
-		assertEmpty(directory.findLive(UUID.randomUUID()));
 		assertEmpty(directory.findAt(UUID.randomUUID(), Instant.EPOCH));
 		assertEmpty(directory.findByHandle(null));
-		assertEmpty(directory.findLive(null));
 		assertEmpty(directory.findAt(null, null));
 	}
 
@@ -186,7 +184,7 @@ class ReplayApiTest {
 
 	@Test
 	void directoryLookupsAreAsynchronousOptionalReferences() {
-		assertEquals(3, ReplayDirectory.class.getDeclaredMethods().length);
+		assertEquals(2, ReplayDirectory.class.getDeclaredMethods().length);
 		for (Method method : ReplayDirectory.class.getDeclaredMethods()) {
 			assertEquals(CompletableFuture.class, method.getReturnType(), method.getName());
 
@@ -336,6 +334,20 @@ class ReplayApiTest {
 		ReplayReference emptyRoster = new ReplayReference(handle, sessionId, "Smash-1", "smash", "Mushroom",
 				null, null, startedAt, 0, 0, ReplayStatus.READY);
 		assertTrue(emptyRoster.players().isEmpty());
+	}
+
+	@Test
+	void replayReferenceAllowsAnUnpersistedSessionId() {
+		ReplayHandle handle = new ReplayHandle(7, "#7");
+		Instant startedAt = Instant.parse("2026-11-10T12:00:00Z");
+
+		ReplayReference reference = new ReplayReference(handle, null, "Smash-1", "smash", "Mushroom",
+				null, List.of(), startedAt, 320, 400, ReplayStatus.READY);
+
+		assertNull(reference.sessionId(), "a backend that does not persist the session id passes null");
+		assertSame(handle, reference.handle());
+		assertEquals("Smash-1", reference.server());
+		assertEquals(ReplayStatus.READY, reference.status());
 	}
 
 	@Test

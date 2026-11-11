@@ -21,15 +21,6 @@ public interface ReplayDirectory {
 	CompletableFuture<Optional<ReplayReference>> findByHandle(ReplayHandle handle);
 
 	/**
-	 * Looks up the replay currently recording a player.
-	 *
-	 * @param player the player's UUID
-	 * @return a future with the reference, or empty when the player is not being
-	 *         recorded
-	 */
-	CompletableFuture<Optional<ReplayReference>> findLive(UUID player);
-
-	/**
 	 * Looks up the replay recording at an instant.
 	 *
 	 * @param player the player the replay must contain
