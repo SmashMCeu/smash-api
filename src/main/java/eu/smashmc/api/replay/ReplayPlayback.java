@@ -11,20 +11,24 @@ import java.util.concurrent.CompletableFuture;
 public interface ReplayPlayback {
 
 	/**
-	 * Opens a replay for a viewer at the given tick. If the viewer is offline,
-	 * nothing happens and the future completes with
+	 * Requests that a replay is opened for a viewer at the given tick. The
+	 * provider clamps the tick to the replay's range.
+	 * <p>
+	 * The result describes the outcome of this request, not the viewer's state:
+	 * an accepted request does not mean that the viewer is already watching. If
+	 * the viewer is offline, nothing happens and the future completes with
 	 * {@link ReplayOpenResult.ReplayOpenStatus#UNAVAILABLE}; no exception is thrown
 	 * and nothing is logged.
 	 * <p>
-	 * The future never blocks and completes exceptionally only for unexpected
-	 * failures, not for the expected {@link ReplayOpenResult.ReplayOpenStatus}
-	 * outcomes.
+	 * The future never blocks the caller. It completes exceptionally when the
+	 * backend cannot be reached or its response cannot be read, and never for the
+	 * expected {@link ReplayOpenResult.ReplayOpenStatus} outcomes.
 	 *
 	 * @param viewer the viewer's UUID
 	 * @param handle the replay to open; must not be {@code null}
-	 * @param tick   the tick to start at; {@code 0} is the first tick and negative
-	 *               values are invalid
-	 * @return a future with the outcome; never {@code null}
+	 * @param tick   the tick to start at; {@code 0} is the first tick, and the
+	 *               provider clamps the value to the replay's range
+	 * @return a future with the request outcome; never {@code null}
 	 */
 	CompletableFuture<ReplayOpenResult> open(UUID viewer, ReplayHandle handle, int tick);
 }
