@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -167,6 +168,16 @@ class ReplayApiTest {
 	}
 
 	@Test
+	void fallbackDirectoryCannotArchive() throws Exception {
+		ReplayDirectory directory = newFallback(FallbackReplay.class).directory();
+		UUID actor = UUID.randomUUID();
+
+		assertArchiveFails(directory.archive(new ReplayHandle(7, "#7"), actor, "punishment proof"));
+		assertArchiveFails(directory.archive(new ReplayHandle(7, "#7"), actor, null));
+		assertArchiveFails(directory.archive(null, null, null));
+	}
+
+	@Test
 	void fallbackPlaybackIsAlwaysUnavailable() throws Exception {
 		ReplayPlayback playback = newFallback(FallbackReplay.class).playback();
 		UUID viewer = UUID.randomUUID();
@@ -183,8 +194,11 @@ class ReplayApiTest {
 
 	@Test
 	void directoryLookupsAreAsynchronousOptionalReferences() {
-		assertEquals(2, ReplayDirectory.class.getDeclaredMethods().length);
+		assertEquals(3, ReplayDirectory.class.getDeclaredMethods().length);
 		for (Method method : ReplayDirectory.class.getDeclaredMethods()) {
+			if (method.getName().equals("archive")) {
+				continue;
+			}
 			assertEquals(CompletableFuture.class, method.getReturnType(), method.getName());
 
 			ParameterizedType future = (ParameterizedType) method.getGenericReturnType();
@@ -193,6 +207,15 @@ class ReplayApiTest {
 			assertEquals(Optional.class, optional.getRawType(), method.getName());
 			assertEquals(ReplayReference.class, optional.getActualTypeArguments()[0], method.getName());
 		}
+	}
+
+	@Test
+	void directoryArchiveTakesTheHandleActorAndAnOptionalReason() throws Exception {
+		Method archive = ReplayDirectory.class.getMethod("archive", ReplayHandle.class, UUID.class, String.class);
+
+		ParameterizedType future = (ParameterizedType) archive.getGenericReturnType();
+		assertEquals(CompletableFuture.class, future.getRawType());
+		assertArrayEquals(new Type[]{Void.class}, future.getActualTypeArguments());
 	}
 
 	@Test
@@ -468,6 +491,13 @@ class ReplayApiTest {
 	private static void assertEmpty(CompletableFuture<Optional<ReplayReference>> lookup) {
 		assertTrue(lookup.isDone());
 		assertTrue(lookup.join().isEmpty());
+	}
+
+	private static void assertArchiveFails(CompletableFuture<Void> archive) {
+		assertTrue(archive.isDone());
+		assertTrue(archive.isCompletedExceptionally(), "a fallback must not report a successful archive");
+		CompletionException failure = assertThrows(CompletionException.class, archive::join);
+		assertNotNull(failure.getCause());
 	}
 
 	private static void assertPackagePrivateDefaultConstructor(Class<?> type) throws Exception {
