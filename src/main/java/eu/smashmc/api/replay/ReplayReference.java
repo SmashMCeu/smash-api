@@ -15,8 +15,8 @@ import java.util.UUID;
  * @param gamemodeId    the gamemode; empty when unknown
  * @param mapName       the map display name; empty when unknown
  * @param gameId        a game or round id, or {@code null}/empty when none
- * @param players       the roster; never {@code null}, read-only, empty when
- *                      unavailable
+ * @param players       the players who played in the recording; never
+ *                      {@code null}, read-only, empty when unavailable
  * @param startedAt     when the recording started
  * @param durationTicks the recorded length; {@code 0} when unknown
  * @param status        the replay status

@@ -51,6 +51,17 @@ public interface ReplayGameIntegration {
 	void recordPlayerSkin(UUID uuid, @Nullable TexturesProperty skin);
 
 	/**
+	 * Marks a player who joined the recorded game after the recording started,
+	 * for example a mid-round join. Idempotent and called from the server main
+	 * thread. A {@code null} player id, no active recording or an already stopped
+	 * recording is ignored. Never throws, and changes only the stored
+	 * participants, never the recording itself.
+	 *
+	 * @param uuid the player's UUID, or {@code null} to ignore
+	 */
+	void recordParticipant(UUID uuid);
+
+	/**
 	 * Returns a snapshot of a session, or empty when none is available. Empty does
 	 * not mean that recording is inactive; use {@link #isRecording()}.
 	 *

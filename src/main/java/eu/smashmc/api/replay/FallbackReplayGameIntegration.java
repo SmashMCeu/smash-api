@@ -32,6 +32,10 @@ class FallbackReplayGameIntegration implements ReplayGameIntegration {
 	}
 
 	@Override
+	public void recordParticipant(UUID uuid) {
+	}
+
+	@Override
 	public Optional<ReplayInfo> info(@Nullable ReplaySession session) {
 		return Optional.empty();
 	}
