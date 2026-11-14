@@ -16,9 +16,11 @@ import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
@@ -28,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -128,6 +131,25 @@ class ReplayApiTest {
 		assertDoesNotThrow(() -> game.recordPlayerSkin(UUID.randomUUID(),
 				new TexturesProperty("value", "signature")));
 		assertDoesNotThrow(() -> game.recordPlayerSkin(UUID.randomUUID(), (TexturesProperty) null));
+	}
+
+	@Test
+	void fallbackAcceptsParticipantReportsAndNullAsANoOp() throws Exception {
+		ReplayGameIntegration game = newFallback(FallbackReplay.class).game();
+
+		assertDoesNotThrow(() -> game.recordParticipant(UUID.randomUUID()));
+		assertDoesNotThrow(() -> game.recordParticipant(null));
+		assertFalse(game.isRecording());
+	}
+
+	@Test
+	void gameIntegrationDeclaresTheParticipantReportAsAnAbstractNoThrowMethod() throws Exception {
+		Method recordParticipant = ReplayGameIntegration.class.getMethod("recordParticipant", UUID.class);
+
+		assertEquals(void.class, recordParticipant.getReturnType());
+		assertTrue(Modifier.isAbstract(recordParticipant.getModifiers()));
+		assertFalse(recordParticipant.isDefault());
+		assertArrayEquals(new Type[0], recordParticipant.getGenericExceptionTypes());
 	}
 
 	@Test
@@ -238,6 +260,10 @@ class ReplayApiTest {
 			@Override
 			public void recordPlayerSkin(UUID uuid, TexturesProperty skin) {
 			}
+
+			@Override
+			public void recordParticipant(UUID uuid) {
+			}
 		};
 
 		assertTrue(game.info(new ReplaySession(UUID.randomUUID(), "smash")).isEmpty());
@@ -251,6 +277,7 @@ class ReplayApiTest {
 		assertEquals("v", config.extra().get("k"));
 		assertNull(config.worldName(), "the two-argument constructor delegates with a null capture world");
 		assertNull(config.gameId(), "the two-argument constructor delegates with a null game id");
+		assertTrue(config.participants().isEmpty(), "the two-argument constructor reports no participants");
 		assertThrows(UnsupportedOperationException.class, () -> config.extra().put("x", "y"));
 		assertTrue(new ReplayConfig("smash", null).extra().isEmpty());
 		assertNull(new ReplayConfig("smash", null).worldName());
@@ -260,6 +287,7 @@ class ReplayApiTest {
 		assertEquals("v", scoped.extra().get("k"));
 		assertEquals("world_nether", scoped.worldName());
 		assertNull(scoped.gameId(), "the three-argument constructor delegates with a null game id");
+		assertTrue(scoped.participants().isEmpty(), "the three-argument constructor reports no participants");
 		assertThrows(UnsupportedOperationException.class, () -> scoped.extra().put("x", "y"));
 		assertTrue(new ReplayConfig("smash", null, "world_nether").extra().isEmpty());
 
@@ -267,6 +295,41 @@ class ReplayApiTest {
 		assertEquals("round-42", withGame.gameId());
 		assertEquals("world_nether", withGame.worldName());
 		assertEquals("v", withGame.extra().get("k"));
+		assertTrue(withGame.participants().isEmpty(), "the four-argument constructor reports no participants");
+	}
+
+	@Test
+	void configParticipantsAreCopiedAndReadOnly() {
+		UUID first = UUID.randomUUID();
+		Set<UUID> mutable = new HashSet<>(Set.of(first));
+
+		ReplayConfig config = new ReplayConfig("smash", Map.of(), "world_nether", "round-42", mutable);
+		mutable.add(UUID.randomUUID());
+
+		assertEquals(Set.of(first), config.participants(), "the participant set is defensively copied");
+		assertThrows(UnsupportedOperationException.class,
+				() -> config.participants().add(UUID.randomUUID()));
+		assertTrue(new ReplayConfig("smash", Map.of(), null, null, null).participants().isEmpty(),
+				"a null participant set means the caller reports none");
+	}
+
+	@Test
+	void configEqualityFollowsTheComponentValues() {
+		UUID participant = UUID.randomUUID();
+		ReplayConfig config = new ReplayConfig("smash", Map.of("k", "v"), "world_nether", "round-42",
+				Set.of(participant));
+
+		ReplayConfig sameValues = new ReplayConfig("smash", Map.of("k", "v"), "world_nether", "round-42",
+				Set.of(participant));
+		assertEquals(sameValues, config);
+		assertEquals(sameValues.hashCode(), config.hashCode());
+		assertEquals(new ReplayConfig("smash", Map.of("k", "v"), "world_nether", "round-42"),
+				new ReplayConfig("smash", Map.of("k", "v"), "world_nether", "round-42", Set.of()),
+				"the four-argument constructor equals the canonical one without participants");
+
+		assertNotEquals(config, new ReplayConfig("smash", Map.of("k", "v"), "world_nether", "round-42"));
+		assertNotEquals(config, new ReplayConfig("smash", Map.of("k", "v"), "world_nether", "round-42",
+				Set.of(UUID.randomUUID())));
 	}
 
 	@Test
@@ -281,8 +344,22 @@ class ReplayApiTest {
 		assertEquals(String.class, ReplayConfig.class.getMethod("worldName").getReturnType());
 		assertNotNull(ReplayConfig.class.getConstructor(String.class, Map.class, String.class));
 		assertNotNull(ReplayConfig.class.getConstructor(String.class, Map.class, String.class, String.class));
-		assertArrayEquals(new String[]{"gamemodeId", "extra", "worldName", "gameId"},
+		assertNotNull(ReplayConfig.class.getConstructor(String.class, Map.class, String.class, String.class,
+				Set.class));
+		assertArrayEquals(new String[]{"gamemodeId", "extra", "worldName", "gameId", "participants"},
 				componentNames(ReplayConfig.class));
+	}
+
+	@Test
+	void configDeclaresTheParticipantSetLastAsASetOfUuids() throws Exception {
+		assertEquals(Set.class, ReplayConfig.class.getMethod("participants").getReturnType());
+		assertArrayEquals(new Class<?>[]{String.class, Map.class, String.class, String.class, Set.class},
+				componentTypes(ReplayConfig.class));
+
+		ParameterizedType participants =
+				(ParameterizedType) ReplayConfig.class.getMethod("participants").getGenericReturnType();
+		assertEquals(Set.class, participants.getRawType());
+		assertArrayEquals(new Type[]{UUID.class}, participants.getActualTypeArguments());
 	}
 
 	@Test
@@ -477,6 +554,10 @@ class ReplayApiTest {
 				return;
 			}
 			recorded.add(skin);
+		}
+
+		@Override
+		public void recordParticipant(UUID uuid) {
 		}
 
 		private static boolean blank(String value) {
